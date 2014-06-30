@@ -1,0 +1,15 @@
+daq:dsd a qb:DataStructureDefinition ;
+  # Dimensions: metrics and what they were computed on
+  qb:component [
+    qb:dimension daq:metric ;
+    qb:order 1 ; ] ;
+  qb:component [
+    qb:dimension daq:computedOn ;
+    qb:order 2 ; ] ;
+  # Measures (here: metric values)
+  qb:component [ qb:measure daq:value ; ] ;
+  # Attribute (here: the unit of measurement)
+  qb:component [
+    qb:attribute sdmx-attribute:unitMeasure ; 
+    qb:componentRequired false ;
+    qb:componentAttachment qb:DataSet ; ] .

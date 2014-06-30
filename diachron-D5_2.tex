@@ -14,7 +14,13 @@
 \usepackage{mdframed}   % for framing
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{sty/lstsemantic} 
 
+
+% Style settings for D5.2
 \global
 \mdfdefinestyle{metricdefinition}{% 
 linecolor=black, middlelinewidth=3pt,% 
@@ -22,6 +28,20 @@ leftmargin=1cm, rightmargin=1cm,
 skipabove=6pt, skipbelow=6pt,
 backgroundcolor=gray!30
 }
+
+\lstset{
+  captionpos=b, 
+  extendedchars=true,
+  % basicstyle=\footnotesize \sffamily, 
+  basicstyle={\scriptsize\ttfamily},
+  % stringstyle=\bfseries,
+  showstringspaces=false,
+  breaklines=true,
+  tabsize=2, % sets default tabsize
+  frame=single % adds a frame around the code
+}
+
+\sloppy % ensures that no math words go in the margin
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

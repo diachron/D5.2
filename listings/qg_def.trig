@@ -1,0 +1,8 @@
+daq:QualityGraph
+  a rdfs:Class, owl:Class  ;
+  rdfs:subClassOf rdfg:Graph , qb:DataSet , 
+    [ rdf:type owl:Restriction ;
+      owl:onProperty qb:structure ;
+      owl:hasValue daq:dsd ];
+  rdfs:comment "Defines a quality graph which will contain all metadata about quality metrics on the dataset." ;
+  rdfs:label "Quality Graph Statistics" .

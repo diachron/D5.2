@@ -2,3 +2,60 @@
 
 \subsubsection{Intrinsic Category}
 \label{sec:Intrinsic} 
+
+
+\subsubsection{Accuracy} % dimension name 
+
+\paragraph{Malformed Datatype Literals} ~\\ %metric name
+% background for the metric
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of typed literals valid regarding its given xsd datatype to all literals}
+\end{mdframed}
+
+% pseudocode
+
+This metric (listing~\ref{let:deref}) will count the number of valid dereferenceable URI resources found in the subject (?s) and object (?o) position of a triple. The \texttt{isDereferenceable(resource)} method uses the rules defined in~\cite{Yang2011}.
+\begin{algorithm}
+\caption{Dereferenceablity Algorithm}\label{lst:deref}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalTriples = 0 ;
+\State deref = 0 ;
+\EndProcedure
+
+\Procedure{Dereference}{$\langle?s,?p,?o,?g\rangle$}
+\If {(isURI(?s)) \&\& (isDereferenceable(?s))} deref++ ; \EndIf
+
+\If {(isURI(?o)) \&\& (isDereferenceable(?o))} deref++ ; \EndIf
+\State totalTriples++;
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+
+\paragraph{Literals Incompartible with Datatype Range} 
+\paragraph{Defined Ontology Author}
+\paragraph{POBO Definition Usage}
+\paragraph{Synonym Usage}
+\subsubsection{Consistency}
+\
+
+\paragraph{Entities As Members of Disjoint Classes}
+\paragraph{Homogeneous Datatypes}
+\paragraph{Misplaced Classes or Properties}
+\paragraph{Misused Owl Datatype or Object Properties}
+\paragraph{Obsolete Concepts in Ontology}
+\paragraph{Ontology Hijacking}
+\paragraph{Undefined Classes or Properties}
+
+\subsubsection{Conciseness}
+
+\paragraph{Duplicate Instance}
+
+\paragraph{Extensional Conciseness}
+
+\paragraph{Ontology Versioning Conciseness}
+
+
+

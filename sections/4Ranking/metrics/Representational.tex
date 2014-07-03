@@ -1,0 +1,45 @@
+%!TEX root = ../../../diachron-D5_2.tex
+
+\subsubsection{Representational Category}
+\label{sec:Representational} 
+
+
+\subsubsection{Representational Conciseness}
+
+\paragraph{Short URIs}
+
+\subsubsection{Understandability}
+
+
+\paragraph{Empty Annotation Value}
+% background for the metric
+The metric Empty Annotation Value consider the following widely used annotation properties (labels, comments, notes, etc.) and identifies triples whose property is an annotation property and whose object is an empty string.
+ 
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of annotations with empty objects to all annotations in the data set.}
+\end{mdframed}
+
+% pseudocode
+\begin{algorithm}
+\caption{Empty Annotation Value Algorithm}\label{lst:emptyAnnotationValue}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalAnnotations = 0 ;
+\State emptyAnnotations = 0 ;
+\EndProcedure
+
+\Procedure{IsEmptyAnnotation}{$\langle?s,?p,?o,?g\rangle$}
+\If {(isAnnotation(?p))}
+\If {(isEmpty(?o))} emptyAnnotations++ ; \EndIf
+\State totalAnnotations++;
+\EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+\paragraph{Human Readable Labelling}
+\paragraph{Labels Using Capitals}
+\paragraph{Low Blank Node Usage}
+\paragraph{Whitespace in Annotation}

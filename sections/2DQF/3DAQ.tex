@@ -65,7 +65,7 @@ Listing~\ref{lst:qg_def} describes the definition of \texttt{daq:QualityGraph}.
 
 \subsubsection{Abstract Classes and Properties}
 This ontology framework (Figure~\ref{fig:daq}) has three abstract classes/concepts (\texttt{daq:Category}, \texttt{daq:Dimension}, \texttt{daq:Metric}) and three abstract properties (\texttt{daq:hasDimension}, \texttt{daq:hasMetric}, \texttt{daq:requires}) which should not be used directly in a quality instance.
-Instead these should be inherited as parent classes and properties for more specific quality protocols.
+Instead these should be inherited as parent classes and properties for more specific quality metrics.
 The abstract concepts (and their related properties) are described as follows:
 
 \begin{description}
@@ -82,6 +82,29 @@ The abstract concepts (and their related properties) are described as follows:
   Therefore, a concrete metric representation can also define such properties using subproperties of the \texttt{daq:requires} abstract property.
   Another important attribute for any observation is the \texttt{daq:dateComputed}, where it records the date of the observation's creation.
 \end{description}
+
+\subsubsection{Extending daQ for Custom/Specific Quality Metrics}
+\label{sec:extendingDAQ}
+The classes of the core daQ vocabulary can be extended by more specific and custom quality metrics. 
+In order to use the daQ, one should define the quality metrics that characterise the ``fitness for use''~\cite{Juran1974:biblatex} in a particular domain.
+We are currently in the process of defining the quality dimensions and metrics described in Deliverable 5.1.
+\textbf{Extending} the daQ vocabulary means adding new quality protocols that inherit the abstract concepts (Category-Dimension-Metric).
+Custom quality metrics do not need to be included in the daQ namespace itself; in fact, in accordance with LOD best practices, we recommend extenders to make them in their own namespaces.
+In Figure~\ref{fig:ext_daq} we show an illustrative example of extending the daQ ontology (TBox) with a more specific quality attribute, i.e.\ the RDF Availability Metric as defined in~\cite{Zaveri2012:LODQ}, and an illustrative instance (ABox) of how it would be represented in a dataset.
+
+The \texttt{Accessibility} concept is defined as an \texttt{rdfs:subClassOf} the abstract \texttt{daq:Category}.
+This category has five quality dimensions, one of which is the \textit{Availability} dimension.
+This is defined as an \texttt{rdfs:subClassOf} \texttt{daq:Dimension}.
+Similarly, \textit{RDFAvailabilityMetric} is defined as an \texttt{rdfs:subClassOf} \texttt{daq:Metric}.
+The specific properties \textit{hasAvailabilityDimension} and \textit{hasRDFAccessibilityMetric} (sub-properties of \texttt{daq:hasDimension} and \texttt{daq:hasMetric} respectively) are also defined (Figure~\ref{fig:ext_daq}).
+
+\begin{figure*}[tbph]
+\begin{center}
+\includegraphics[width=\textwidth]{images/abox-tbox.png}
+\caption{Extending the daQ Ontology – TBox and ABox}
+\label{fig:ext_daq}
+\end{center}
+\end{figure*}
 
 \subsubsection{A typical Quality Metadata Graph}
 The excerpt listing in~\ref{lst:qg_example} show a typical quality graph metadata in a dataset.

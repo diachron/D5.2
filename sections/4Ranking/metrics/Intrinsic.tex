@@ -9,45 +9,136 @@
 \paragraph{Malformed Datatype Literals} ~\\ %metric name
 % background for the metric
 % short description
+
+Literals are nodes in an RDF graph, used to identify values such as numbers and dates.
+The RDF specifies two types of literals: plain and typed. 
+A plain literal is a string combined with an optional language tag.
+A typed literal comprises a string (the lexical form of the literal) and a datatype (identified by a URI) which is supposed to denote a mapping from lexical forms to some space of values.
+In the Turtle syntax typed literals are notated with syntax such as:  \textit{"13"^^xsd:int}
+This Malformed Datatype Literals metric intends to check if the value of a typed literal is valid with regards to the given xsd datatype.
+
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of typed literals valid regarding its given xsd datatype to all literals}
+\emph{Calculates the ratio of typed literals not valid regarding its given xsd datatype to all literals}
 \end{mdframed}
 
 % pseudocode
 
-This metric (listing~\ref{let:deref}) will count the number of valid dereferenceable URI resources found in the subject (?s) and object (?o) position of a triple. The \texttt{isDereferenceable(resource)} method uses the rules defined in~\cite{Yang2011}.
+
 \begin{algorithm}
-\caption{Dereferenceablity Algorithm}\label{lst:deref}
+\caption{Malformed Datatype Literals Algorithm}\label{lst:deref}
 \begin{algorithmic}[1]
 \Procedure{init}{}
-\State totalTriples = 0 ;
-\State deref = 0 ;
+\State totalLiterals = 0 ;
+\State malformedLiterals = 0 ;
 \EndProcedure
 
-\Procedure{Dereference}{$\langle?s,?p,?o,?g\rangle$}
-\If {(isURI(?s)) \&\& (isDereferenceable(?s))} deref++ ; \EndIf
-
-\If {(isURI(?o)) \&\& (isDereferenceable(?o))} deref++ ; \EndIf
-\State totalTriples++;
+\Procedure{ComputeMalformedDatatypeLiterals}{$\langle?s,?p,?o,?g\rangle$}
+\If {(isLiteral(?o))} totalLiterals++ ;
+\If {(isTypedLiteral(?o)) \&\& (!hasValidDatatype(?o))} malformedLiterals++ ; \EndIf
+ \EndIf
+\State metric=malformedLiterals/totalLiterals;
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
 
-\paragraph{Literals Incompartible with Datatype Range} 
-\paragraph{Defined Ontology Author}
-\paragraph{POBO Definition Usage}
-\paragraph{Synonym Usage}
-\subsubsection{Consistency}
+\paragraph{Literals Incompartible with Datatype Range} ~\\ 
+
+\paragraph{Defined Ontology Author} ~\\ 
+\paragraph{POBO Definition Usage}~\\ 
+\paragraph{Synonym Usage}~\\ 
+\subsubsection{Consistency}~\\ 
 \
 
-\paragraph{Entities As Members of Disjoint Classes}
-\paragraph{Homogeneous Datatypes}
+\paragraph{Entities As Members of Disjoint Classes}~\\
+
+
+\paragraph{Homogeneous Datatypes}~\\
+The literals assigned to a certain property should be the same datatype.
+E.g. lite 
+This metric reports outliers or conflicts of literal datatypes. Since it is
+ * meant to measure the homogeneity and not the validity possible rdfs:range
+ * restrictions are not evaluated.
+ * 
+ * This metric makes two distinctions as far as homogeneity is concerned:
+ * 1) if there are just a few triples of one predicate having a datatype
+ *    different from all other triples, they are considered as outliers and
+ *    are all reported
+ * 2) if there is no obvious ratio of possibly wrong and possibly right triples
+ *    the conflicting view candidates are reported
+ * 
 \paragraph{Misplaced Classes or Properties}
 \paragraph{Misused Owl Datatype or Object Properties}
 \paragraph{Obsolete Concepts in Ontology}
 \paragraph{Ontology Hijacking}
-\paragraph{Undefined Classes or Properties}
+\paragraph{Undefined Classes Metric} ~\\ 
+\label{par:undefClass}
+
+Oftentimes a terms which is used in the object position of a triple and is not a literal is not formaly defined as being a class.
+'Being defined' means that the term is defined either in some external ontology or at an earlier position in the given dataset. 
+Regarding to Hogar ~\cite{hogan2010} to the most used undefined classes belong \texttt{foaf:UserGroup}, \texttt{rss:item}, \texttt{linkedct:link}, \texttt{politico:Term} .
+The probability for undefined class in the subject position is very low, because the subject of a quad never references classes or properties in external vocabularies.
+Therefore they is no need to analyse the subject for this metric.
+For the most LOD data sets is sufficient to check object by the predicate \texttt{rdf:type}. 
+In the case when LOD data set defines its own vocabulary the following predicates indicate that the object must be a defined class:  \texttt{rdfs:domain}, \texttt{rdfs:range}, \texttt{rdfs:subClassOf}, \texttt{owl:allValuesFrom}, \texttt{owl:someValuesFrom}, \texttt{owl:equivalentClass}, \texttt{owl:complementOf}, \texttt{owl:onClass}, \texttt{owl:disjointWith}.
+The undefined classes problem occurs due to spelling or syntactic mistakes resolvable through minor fixes to the respective ontologies.
+The missing classes should be define in corresponding ontology or in a separate namenspace.
+
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of undefined classes to all classes in object position in a dataset}
+\end{mdframed}
+
+
+\begin{algorithm}
+\caption{Undefined Classes Metric Algorithm}\label{lst:undefCl}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalClasses = 0 ;
+\State undefinedClasses = 0 ;
+\EndProcedure
+
+\Procedure{ClassNotDefined}{$\langle?s,?p,?o,?g\rangle$}
+\If {(isClassProperty(?p) \&\& (isURI(?o))} ; 
+
+\If {(!isDefined(?o))  undefinedClasses++ }; \EndIf
+\EndIf
+\State totalClasses++ ++;
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Undefined  Properties}  ~\\ 
+
+
+Similar to the Undefined Classes metric \ref{par:undefClass} the Undefined Properties metric identifies terms in the predicate position that are used without any formal definition.
+ Hogan  ~\cite{hogan2010} identified the following properties that are often used whithout being defined:  \textit{foaf:image}, \textit{cycann:label} , \textit{foaf:tagLine}.
+The following list of predicates indicate that the object of the quad must be a defined property:\textit{rdfs:subPropertyOf}, \textit{owl:onProperty}, \textit{owl:assertionProperty}, \textit{owl:equivalentProperty}, \textit{owl:propertyDisjointWith}.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of undefined properties to all properties in the given data set}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{Undefined Properties Algorithm}\label{lst:undefCl}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalProperties = 0 ;
+\State undefinedProperties = 0 ;
+\EndProcedure
+
+\Procedure{PropertyNotDefined}{$\langle?s,?p,?o,?g\rangle$}
+\If {(isURI(?p) totalProperties++} ; 
+\If {(!isDefined(?p)) udefinedProperties++ }; \EndIf
+
+\If {(isFromList(?p)) \&\&  !isDefined(?o) udefinedProperties++ }; \EndIf
+\State totalProperties ++;
+\EndIf
+
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
 
 \subsubsection{Conciseness}
 

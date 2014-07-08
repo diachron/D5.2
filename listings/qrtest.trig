@@ -1,0 +1,6 @@
+ex:JoeDoe a foaf:Researcher ;
+ rdfs:label "JoeDoe" ;
+ ex:worksFor ex:UniBonn .
+ 
+ex:UniBonn rdfs:label "UniBonn" ;
+ foaf:name "University Bonn" .

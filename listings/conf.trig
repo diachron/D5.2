@@ -1,10 +1,11 @@
 @prefix diachron:     <http://www.diachron-fp7.eu/diachron#> .
+@prefix qf:     <http://www.diachron-fp7.eu/qualityFramework#> .
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfg:	 <http://www.w3.org/2004/03/trix/rdfg-1> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
-diachron:ebi a diachron:Usecase ;
+_:metricAssessment a qf:metricConfiguration ;
 	diachron:metric "accessibility.availability.SPARQLAccessibility" ;
 	diachron:metric "accessibility.availability.RDFAccessibility" ;
 	diachron:metric "accessibility.availability.Dereferencibility" ;

@@ -1,0 +1,69 @@
+"Dataset": "http://exampleuri.com/rdfdump", 
+"QualityReportRequired": true,
+"MetricsConfiguration" : [
+    {
+        "@id": "_:f4212571792b1",
+        "@type": [
+            "http://www.diachron-fp7.eu/qualityFramework#metricConfiguration"
+        ],
+        "http://www.diachron-fp7.eu/diachron#metric": [
+            {
+                "@value": "intrinsic.accuracy.DefinedOntologyAuthor"
+            },
+            {
+                "@value": "accessibility.availability.RDFAccessibility"
+            },
+            {
+                "@value": "representational.understandability.HumanReadableLabelling"
+            },
+            {
+                "@value": "intrinsic.consistency.ObsoleteConceptsInOntology"
+            },
+            {
+                "@value": "accessibility.availability.SPARQLAccessibility"
+            },
+            {
+                "@value": "accessibility.performance.HighThroughput"
+            },
+            {
+                "@value": "intrinsic.consistency.EntitiesAsMembersOfDisjointClasses"
+            },
+            {
+                "@value": "intrinsic.accuracy.SynonymUsage"
+            },
+            {
+                "@value": "dynamicity.currency.CurrencyDocumentStatements"
+            },
+            {
+                "@value": "intrinsic.accuracy.POBODefinitionUsage"
+            },
+            {
+                "@value": "accessibility.availability.Dereferencibility"
+            },
+            {
+                "@value": "intrinsic.conciseness.OntologyVersioningConciseness"
+            },
+            {
+                "@value": "dynamicity.currency.TimeSinceModification"
+            },
+            {
+                "@value": "representational.understandability.LowBlankNodeUsage"
+            },
+            {
+                "@value": "accessibility.performance.DataSourceScalability"
+            },
+            {
+                "@value": "intrinsic.consistency.HomogeneousDatatypes"
+            },
+            {
+                "@value": "intrinsic.consistency.MisplacedClassesOrProperties"
+            },
+            {
+                "@value": "accessibility.performance.LowLatency"
+            },
+            {
+                "@value": "dynamicity.timeliness.TimelinessOfResource"
+            }
+        ]
+    }
+]

@@ -6,18 +6,45 @@
 
 \subsubsection{Representational Conciseness}
 
+Metrics in the representational dimensions capture aspects related to information representation.
+
+
 \paragraph{Short URIs}
 
 \subsubsection{Understandability}
 
 
 \paragraph{Empty Annotation Value}
+
+Some languages, e.g. OWL distinguish annotation properties.
+Annotation properties are predicates that provide informal documentation annotations about ontologies, statements, or IRIs. 
+A simple example for annotation property is \textit{rdfs:comment} which  is used to provide a comment. 
+Unfortunately annotation properties are often used with empty literal values that couse inconsistences in data.
+The problem can be solved by the corresponding triples or by replacing empty literals by annotation strings.
+The following annotation properties were used in this metric:
+\begin{itemize}
+\item \textit{skos:altLabel}
+\item \textit{skos:hiddenLabel}
+\item \textit{skos:prefLabel}
+\item \textit{skos:changeNote}
+\item \textit{skos:definition}
+\item \textit{skos:editorialNote}
+\item \textit{skos:example}
+\item \textit{skos:historyNote}
+\item \textit{skos:note}
+\item \textit{skos:scopeNote}
+\item \textit{dcterms:description}
+\item \textit{dc:description}
+\item \textit{rdf:label}
+\item \textit{rdf:comment}
+\end{itemize}
+
 % background for the metric
-The metric Empty Annotation Value consider the following widely used annotation properties (labels, comments, notes, etc.) and identifies triples whose property is an annotation property and whose object is an empty string.
+The metric Empty Annotation Value identifies triples whose property is an annotation property and whose object is an empty string.
  
 % short description
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of annotations with empty objects to all annotations in the data set.}
+\emph{Calculates the ratio of annotations with empty values to all annotations in the data set.}
 \end{mdframed}
 
 % pseudocode
@@ -29,7 +56,7 @@ The metric Empty Annotation Value consider the following widely used annotation 
 \State emptyAnnotations = 0 ;
 \EndProcedure
 
-\Procedure{IsEmptyAnnotation}{$\langle?s,?p,?o,?g\rangle$}
+\Procedure{CountEmptyAnnotations}{$\langle?s,?p,?o,?g\rangle$}
 \If {(isAnnotation(?p))}
 \If {(isEmpty(?o))} emptyAnnotations++ ; \EndIf
 \State totalAnnotations++;

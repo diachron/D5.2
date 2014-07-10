@@ -1,6 +1,9 @@
 %!TEX root = ../../../diachron-D5_2.tex
 
 \subsubsection{Intrinsic Category}
+
+The intrinsic category metrics are independent of the user's context.
+They reflect whether information presented in data correctly represent the real world and whether information is logically consistent itself.
 \label{sec:Intrinsic} 
 
 
@@ -11,10 +14,11 @@
 % short description
 
 Literals are nodes in an RDF graph, used to identify values such as numbers and dates.
-The RDF specifies two types of literals: plain and typed. 
 A plain literal is a string combined with an optional language tag.
 A typed literal comprises a string (the lexical form of the literal) and a datatype (identified by a URI) which is supposed to denote a mapping from lexical forms to some space of values.
-In the Turtle syntax typed literals are notated with syntax such as:  \textit{"13"^^xsd:int}
+The RDF specifies two types of literals: plain and typed. 
+In the Turtle syntax typed literals are notated with syntax such as:  \textit{"13"^^xsd:int}.
+Malformed datatype literals are quit common and can be fixed by simple changes to the literals.
 This Malformed Datatype Literals metric intends to check if the value of a typed literal is valid with regards to the given xsd datatype.
 
 \begin{mdframed}[style=metricdefinition]
@@ -54,19 +58,7 @@ This Malformed Datatype Literals metric intends to check if the value of a typed
 
 
 \paragraph{Homogeneous Datatypes}~\\
-The literals assigned to a certain property should be the same datatype.
-E.g. lite 
-This metric reports outliers or conflicts of literal datatypes. Since it is
- * meant to measure the homogeneity and not the validity possible rdfs:range
- * restrictions are not evaluated.
- * 
- * This metric makes two distinctions as far as homogeneity is concerned:
- * 1) if there are just a few triples of one predicate having a datatype
- *    different from all other triples, they are considered as outliers and
- *    are all reported
- * 2) if there is no obvious ratio of possibly wrong and possibly right triples
- *    the conflicting view candidates are reported
- * 
+ 
 \paragraph{Misplaced Classes or Properties}
 \paragraph{Misused Owl Datatype or Object Properties}
 \paragraph{Obsolete Concepts in Ontology}

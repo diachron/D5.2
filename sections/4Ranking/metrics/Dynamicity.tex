@@ -2,3 +2,140 @@
 
 \subsubsection{Dynamicity Category}
 \label{sec:Dynamicity} 
+
+
+\paragraph{Volatility Dimension}~\\ % dimension name 
+%\subparagraph{Background for Volatility Quality Metrics} ~\\ %general background
+In Linked Data evolution appeared almost at each new published version of data. Following the idea of \cite{TODS13} curators could define a list of changes that occur frequently and correspond to one or more low-level changes (added or deleted triples). These changes termed as Simple Changes also in the context of DIACHRON and comprise an upper abstract level of changes which is pilot-specific to describe group of changes that appear a special interest for each pilot. The detection of Simple Changes achieved accordingly to the methodology presented in \cite{TODS13} and followed in change detection service of DIACHRON (~\cite{D3.1}. The following three volatility metrics take into account these assumptions and background information.
+
+\paragraph{Versions Volatility Metric} ~\\ %metric name
+% background for the metric
+The comparison of two sequential (or not) versions of datasets could contain a number of simple changes for each pilot. In other cases, it makes sense to compare an old version of a dataset with the newest one. 
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the number of simple changes happened accross two specified versions.}
+\end{mdframed}
+
+% pseudocode
+The Versions Volatility Metric can be applied to a pair
+of defined versions to count the detected number of Simple Changes. This achieved by querying the corresponding named graph where the the total number of Simple Changes have been stored which are returned as result. 
+
+% algorithm
+\begin{algorithm}
+\caption{Versions Volatility Algorithm}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State numberOfChanges = 0
+\EndProcedure
+\Procedure{compute}{}
+\State numberOfChanges = countSimpleChanges(v1,v2)
+\EndProcedure
+\State \Return {numberOfChanges}
+\end{algorithmic}
+\end{algorithm}
+
+% metric value, range and rating
+The metric will return the total number of Simple Changes between two versions [integer number].
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Average Volatility Metric} ~\\ %metric name
+% background for the metric
+The number of detected simple changes could be varied accross different published versions for each curator/pilot. According to different scenarios some versions are similar while others appear many deltas. Thus, it is meaningful to examine all available published versions of datasets in order to find the average detected Simple Changes across each pair of versions. 
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the average number of simple changes detected across the published versions.}
+\end{mdframed}
+
+% pseudocode
+The Average Volatility Metric firstly calculates the total number of published versions through a SPARQL query. Afterwards, it calculates the detected Simple Changes per versions pair and aggregate the sum of changes. Finally, it calculates and returns the ratio between aggregated sum and the number of examined pairs.
+
+
+% algorithm
+\begin{algorithm}
+\caption{Average Volatility Metric Algorithm}
+\begin{algorithmic}[1]
+
+\Procedure{init}{}
+\State changesTotal = 0
+\State versionsNo = 0
+\State retValue = 0
+\EndProcedure
+\Procedure{compute}{}
+\State $ Versions [] = countVersions (SPARQL)$
+
+\ForAll{$v[i],v[i+1] \in Versions$}
+\State $changesTotal = changesTotal + countSimpleChanges(v[i],v[i+1])$
+\EndFor
+\EndProcedure
+\State retValue = changesTotal / versionsNo -1
+\State \Return {retValue}
+\end{algorithmic}
+\end{algorithm}
+
+% metric value, range and rating
+The metric will return the ratio [0..1] of average detected simple changes across the published dataset versions. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Weighted Volatility Metric} ~\\ %metric name
+% background for the metric
+In some applications pilots are interested more in evolution of specified versions. By applying a weighted sum model \cite{WSM} for each sequential pair of versions, we could adapt this preference for each pilot.
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the average weighted sum of simple changes that has been detected across the published versions.}
+\end{mdframed}
+
+% pseudocode
+The Weighted Volatility Metric after finding the total number of published versions it loads the weights
+from the curator preference table. Afterwards, it calculates the simple changes per pair and multiply with the corresponding weight. Finally it calculates the ratio of weighted sum of changes to the examined pairs of versions.
+
+
+% algorithm
+\begin{algorithm}
+\caption{Weighted Volatility Metric Algorithm}
+\begin{algorithmic}[1]
+
+\Procedure{init}{}
+\State aggregSChanges = 0
+\State versionsNo = 0
+\State retValue = 0
+\EndProcedure
+
+\Procedure{LoadWeights}{}
+\State $ weights [] = fetchWeights()$
+\EndProcedure
+
+\Procedure{compute}{}
+\State $ versions [] = countVersions (SPARQL)$
+
+\ForAll{$v[i],v[i+1] \in versions$}
+	\ForAll{$w[j] \in weights$}
+\State $changesTotal = changesTotal + w[j]*countSimpleChanges(v[i],v[i+1])$
+	\EndFor
+\EndFor
+\EndProcedure
+\State retValue = aggregSChanges / versionsNo -1
+\State \Return {retValue}
+\end{algorithmic}
+\end{algorithm}
+
+% metric value, range and rating
+The metric will return the ratio of [0..1] aggregated weighted sum detected simple changes across the published dataset versions.
+
+
+%%%%%%% Bibliography
+
+%TODS13:Vicky Papavassiliou, Giorgos Flouris, Irini Fundulaki, Dimitris Kotzinos, Vassilis Christophides. High-Level Change Detection in RDF(S) KBs. Transactions on Database Systems (TODS), 38(1), 2013.%
+
+
+%D3.1:Giorgos Flouris, Yannis Roussakis, Ioannis Chrysakis, Michalis Chortis, Kostas Stefanidis, Christos Pateritsas,Theodora Galani, Natalja Friesen, and Christoph Lange. D3.1: LOD evolution: change typology, updatelanguages and integrity rules. DIACHRON Deliverable D3.1, 2014.%
+
+
+%WSM: Fishburn, P.C. (1967). "Additive Utilities with Incomplete Product Set: Applications to Priorities and Assignments". Operations Research Society of America (ORSA), Baltimore, MD, U.S.A.%

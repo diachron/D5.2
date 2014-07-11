@@ -1,6 +1,29 @@
 %!TEX root = ../../diachron-D5_2.tex
 
-\section{Libraries Used}
+\section{Tools and Libraries Used}
 \label{sec:Libraries} 
+
+In this section we discuss the main tools and libraries used in our solution to help us achieve our goal.
+
+\subsection{OntoWiki}
+\label{sec:OntoWiki}
+OntoWiki\footnote{http://ontowiki.net/} is a tool providing support for agile, distributed knowledge engineering scenarios.
+Based on semantic technologies, OntoWiki provides an easy to use control management system (CMS) that allows users to manage the knowledge base (RDF data) underlying the application.
+OntoWiki is part of the LOD2 Stack, licensed under GPL and is open source.
+The Quality Framework is currently based on top of OntoWiki.
+
+\subsection{CubeViz}
+\label{sec:CubeViz}
+CubeViz\footnote{http://cubeviz.aksw.org} is an RDF DataCube browser and also an extension to OntoWiki.
+This extension allows users to visually represent statistical data represented in RDF, specifically data which is modelled by the RDF DataCube vocabulary.
+The Dataset Quality Vocabulary (daQ) is defined to use the mentioned RDF statistical vocabulary, thus CubeViz was a suitable extension to use to visualise statistical results about quality metadata.
+
+
+\subsection{Apache Jena}
+\label{sec:Jena}
+Apache Jena\footnote{https://jena.apache.org} is an open source Java framework for building Semantic Web and Linked Data applications.
+The framework is composed of different APIs interacting together to process RDF data. If you are new here, you might want to get started by following one of the tutorials.
+Apache Jena is licensed under the Apache License, Version 2.0. 
+This framework is the underlying technology used for the ``Quality Core Framework''.
 
 % mention all libraries used and their licences

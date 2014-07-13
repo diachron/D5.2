@@ -1,68 +1,181 @@
 %!TEX root = ../../../diachron-D5_2.tex
 
 \subsubsection{Intrinsic Category}
+\label{sec:Intrinsic}
 
 The intrinsic category metrics are independent of the user's context.
 They reflect whether information presented in data correctly represent the real world and whether information is logically consistent itself.
-\label{sec:Intrinsic} 
+ 
 
 
 \subsubsection{Accuracy} % dimension name 
 
+Accuracy dimension metrics reflect the  degree of correctness and presicion with wich the given dataset represent the real world facts.
+
+
 \paragraph{Malformed Datatype Literals} ~\\ %metric name
 % background for the metric
 % short description
-
+Literals that are incorrect regarding their data type is a very common problem.
 Literals are nodes in an RDF graph, used to identify values such as numbers and dates.
+The RDF specifies two types of literals: plain and typed.
 A plain literal is a string combined with an optional language tag.
 A typed literal comprises a string (the lexical form of the literal) and a datatype (identified by a URI) which is supposed to denote a mapping from lexical forms to some space of values.
-The RDF specifies two types of literals: plain and typed. 
-In the Turtle syntax typed literals are notated with syntax such as:  \textit{"13"^^xsd:int}.
-Malformed datatype literals are quit common and can be fixed by simple changes to the literals.
-This Malformed Datatype Literals metric intends to check if the value of a typed literal is valid with regards to the given xsd datatype.
+In the Turtle syntax typed literals are notated with syntax such as: \textit{"13"^^xsd:int}
+This Malformed Datatype Literals metric intends to check if the value of a typed literal is valid with regards to the given \textit{xsd} datatype.
+The algorithm \ref{lst:malformedLiterals} describes the metric computation in more details.
 
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of typed literals not valid regarding its given xsd datatype to all literals}
+\emph{Calculates the ratio of typed literals that are not valid regarding its datatype to all literals}
 \end{mdframed}
 
-% pseudocode
-
-
 \begin{algorithm}
-\caption{Malformed Datatype Literals Algorithm}\label{lst:deref}
+\caption{Malformed Datatype Literals Algorithm}\label{lst:malformedLiterals}
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State totalLiterals = 0 ;
 \State malformedLiterals = 0 ;
 \EndProcedure
 
-\Procedure{ComputeMalformedDatatypeLiterals}{$\langle?s,?p,?o,?g\rangle$}
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {(isLiteral(?o))} totalLiterals++ ;
 \If {(isTypedLiteral(?o)) \&\& (!hasValidDatatype(?o))} malformedLiterals++ ; \EndIf
  \EndIf
-\State metric=malformedLiterals/totalLiterals;
+\Return {malformedLiterals/totalLiterals}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+Only the typed literals are considered by the metric. 
+The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+
+% pseudocode
+
 % metric value, range and rating
 
 \paragraph{Literals Incompartible with Datatype Range} ~\\ 
 
+Similar to the previous metric the 'literals incompartible with datatype range' metric verifies the correctness of literals regarding their datatype. 
+Apart from typed literals descibed below a Literal datatype can also be defined through the predicate of a triple.
+The range of attribute property (property corresponding to ressourse with literal value) may be constrained to be a certain datatype.
+Please see \ref{alg:dataRange} the computational algorithm for more details.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of literals incompartible with datatype range to all literals}
+\end{mdframed}
+
+% pseudocode
+
+\begin{algorithm}
+\caption{Literals Incompartible with datatype range}\label{alg:dataRange}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalLiterals = 0
+\State incompartibleLiterals = 0
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isLiteral(?o)} totalLiterals++ ;
+\If {hasRange(?p) \&\& (literalDatatype(?o)!=rangeDatatype(?p)) } imcompartibleLiterals++; 
+\EndIf
+\EndIf
+\Return {incompartibleLiterals/totalLiterals}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Only the literals referring by the property with the range characteristic are considered by the metric. 
+The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+
+
 \paragraph{Defined Ontology Author} ~\\ 
 \paragraph{POBO Definition Usage}~\\ 
 \paragraph{Synonym Usage}~\\ 
+
+
+
 \subsubsection{Consistency}~\\ 
-\
+
+Consistency metrics intend to identify any kinds of contradictions in data.
 
 \paragraph{Entities As Members of Disjoint Classes}~\\
 
 
 \paragraph{Homogeneous Datatypes}~\\
  
-\paragraph{Misplaced Classes or Properties}
-\paragraph{Misused Owl Datatype or Object Properties}
+\paragraph{Misplaced Classes or Properties} ~\\
+
+In some cases a URI that occurs in the predicate position of a triple is defined in the corresponding vocabulary as a class, or a contrariwise a URI in the object position is a property.
+The common problem is e.g. the usage of property assigned to \textit{rdf:type} predicate.  
+These kind of inconsistences make machine interpretation of the data more complex.
+More details about the metric computation are presented in \ref{alg:misplacedCl}.
+
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Number of properties in a class position + number of classes used as predicate to number of all classes and properties.}
+\end{mdframed}
+
+
+\begin{algorithm}
+\caption{Misplaced Classes or Properties Metric Algorithm}\label{alg:misplacedCl}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalClassesUndProperties = 0 ;
+\State misplacedClasses = 0 ;
+\State misplacedProperties = 0 ;
+\EndProcedure
+
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isURI(?p)} totalClassesUndProperties++ ;\EndIf 
+\If {!isProperty(?p)} misplacedProperties++ ; \EndIf 
+
+\If {isURI(?o)} totalClassesUndProperties++; \EndIf  
+\If {!isClass(?o)} misplacedClasses++ ; \EndIf 
+\Return{(misplacedClasses+misplacedProperties)/totalClassesUndProperties}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+
+
+\paragraph{Misused Owl Datatype or Object Properties} ~\\
+
+OWL language defines additional characteristics to some properties. 
+If it's defined, a property can be either an instance of the \textit{owl:ObjectProperty} or \textit{owl:DatatypeProperty} class.
+A datatype property relates some resorce to a literal value, while an object property describe the relation between two resources.
+Wrong usage of the datatype and object properties indicates inconsisnetces in the data.
+The following algorithm  \ref{alg:misusedCl} presents more details about how the metric is computed.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Number of misused datatype and object properties to all properties}
+\end{mdframed}
+
+
+\begin{algorithm}
+\caption{Misused Owl Datatype or Object Properties Metric Algorithm} \label{alg:misusedCl}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalProperties = 0 ;
+\State misusedObjectProperties = 0 ;
+\State misusedDatatypeProperties = 0 ;
+\EndProcedure
+
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isURI(?p)} totalProperties++ ;\EndIf 
+\If {isDatatypeProperty(?p) \&\& isURI(?o)} misusedDatatypeProperties++ ; \EndIf 
+\If {isObjectProperty(?p) \&\& isLiteral(?o)} misusedObjectProperties++ ; \EndIf 
+\Return{(misusedObjectProperties + misusedDatatypeProperties)/totalProperties}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+
+
 \paragraph{Obsolete Concepts in Ontology}
 \paragraph{Ontology Hijacking}
+
+
 \paragraph{Undefined Classes Metric} ~\\ 
 \label{par:undefClass}
 
@@ -78,7 +191,7 @@ The missing classes should be define in corresponding ontology or in a separate 
 
 
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of undefined classes to all classes in object position in a dataset}
+\emph{Calculates the ratio of undefined classes to all classes in the object position in a dataset}
 \end{mdframed}
 
 
@@ -90,15 +203,16 @@ The missing classes should be define in corresponding ontology or in a separate 
 \State undefinedClasses = 0 ;
 \EndProcedure
 
-\Procedure{ClassNotDefined}{$\langle?s,?p,?o,?g\rangle$}
-\If {(isClassProperty(?p) \&\& (isURI(?o))} ; 
-
-\If {(!isDefined(?o))  undefinedClasses++ }; \EndIf
-\EndIf
-\State totalClasses++ ++;
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {(isClassProperty(?p) \&\& (isURI(?o))}  totalClasses++ ;\EndIf
+\If {(!isDefinedClass(?o))  undefinedClasses++ }; \EndIf
+\Return{undefinedClasses/totalClasses}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+
 
 \paragraph{Undefined  Properties}  ~\\ 
 
@@ -112,24 +226,24 @@ The following list of predicates indicate that the object of the quad must be a 
 \end{mdframed}
 
 \begin{algorithm}
-\caption{Undefined Properties Algorithm}\label{lst:undefCl}
+\caption{Undefined Properties Algorithm}
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State totalProperties = 0 ;
 \State undefinedProperties = 0 ;
 \EndProcedure
 
-\Procedure{PropertyNotDefined}{$\langle?s,?p,?o,?g\rangle$}
-\If {(isURI(?p) totalProperties++} ; 
-\If {(!isDefined(?p)) udefinedProperties++ }; \EndIf
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {(isURI(?p)} totalProperties++; \EndIf 
+\If {!isDefined(?p)} udefinedProperties++; \EndIf
 
-\If {(isFromList(?p)) \&\&  !isDefined(?o) udefinedProperties++ }; \EndIf
-\State totalProperties ++;
-\EndIf
-
+\If {isFromList(?p) \&\&  !isDefined(?o)} udefinedProperties++ ; \EndIf
+\Return{undefinedProperties/totalProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
 
 
 \subsubsection{Conciseness}

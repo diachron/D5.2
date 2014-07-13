@@ -3,20 +3,21 @@
 \subsubsection{Representational Category}
 \label{sec:Representational} 
 
+Representational dimensions reflect the quality aspects like conciseness, consistency and interpretability of information.
 
 \subsubsection{Representational Conciseness}
 
-Metrics in the representational dimensions capture aspects related to information representation.
 
 
 \paragraph{Short URIs}
 
 \subsubsection{Understandability}
 
+Data understandability is a very important prerequisite for an information consumer.
 
 \paragraph{Empty Annotation Value}
 
-Some languages, e.g. OWL distinguish annotation properties.
+In some languages, e.g. OWL annotation properties are distinquished.
 Annotation properties are predicates that provide informal documentation annotations about ontologies, statements, or IRIs. 
 A simple example for annotation property is \textit{rdfs:comment} which  is used to provide a comment. 
 Unfortunately annotation properties are often used with empty literal values that couse inconsistences in data.
@@ -56,14 +57,16 @@ The metric Empty Annotation Value identifies triples whose property is an annota
 \State emptyAnnotations = 0 ;
 \EndProcedure
 
-\Procedure{CountEmptyAnnotations}{$\langle?s,?p,?o,?g\rangle$}
-\If {(isAnnotation(?p))}
-\If {(isEmpty(?o))} emptyAnnotations++ ; \EndIf
-\State totalAnnotations++;
-\EndIf
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isAnnotation(?p)} totalAnnotations++; \EndIf
+\If {isEmpty(?o)} emptyAnnotations++ ; \EndIf
+\Return{emptyAnnotations/totalAnnotations}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+
+The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
 
 
 \paragraph{Human Readable Labelling}

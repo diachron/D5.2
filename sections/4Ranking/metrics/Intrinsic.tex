@@ -250,9 +250,33 @@ The metric values vary in the interval [0,1], where  the 0 indicates the best qu
 
 \paragraph{Duplicate Instance}
 
-\paragraph{Extensional Conciseness}
+\paragraph{Extensional Conciseness Metric} ~\\ 
+% background for the metric
+The conciseness of a dataset can be considered at the data level, as the redundancy of objects (i.e. instances) contained into the dataset. As defined by Mendes et al \cite{Mendes2012}, a dataset is concise (on the extensional or instance level), if it does not contain redundant objects, that is, objects being equivalent in their contents, yet having different identifiers.
+Ideally, Linked Data resources should not contain redundant information, which implies that all the objects described by them should be unique. Uniqueness of objects is determined from their properties: one object is said to be unique if and only if there are no other objects with the same set of properties and corresponding values.
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of the number of unique objects (i.e. instances) to the Total Number of objects. Two objects are equivalent if they have the same set of properties, all with the same values (but not necessarily the same ids).}
+\end{mdframed}
+
+% pseudocode
+In the implementation of this metric (algorithm~\ref{alg:extConciseness}), objects are identified by their URI (the value of the subject attribute of the triples). The uniqueness of objects is determined from its properties: one object is said to be unique if and only if there is no other subject equivalent to it. Note that two equivalent objects may differ in their URI.
+\begin{algorithm}
+\caption{Extensional Conciseness Algorithm} \label{alg:extConciseness}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State mapDescribedObjs = new Map$\langle URI, Object\rangle$();
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\State curDescribedObj = getElementWithKey(mapDescribedObjs, ?s);
+\State setObjectProperty(curDescribedObj, ?p, ?o); ~\\
+\Return{countUniqueObjects(mapDescribedObjs)/countTotalObjects(mapDescribedObjs);}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The metric will return a ratio of the number of unique objects in the dataset (i.e. objects whose properties and their values are not duplicated in another object), to the total number of objects described in the dataset. The expected range is [0..1], where 0 is the worst rating (all objects are the same) and 1 is the best rating (all objects are unique).
 
 \paragraph{Ontology Versioning Conciseness}
-
-
 

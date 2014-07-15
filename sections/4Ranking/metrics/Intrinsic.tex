@@ -248,7 +248,39 @@ The metric values vary in the interval [0,1], where  the 0 indicates the best qu
 
 \subsubsection{Conciseness}
 
-\paragraph{Duplicate Instance}
+\paragraph{Duplicate Instance Metric} ~\\
+% background for the metric
+The information contained in Linked Data resources should not be redundant, which means that the instances contained in a dataset should, ideally, be unique. As stated by Yuangui Lei et al in \cite{Lei2007}, the mapping between the real-world objects described by the data sources and the instances contained in the semantic metadata should be one to one. That is, each statement about the existence of a real-world object should correspond to one and only one instance declaration.
+Resources are divided into groups called classes. The members of a class are known as instances of the class. A triple of the form: R rdf:type C, states that C is an instance of rdfs:Class and R is an instance of C, as defined in the RDF Schema specification \footnote{$http://www.w3.org/TR/rdf-schema/\#ch\_type$}.
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Computes the Duplicate Instance metric as one minus the ratio of the number of instances violating the uniqueness rule to the total number of instances in the dataset.}
+\end{mdframed}
+
+% pseudocode
+As shown in algorithm~\ref{alg:duplicateInstance}, this metric is implemented by computing the subtraction one minus the ratio of the number of non-unique instances to the total number of declared instances. An instance is regarded as non-unique, if there is another instance declaration (i.e. rdf:type annotation) with its same subject URI and object value.
+\begin{algorithm}
+\caption{Duplicate Instance Algorithm} \label{alg:duplicateInstance}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State mapDeclaredInstances = new Map$\langle URI, Instance\rangle$();
+\State countNonUniqueInstances = 0;
+\State countTotalInstances = 0;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {containsKey(mapDeclaredInstances, ?s)} 
+countNonUniqueInstances++; 
+\EndIf
+\State countTotalInstances++;  ~\\
+\Return{1.0 - (countNonUniqueInstances / countTotalInstances);}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The metric will return one minus the ratio of the number of unique instance declarations in the dataset, to the total number of instance declarations existing in the dataset. The expected range is [0..1], where 0 is the best rating (no duplicate instance declarations exist) and 1 is the worst rating (all instance declarations in the dataset are redundant).
+
+% end-of Duplicate Instance Metric
 
 \paragraph{Extensional Conciseness Metric} ~\\ 
 % background for the metric
@@ -277,6 +309,7 @@ In the implementation of this metric (algorithm~\ref{alg:extConciseness}), objec
 \end{algorithm}
 % metric value, range and rating
 The metric will return a ratio of the number of unique objects in the dataset (i.e. objects whose properties and their values are not duplicated in another object), to the total number of objects described in the dataset. The expected range is [0..1], where 0 is the worst rating (all objects are the same) and 1 is the best rating (all objects are unique).
+% end-of Extensional Conciseness Metric
 
 \paragraph{Ontology Versioning Conciseness}
 

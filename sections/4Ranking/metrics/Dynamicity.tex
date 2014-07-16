@@ -4,6 +4,46 @@
 \label{sec:Dynamicity} 
 
 
+\paragraph{Currency Dimension}~\\ % dimension name 
+Virtually all application domains are interested in getting access to data that is as up-to-date as possible. Actually, it is generally the case that data sources decrease in value as they become outdated. Therefore, the currency dimension is a key feature of Liked Data resources. The following metrics, intended to assess the currency of datasets, are based in the definition of this dimension provided by Kahn et al. (\cite{Kahn2002}) as "the degree to which information is up-to-date".
+
+\paragraph{Currency of Documents/Statements Metric} ~\\ %metric name
+% background for the metric
+This metric is based in the definition of currency provided by Rula et al. (\cite{Rula2012}) as "the age of a value, where the age of a value is computed as the difference between the current time (the observation time) and the time when the value was last modified". The age of a dataset can be computed at both, the resource level (by comparing its last time of modification with the observation time) and the triples level (by comparing the value of last-modified statements instead).
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Measures the degree to which data is up to date, by comparing the time when the data was observed (approximately the current time), with the time when the data (the document and each triple) was last modified.}
+\end{mdframed}
+
+% pseudocode
+As listed in algorithm~\ref{alg:currencyDocsStm}, the metric is computed as the average of the comparisons of the observation time and the last modification time of each triple, normalized by the time elapsed since the publication of the document and the observation time. The last modification time is extracted from the properties: \textit{http://purl.org/dc/terms/modified} and \textit{http://semantic-mediawiki.org/swivt/1.0\#wikiPageModificationDate}. Likewise, the publication time of the document is extracted from \textit{http://purl.org/dc/terms/created}, \textit{http://purl.org/dc/terms/issued} and \textit{http://semantic-mediawiki.org/swivt/1.0\#creationDate}, as suggested by the study conducted by Rula et al. at \cite{Rula2012}.
+\begin{algorithm}
+\caption{Currency of Documents/Statements Algorithm} \label{alg:currencyDocsStm}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State accumTimeDiffs = 0;
+\State countModifiedObjs = 0;
+\State observationTime = getCurrentTime();
+\State publishingTime = null;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isLastModifiedTimeURI(?p)} 
+\State accumTimeDiffs += (observationTime - parseAsTime(?o));
+\State countModifiedObjs++;
+\EndIf
+\If {isPublishingTimeURI(?p)} 
+\State publishingTime = parseAsTime(?o);
+\EndIf ~\\
+\Return{(countModifiedObjs-(accumTimeDiffs/(observationTime-publishingTime)))/countModifiedObjs;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The metric will return the average of the difference between one and the ratio of the time elapsed since the last modification of each triple to the total time the dataset has been available. Since the former time span cannot be larger that the latter, the expected range is [0, 1]. The higher the value, the better, as it reflects how recently have the resources been updated. A value of 0 indicates that the resources have never been updated after their publication.
+
+% end-of Currency of Documents/Statements Metric
+
+
 \paragraph{Volatility Dimension}~\\ % dimension name 
 %\subparagraph{Background for Volatility Quality Metrics} ~\\ %general background
 In Linked Data evolution appeared almost at each new published version of data. Following the idea of \cite{TODS13} curators could define a list of changes that occur frequently and correspond to one or more low-level changes (added or deleted triples). These changes termed as Simple Changes also in the context of DIACHRON and comprise an upper abstract level of changes which is pilot-specific to describe group of changes that appear a special interest for each pilot. The detection of Simple Changes achieved accordingly to the methodology presented in \cite{TODS13} and followed in change detection service of DIACHRON (~\cite{D3.1}. The following three volatility metrics take into account these assumptions and background information.
@@ -139,3 +179,7 @@ The metric will return the ratio of [0..1] aggregated weighted sum detected simp
 
 
 %WSM: Fishburn, P.C. (1967). "Additive Utilities with Incomplete Product Set: Applications to Priorities and Assignments". Operations Research Society of America (ORSA), Baltimore, MD, U.S.A.%
+
+%Rula2012: Rula, A and Palmonari, M. and Maurino, A. Capturing the Age of Linked Open Data: Towards a Dataset-Independent Framework. Semantic Computing (ICSC), 2012 IEEE Sixth International Conference on, 2012.%
+
+%Kahn2002: Kahn, Beverly K. and Strong, Diane M. and Wang, Richard Y. Information Quality Benchmarks: Product and Service Performance. Commun. ACM, 2002.%

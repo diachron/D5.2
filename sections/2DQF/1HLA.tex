@@ -25,10 +25,6 @@ Figure~\ref{fig:qualityFramework} illustrates the high level architecture of the
 The two main components are the API layer (cf. Section~\ref{sec:RestAPI}) and the Core framework.
 The core framework is made up of five modules: \emph{Semantic Schema Layer}, \emph{Processing Unit}, \emph{Semantic Annotation Unit}, \emph{Quality Assessment Layer}, and \emph{Visualisation Layer}.
 
-The quality framework is envisioned to run on top of OntoWiki\footnote{http://ontowiki.eu/Welcome}, a wiki based on semantic technologies.
-The current technologies and extensions available in OntoWiki allow us to reach both the main objectives in this deliverable, and eventually to commence our initial prototypes of the quality framework (e.g. as an enterprise add-on tool to linked data publishers).
-Further investigation upon the usability of OntoWiki is still necessary in order to discover if the mentioned application can fulfil further the quality framework's ambitions, beyond the initial prototypes.
-
 \subsubsection{Semantic Schema Layer}
 The Quality Framework is based on semantic technologies and thus has an underlying semantic vocabulary layer which currently is made up of two ontologies: (i) the Dataset Quality Ontology (daQ)\footnote{\url{http://purl.org/eis/vocab/daq}}; and (ii) the Quality Problem Report Ontology (qr)\footnote{\url{http://purl.org/eis/vocab/qr}}. 
 The former describes the quality metadata representation whilst the latter describes quality problems found in the dataset itself. 
@@ -110,7 +106,8 @@ Therefore, RDF descriptions of metrics extending the daQ (cf. Section~\ref{sec:e
 These inferencing queries enable the framework to create a complete metadata description (cf. Section~\ref{sec:DAQ}) of an assessed quality metric.
 
 \subsubsection{Visualisation Layer}
-CubeViz is an OntoWiki extension for visualising data cubes (observation instances).
+\label{sec:vislayer_hla}
+CubeViz is an OntoWiki\footnote{http://ontowiki.eu/Welcome} extension for visualising data cubes (observation instances).
 Figures~\ref{fig:hor_chart},~\ref{fig:ver_chart},~\ref{fig:rad_chart}, and~\ref{fig:line_chart} depicts four different CubeViz chart visualisations from computed quality metadata\footnote{The quality metadata used can be found in \url{https://raw.githubusercontent.com/diachron/quality/master/src/test/resources/cube_qg.trig}}.
 
 \begin{figure*}[tbph]

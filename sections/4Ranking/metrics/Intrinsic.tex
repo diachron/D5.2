@@ -5,18 +5,17 @@
 
 The intrinsic category metrics are independent of the user's context.
 They reflect whether information presented in data correctly represent the real world and whether information is logically consistent itself.
- 
-
 
 \subsubsection{Accuracy} % dimension name 
 
-Accuracy dimension metrics reflect the  degree of correctness and presicion with wich the given dataset represent the real world facts.
+Accuracy dimension metrics reflect the degree of correctness and precision with which the given dataset represent the real world facts.
 
 
 \paragraph{Malformed Datatype Literals} ~\\ %metric name
+\label{par:malformed}
 % background for the metric
 % short description
-Literals that are incorrect regarding their data type is a very common problem.
+Literals that are incorrect regarding their data type are a very common problem.
 Literals are nodes in an RDF graph, used to identify values such as numbers and dates.
 The RDF specifies two types of literals: plain and typed.
 A plain literal is a string combined with an optional language tag.
@@ -26,7 +25,7 @@ This Malformed Datatype Literals metric intends to check if the value of a typed
 The algorithm \ref{lst:malformedLiterals} describes the metric computation in more details.
 
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of typed literals that are not valid regarding its datatype to all literals}
+\emph{Calculates the ratio of typed literals  not valid regarding its datatype to all literals}
 \end{mdframed}
 
 \begin{algorithm}
@@ -47,27 +46,28 @@ The algorithm \ref{lst:malformedLiterals} describes the metric computation in mo
 \end{algorithm}
 
 Only the typed literals are considered by the metric. 
-The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+The metric values vary in the interval [0, 1], where the 0 indicates the best quality.
 
 % pseudocode
 
 % metric value, range and rating
 
-\paragraph{Literals Incompartible with Datatype Range} ~\\ 
+\paragraph{Literals Incompatible with Datatype Range} ~\\ 
+\label{par:incompartible}
 
-Similar to the previous metric the 'literals incompartible with datatype range' metric verifies the correctness of literals regarding their datatype. 
-Apart from typed literals descibed below a Literal datatype can also be defined through the predicate of a triple.
-The range of attribute property (property corresponding to ressourse with literal value) may be constrained to be a certain datatype.
+Similar to the previous metric the 'literals incompatible with datatype range' metric verifies the correctness of literals regarding their datatype. 
+Apart from typed literals described below a Literal datatype can also be defined through the predicate of a triple.
+The range of attribute property (property corresponding to recourse with literal value) may be constrained to be a certain datatype.
 Please see \ref{alg:dataRange} the computational algorithm for more details.
 
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of literals incompartible with datatype range to all literals}
+\emph{Calculates the ratio of literals incompatible with datatype range to all literals}
 \end{mdframed}
 
 % pseudocode
 
 \begin{algorithm}
-\caption{Literals Incompartible with datatype range}\label{alg:dataRange}
+\caption{Literals Incompatible with datatype range}\label{alg:dataRange}
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State totalLiterals = 0
@@ -84,14 +84,12 @@ Please see \ref{alg:dataRange} the computational algorithm for more details.
 \end{algorithm}
 
 Only the literals referring by the property with the range characteristic are considered by the metric. 
-The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+The metric values vary in the interval [0, 1], where  the 0 indicates the best quality.
 
 
 \paragraph{Defined Ontology Author} ~\\ 
 \paragraph{POBO Definition Usage}~\\ 
 \paragraph{Synonym Usage}~\\ 
-
-
 
 \subsubsection{Consistency}~\\ 
 
@@ -101,13 +99,55 @@ Consistency metrics intend to identify any kinds of contradictions in data.
 
 
 \paragraph{Homogeneous Datatypes}~\\
- 
+
+This metric deal with literals that conflict regarding their datatype.
+Having restrictions to the literal datatype it's easy to validate the correctness of the data.
+However, even if no restriction regarding literals is defined, different datatypes for a literals corresponding to the same property could point to inconsistences in the data.
+In contrast to the previous metrics described in \ref{par:malformed} and in \ref{par:incompartible}, this metric deals only with literals which data type is  not defined. 
+The metric computation therefore contains the following steps:
+\begin{itemize}
+\item Count frequency of different datatypes occurring with a particular predicates.
+\item Identify properties corresponding to heterogeneous datatype literals.
+\end{itemize}
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of properties containing heterogeneous datatype literals to all properties}
+\end{mdframed}
+
+% pseudocode
+
+\begin{algorithm}
+\caption{Homogeneous Datatypes}\label{lst:heterogeneous}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalProperties = 0;
+\State heterogeneousDatatypeProperties = 0
+\State  propertyMap = map(Property, List<Datatypes>)
+\EndProcedure
+\Procedure{analyzeProperties}{$\langle?s,?p,?o,?g\rangle$}
+\If {isLiteral(?o)}  propertyMap.put(?p, Set.add.datatypeOf(?o)) \EndIf;
+\EndProcedure
+\Procedure{compute}{}
+\ForAll {Properties in propertyMap}
+\If {size(Set<Datatype>) > 1 } heterogeneousDatatypeProperties++; 
+\EndIf
+totalProperties ++;
+\EndFor
+\Return {eterogeneousDatatypeProperties/totalProperties}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric values vary in the interval [0,1], when the 0 indicates no properties containing heterogeneous datatype literals
+
+If there are just a few triples of one predicate having a datatype different from all other triples, they are considered as outliers and are all reported.
+In case if there is no obvious ratio of possibly wrong and possibly right triples the conflicting property will be reported to the user.
+  
 \paragraph{Misplaced Classes or Properties} ~\\
 
 In some cases a URI that occurs in the predicate position of a triple is defined in the corresponding vocabulary as a class, or a contrariwise a URI in the object position is a property.
 The common problem is e.g. the usage of property assigned to \textit{rdf:type} predicate.  
 These kind of inconsistences make machine interpretation of the data more complex.
-More details about the metric computation are presented in \ref{alg:misplacedCl}.
+More details about the metric computation are presented in \ref{lst:misplacedCl}.
 
 
 \begin{mdframed}[style=metricdefinition]
@@ -116,7 +156,7 @@ More details about the metric computation are presented in \ref{alg:misplacedCl}
 
 
 \begin{algorithm}
-\caption{Misplaced Classes or Properties Metric Algorithm}\label{alg:misplacedCl}
+\caption{Misplaced Classes or Properties Metric Algorithm}\label{lst:misplacedCl}
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State totalClassesUndProperties = 0 ;
@@ -135,16 +175,16 @@ More details about the metric computation are presented in \ref{alg:misplacedCl}
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+The metric values vary in the interval [0, 1], where  the 0 indicates the best quality.
 
 
 \paragraph{Misused Owl Datatype or Object Properties} ~\\
 
 OWL language defines additional characteristics to some properties. 
 If it's defined, a property can be either an instance of the \textit{owl:ObjectProperty} or \textit{owl:DatatypeProperty} class.
-A datatype property relates some resorce to a literal value, while an object property describe the relation between two resources.
-Wrong usage of the datatype and object properties indicates inconsisnetces in the data.
-The following algorithm  \ref{alg:misusedCl} presents more details about how the metric is computed.
+A datatype property relates some resource to a literal value, while an object property describes the relation between two resources.
+Wrong usage of the datatype and object properties indicates inconsistences in the data.
+The following algorithm  \ref{lst:misusedCl} presents more details about how the metric is computed.
 
 \begin{mdframed}[style=metricdefinition]
 \emph{Number of misused datatype and object properties to all properties}
@@ -152,7 +192,7 @@ The following algorithm  \ref{alg:misusedCl} presents more details about how the
 
 
 \begin{algorithm}
-\caption{Misused Owl Datatype or Object Properties Metric Algorithm} \label{alg:misusedCl}
+\caption{Misused Owl Datatype or Object Properties Metric Algorithm} \label{lst:misusedCl}
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State totalProperties = 0 ;
@@ -172,22 +212,56 @@ The following algorithm  \ref{alg:misusedCl} presents more details about how the
 The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
 
 
-\paragraph{Obsolete Concepts in Ontology}
-\paragraph{Ontology Hijacking}
+\paragraph{Obsolete Concepts in Ontology} ~\\
+\paragraph{Ontology Hijacking}  ~\\
 
+The 'ontology hijacking' term was first introduced in Hogan et. al~\cite{Hogan08} and is defined as 'the contribution of statements about classes and/or properties in a non-authoritative source such that reasoning on those classes and/or properties is affected'. 
+In other words ontology hijacking refers to cases where external concepts are redefined in a local ontology.
+Defining new super classes or properties of third-party classes or properties is an example for this problem, e.g. declaring \textit{rdfs:subPropertyOf} which is defined as a property,  to be a \textit{rdfs:Class}. 
+The challenging question is how to define authoritative source.
+We assume the ontologies/vocabularies published according to the best-practices as authoritative, while all other vocabularies as third parties documents.
+More formal, a concept (class or property) is authoritative if it's not a blank node and if the corresponding vocabulary is retrievable.
+To identify hijacked terms  we define a set of properties $P$ = {\textit{rdf:type}, \textit{rdf:domain}, \textit{rdf:range}, \textit{rdfs:subClassOf}, \textit{rdfs:subPropertyOf}\textit{owl:equivalentClass}, \textit{owl:equivalentProperty}, \textit{owl:inverseOf}, \textit{owl:onProperty}, \textit{owl:hasValue}, \textit{owl:someValuesFrom}, \textit{owl:allValuesFrom}, \textit{owl:intersectionOf}, \textit{owl:unionOf}, \textit{owl:maxCardinality}, \textit{owl:cardinality}, \textit{owl:oneOf} and a set of classes $C$ = {\textit{owl:FunctionalProperty}, \textit{owl:InverseFunctionalProperty}, \textit{owl:TransitiveProperty}, \textit{owl:SymmetricProperty}.
+Metric check the two following cases:
+\begin{itemize}
+\item Classes in \textbf{C} appear in a position other than the object of a \textit{rdf:type} triple. This is the a property redefinition.
+\item Properties in \textbf{P} appear in a position other than the predicate position.
+\end{itemize}
+Hogan et. al ~\cite{Hogan08} present more detail about the metric computation.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of hijacked triples to all triples}
+\end{mdframed}
+
+
+\begin{algorithm}
+\caption{Ontology Hijacking Algorithm}\label{lst:undefCl}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State hijackedTriples = 0 ;
+\State totalTriples = 0 ;
+\EndProcedure
+
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {(($?s \in \textbf{C}$)||($?o \in \textbf{C}$))\&\& ($?p== \textit{rdf:type}$)} hijackedTriples++ ;\EndIf
+\If {($?p \in \textbf{P}$) \&\& isAuthority(?s) \&\& !isAuthority(?o)} hijackedTriples++; \EndIf
+\Return{hijackedTriples/totalTriples}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 \paragraph{Undefined Classes Metric} ~\\ 
 \label{par:undefClass}
 
-Oftentimes a terms which is used in the object position of a triple and is not a literal is not formaly defined as being a class.
+Oftentimes a terms which is used in the object position of a triple and is not a literal is not formally defined as being a class.
 'Being defined' means that the term is defined either in some external ontology or at an earlier position in the given dataset. 
 Regarding to Hogar ~\cite{hogan2010} to the most used undefined classes belong \texttt{foaf:UserGroup}, \texttt{rss:item}, \texttt{linkedct:link}, \texttt{politico:Term} .
 The probability for undefined class in the subject position is very low, because the subject of a quad never references classes or properties in external vocabularies.
-Therefore they is no need to analyse the subject for this metric.
+Therefore they is no need to analyze the subject for this metric.
 For the most LOD data sets is sufficient to check object by the predicate \texttt{rdf:type}. 
 In the case when LOD data set defines its own vocabulary the following predicates indicate that the object must be a defined class:  \texttt{rdfs:domain}, \texttt{rdfs:range}, \texttt{rdfs:subClassOf}, \texttt{owl:allValuesFrom}, \texttt{owl:someValuesFrom}, \texttt{owl:equivalentClass}, \texttt{owl:complementOf}, \texttt{owl:onClass}, \texttt{owl:disjointWith}.
 The undefined classes problem occurs due to spelling or syntactic mistakes resolvable through minor fixes to the respective ontologies.
-The missing classes should be define in corresponding ontology or in a separate namenspace.
+The missing classes should be defining in corresponding ontology or in a separate namespaces.
 
 
 \begin{mdframed}[style=metricdefinition]
@@ -211,14 +285,14 @@ The missing classes should be define in corresponding ontology or in a separate 
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+The metric values vary in the interval [0, 1], where  the 0 indicates the best quality.
 
 
-\paragraph{Undefined  Properties}  ~\\ 
+\paragraph{Undefined Properties}  ~\\ 
 
 
 Similar to the Undefined Classes metric \ref{par:undefClass} the Undefined Properties metric identifies terms in the predicate position that are used without any formal definition.
- Hogan  ~\cite{hogan2010} identified the following properties that are often used whithout being defined:  \textit{foaf:image}, \textit{cycann:label} , \textit{foaf:tagLine}.
+ Hogan  ~\cite{hogan2010} identified the following properties that are often used without being defined:  \textit{foaf:image}, \textit{cycann:label} , \textit{foaf:tagLine}.
 The following list of predicates indicate that the object of the quad must be a defined property:\textit{rdfs:subPropertyOf}, \textit{owl:onProperty}, \textit{owl:assertionProperty}, \textit{owl:equivalentProperty}, \textit{owl:propertyDisjointWith}.
 
 \begin{mdframed}[style=metricdefinition]
@@ -292,6 +366,7 @@ Ideally, Linked Data resources should not contain redundant information, which i
 \emph{Calculates the ratio of the number of unique objects (i.e. instances) to the Total Number of objects. Two objects are equivalent if they have the same set of properties, all with the same values (but not necessarily the same ids).}
 \end{mdframed}
 
+
 % pseudocode
 In the implementation of this metric (algorithm~\ref{alg:extConciseness}), objects are identified by their URI (the value of the subject attribute of the triples). The uniqueness of objects is determined from its properties: one object is said to be unique if and only if there is no other subject equivalent to it. Note that two equivalent objects may differ in their URI.
 \begin{algorithm}
@@ -313,3 +388,8 @@ The metric will return a ratio of the number of unique objects in the dataset (i
 
 \paragraph{Ontology Versioning Conciseness}
 
+%%%%%%% Bibliography
+
+% Mendes2012 : Mendes, Pablo N. and M\"{u}hleisen, Hannes and Bizer, Christian. Sieve: Linked Data Quality Assessment and Fusion. Proceedings of the 2012 Joint EDBT/ICDT Workshops, 2012%
+
+% Lei2007 : Lei, Yuangui and Uren, Victoria and Motta, Enrico. A Framework for Evaluating Semantic Metadata. Proceedings of the 4th International Conference on Knowledge Capture, 2007%

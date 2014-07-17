@@ -4,6 +4,113 @@
 \label{sec:Dynamicity} 
 
 
+\paragraph{Currency Dimension}~\\ % dimension name 
+Virtually all application domains are interested in getting access to data that is as up-to-date as possible. Actually, it is generally the case that data sources decrease in value as they become outdated. Therefore, the currency dimension is a key feature of Liked Data resources. The following metrics, intended to assess the currency of datasets, are based in the definition of this dimension provided by Kahn et al. (\cite{Kahn2002}) as "the degree to which information is up-to-date".
+
+\paragraph{Currency of Documents/Statements Metric} ~\\ %metric name
+% background for the metric
+This metric is based in the definition of currency provided by Rula et al. (\cite{Rula2012}) as "the age of a value, where the age of a value is computed as the difference between the current time (the observation time) and the time when the value was last modified". The age of a dataset can be computed at both, the resource level (by comparing its last time of modification with the observation time) and the triples level (by comparing the value of last-modified statements instead).
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Measures the degree to which data is up to date, by comparing the time when the data was observed (approximately the current time), with the time when the data (the document and each triple) was last modified.}
+\end{mdframed}
+
+% pseudocode
+As listed in algorithm~\ref{alg:currencyDocsStm}, the metric is computed as the average of the comparisons of the observation time versus the last modification time of each triple, normalized by the time elapsed since the publication of the document and the observation time. The last modification time is extracted from the properties: \textit{http://purl.org/dc/terms/modified} and \textit{http://semantic-mediawiki.org/swivt/1.0\#wikiPageModificationDate}. Likewise, the publication time of the document is extracted from \textit{http://purl.org/dc/terms/created}, \textit{http://purl.org/dc/terms/issued} and \textit{http://semantic-mediawiki.org/swivt/1.0\#creationDate}, as suggested by the study conducted by Rula et al. at \cite{Rula2012}.
+\begin{algorithm}
+\caption{Currency of Documents/Statements Algorithm} \label{alg:currencyDocsStm}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State accumTimeDiffs = 0;
+\State countModifiedObjs = 0;
+\State observationTime = getCurrentTime();
+\State publishingTime = null;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isLastModifiedTimeURI(?p)} 
+\State accumTimeDiffs += (observationTime - parseAsTime(?o));
+\State countModifiedObjs++;
+\EndIf
+\If {isPublishingTimeURI(?p)} 
+\State publishingTime = parseAsTime(?o);
+\EndIf ~\\
+\Return{(countModifiedObjs-(accumTimeDiffs/(observationTime-publishingTime)))/countModifiedObjs;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The metric will return the average of the difference between one and the ratio of the time elapsed since the last modification of each triple to the total time the dataset has been available. Since the former time span cannot be larger that the latter, the expected range is [0, 1]. The higher the value, the better, as it reflects how recently have the resources been updated. A value of 0 indicates that the resources have never been updated after their publication.
+
+% end-of Currency of Documents/Statements Metric
+
+\paragraph{Time Since Modification Metric} ~\\ %metric name
+% background for the metric
+As suggested above, the difference between the observation time (the time at which the resource is examined) and the time when the data was last modified, is a natural measure of how current is the information provided by a dataset. In contrast with the Currency of Documents/Statements metric, a simpler approach can be taken in order to measure the degree to which data is up to date. This metric does so by computing the plain difference between the observation time and the time when the data values were last modified (note that the normalization factor, based on the publishing time of the document is omitted here).
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Provides a measure of the degree to which information is up to date, by taking the average difference between the observation time (i.e. the instant when the present calculation of the metric was initiated) and the time when the data (each triple in the dataset) were last modified.}
+\end{mdframed}
+
+% pseudocode
+The computation performed by the metric is detailed in algorithm~\ref{alg:timeSinceMod}. The observation time corresponds to the instant when the calculation of the metric was initiated and only the triples providing a last time of modification are processed during the computation.
+\begin{algorithm}
+\caption{Time Since Modification Algorithm} \label{alg:timeSinceMod}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State accumTimeDiffs = 0;
+\State countModifiedObjs = 0;
+\State observationTime = getCurrentTime();
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isLastModifiedTimeURI(?p)} 
+\State accumTimeDiffs += (observationTime - parseAsTime(?o));
+\State countModifiedObjs++;
+\EndIf ~\\
+\Return{accumTimeDiffs/countModifiedObjs;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The result is in the range [0, $+\infty$] and represents an amount of time in milliseconds. The lower the value, the better, as this metric measures the average time elapsed since the last modification of the information contained in the resource. That is, high values indicate that data provided by the resource was last updated long ago.
+
+% end-of Time Since Modification Metric
+
+\paragraph{Exclusion of Outdated Data Metric} ~\\ %metric name
+% background for the metric
+The currency of a Linked Data resource can also be measured relative to the amount of outdated entities it contains. However, in order to do so, it is necessary to somehow be able recognize when an entity is to be deemed as outdated, which in turn requires that temporal metadata is available and represented according to an appropriate model, such as those proposed by Rula et al. in \cite{Rula2012A}. In this particular case, we consider an entity to be outdated, if information about its period of validity is provided and according to it, data has already expired. The proportion of outdated data present in a dataset is an important quality factor, since it is usually the case that outdated data is no longer valid.
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Determines the extent to which information provided in a dataset is outdated, by comparing the total number of entities described by the dataset, versus how many of those that are recognized to be outdated.}
+\end{mdframed}
+
+% pseudocode
+The implementation of the metric, as presented in algorithm \ref{alg:exclusionOutdated}, makes use of the property \textit{http://purl.org/dc/terms/valid} (when provided) to determine the expiration time of each examined triple and then, whether the described entity is outdated. After processing all triples of the dataset, the metric is computed as the ratio of the number of outdated entities to the total number of entities in the dataset.
+\begin{algorithm}
+\caption{Exclusion of Outdated Data Algorithm} \label{alg:exclusionOutdated}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State countTotalOutdatedObjs = 0;
+\State countTotalDescribedObjs = 0;
+\State observationTime = getCurrentTime();
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isValidTimeURI(?p)} 
+\If {observationTime $<$ parseAsTime(?o)} 
+\State countTotalOutdatedObjs++;
+\EndIf
+\EndIf
+\If {equalsURI(?p, rdf:type) \&\& isURI(?s)} 
+\State countTotalDescribedObjs++;
+\EndIf ~\\
+\Return{1-(countTotalOutdatedObjs/countTotalDescribedObjs);}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The metric values vary in the interval [0, 1], where a value of 1 indicates the best quality (no entities were found to be outdated).
+
+% end-of Exclusion of Outdated Data Metric
+
 \paragraph{Volatility Dimension}~\\ % dimension name 
 %\subparagraph{Background for Volatility Quality Metrics} ~\\ %general background
 In Linked Data evolution appeared almost at each new published version of data. Following the idea of \cite{TODS13} curators could define a list of changes that occur frequently and correspond to one or more low-level changes (added or deleted triples). These changes termed as Simple Changes also in the context of DIACHRON and comprise an upper abstract level of changes which is pilot-specific to describe group of changes that appear a special interest for each pilot. The detection of Simple Changes achieved accordingly to the methodology presented in \cite{TODS13} and followed in change detection service of DIACHRON (~\cite{D3.1}. The following three volatility metrics take into account these assumptions and background information.
@@ -130,6 +237,74 @@ from the curator preference table. Afterwards, it calculates the simple changes 
 The metric will return the ratio of [0..1] aggregated weighted sum detected simple changes across the published dataset versions.
 
 
+\paragraph{Time Validity Interval Metric} ~\\ %metric name
+% background for the metric
+An alternative to measure how frequently the data varies with time, is to make use of information about the expiration of entities in order to assess how long does data remain valid. Consequently, such measurement would require two pieces of information about entities described in the dataset: the expiry time of entities (i.e. validity) and the time when data became available (i.e. publishing time). By combining these two components, the interval during which the information will remain valid can be computed.
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Estimates the frequency with which data will be updated, by calculating the average length of the time interval during which entities remain valid.}
+\end{mdframed}
+
+% pseudocode
+As shown in algorithm \ref{alg:timeValidityInterval}, information about the expiration time and issued time of entities is extracted from the triples, thereby accumulating the data necessary to compute the average length of the validity interval of all entities for which such information is provided in the dataset.
+\begin{algorithm}
+\caption{Time Validity Interval Algorithm} \label{alg:timeValidityInterval}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State mapObjsWithValidityInfo = new Map$\langle URI, Object\rangle$();
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isValidityTimeURI(?p)} 
+\State setValidityTimeOfObj(getElementWithKey(mapObjsWithValidityInfo, ?s), parseAsTime(?o));
+\EndIf
+\If {isPublishingTimeURI(?p)} 
+\State setIssueTimeOfObj(getElementWithKey(mapObjsWithValidityInfo, ?s), parseAsTime(?o));
+\EndIf ~\\
+\Return{calcTotalValidityMinusIssueTime(mapObjsWithValidityInfo)/countTotalElements(mapObjsWithValidityInfo);}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The result is in the range [0, $+\infty$] and represents an amount of time in seconds. Lower values correspond to better quality rankings, as they indicate that data is expected to be updated more frequently and therefore would be fresher.
+
+% end-of Time Validity Interval Metric
+
+
+\paragraph{Timeliness Dimension}~\\ % dimension name 
+The degree to which Linked Data is considered to be up-to-date or outdated can heavily depend on the task at hand. Depending on the application, information updated one month ago can be considered highly current (e.g. the list of pet shops in a city) or unacceptably outdated (e.g. a pricing list of foreign currencies). Therefore, in order to align the quality measures related to the age of data with the application of interest, it makes sense to provide currency measures relative to a specific task. The metrics part of this dimension, are based on the concept of timeliness as defined by Gamble et al. (\cite{Gamble2011}): "Timeliness is a measure of utility, is a comparison of the date the annotation was updated with the consumer's requirement".
+
+\paragraph{Timeliness of the Resource Metric} ~\\ %metric name
+% background for the metric
+If the expiration time of the data comprised by a Linked Data resource is provided, it is reasonable to expect such data to be updated before or shortly after that time. Otherwise, it would suggest that the data might be outdated. This, added up to the fact that the expiration time of information is closely associated to the application domain, allows to define Timeliness of the Resource as an application-domain-related metric that measures the currency of data.
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Indicates how up-to-date data is, relative to a specific task, by measuring the difference between the invalid time (expiry time of the data) and the observation time (current time).}
+\end{mdframed}
+
+% pseudocode
+Algorithm \ref{alg:timelinessResource} illustrates how this metric is computed. The procedure determines whether the triple contains  temporal information stating when the described entity expires (i.e. its validity). This is done by evaluating the property regarded as source  of the Expiration/Valid Time (namely, \textit{http://purl.org/dc/terms/valid}, as suggested by Rula et al. at \cite{Rula2012}), if such a property is found, its value is subtracted from the current observation time, and the result is accumulated. The total accumulated differences will be used afterwards, to calculate the final value of the metric.
+\begin{algorithm}
+\caption{Timeliness of the Resource Algorithm} \label{alg:timelinessResource}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State accumValidTimeDiffs = 0;
+\State countTotalAccountedObjs = 0;
+\State observationTime = getCurrentTime();
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isExpirationTimeURI(?p)} 
+\State accumValidTimeDiffs += (observationTime - parseAsTime(?o));
+\State countTotalAccountedObjs++;
+\EndIf
+\Return{accumValidTimeDiffs/countTotalAccountedObjs;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The result of the metric is a real number in the range [$-\infty$, $+\infty$], as it represents the average length of the gap (in  milliseconds) between the expiration time of the data and the actual time. The lower the value, the better, since a higher, positive value indicates that the resources are possibly outdated.
+
+% end-of Timeliness of the Resource Metric
+
 %%%%%%% Bibliography
 
 %TODS13:Vicky Papavassiliou, Giorgos Flouris, Irini Fundulaki, Dimitris Kotzinos, Vassilis Christophides. High-Level Change Detection in RDF(S) KBs. Transactions on Database Systems (TODS), 38(1), 2013.%
@@ -139,3 +314,11 @@ The metric will return the ratio of [0..1] aggregated weighted sum detected simp
 
 
 %WSM: Fishburn, P.C. (1967). "Additive Utilities with Incomplete Product Set: Applications to Priorities and Assignments". Operations Research Society of America (ORSA), Baltimore, MD, U.S.A.%
+
+%Rula2012: Rula, A and Palmonari, M. and Maurino, A. Capturing the Age of Linked Open Data: Towards a Dataset-Independent Framework. Semantic Computing (ICSC), 2012 IEEE Sixth International Conference on, 2012.%
+
+%Rula2012A: Rula, Anisa and Palmonari, Matteo and Harth, Andreas and Stadtmüller, Steffen and Maurino, Andrea. On the Diversity and Availability of Temporal Information in Linked Open Data. The Semantic Web – ISWC, 2012.%
+
+%Kahn2002: Kahn, Beverly K. and Strong, Diane M. and Wang, Richard Y. Information Quality Benchmarks: Product and Service Performance. Commun. ACM, 2002.%
+
+%Gamble2011: Gamble, Matthew and Goble, Carole. Quality, Trust, and Utility of Scientific Data on the Web: Towards a Joint Model. Proceedings of the 3rd International Web Science Conference, 2011.%

@@ -1,4 +1,3 @@
-%!TEX root = ../../../diachron-D5_2.tex
 
 \subsubsection{Representational Category}
 \label{sec:Representational} 
@@ -7,9 +6,38 @@ Representational dimensions reflect the quality aspects like conciseness, consis
 
 \subsubsection{Representational Conciseness}
 
+\paragraph{Short URIs} ~\\
+% background for the metric
+URIs play a key role in how information is represented in Linked Data resources, as they are used to name the entities being described. Therefore, having compact, well formatted URIs has a positive effect in the clearness and conciseness of data. 
+As suggested by \cite{Hogan2012}, data providers that locally mint (on average) shorter URIs are deemed as being more compliant with Linked Data best practices.
 
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Detects whether, in average, short URIs are being used, which suggests that information is compactly represented and that readability is favored.}
+\end{mdframed}
 
-\paragraph{Short URIs}
+% pseudocode
+Implementation details regarding these metric are provided in algorithm~\ref{alg:shortURIs}. All URIs identifying instances, that are defined locally, are considered by the metric. The calculation is performed as the average of the lengths of the URIs corresponding to the subjects of all instance declarations (i.e. statements using the \textit{rdf:type} predicate).
+\begin{algorithm}
+\caption{Short URIs Algorithm} \label{alg:shortURIs}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State accumulatedURIsLength = 0;
+\State countLocallyDefURIs = 0;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {equalsURI(?p, rdf:type) \&\& isURI(?s)} 
+\State accumulatedURIsLength += lengthOfURI(?s);
+\State countLocallyDefURIs++;
+\EndIf ~\\
+\Return{accumulatedURIsLength / countLocallyDefURIs;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The metric will return the average length of all the URIs locally defined in the dataset. The expected range is a real number in the range [0, $+\infty$). Lower values represent better rankings.
+
+% end-of Short URIs Metric
 
 \subsubsection{Understandability}
 
@@ -17,10 +45,10 @@ Data understandability is a very important prerequisite for an information consu
 
 \paragraph{Empty Annotation Value}
 
-In some languages, e.g. OWL annotation properties are distinquished.
+In some languages, e.g. OWL annotation properties are distinguished.
 Annotation properties are predicates that provide informal documentation annotations about ontologies, statements, or IRIs. 
-A simple example for annotation property is \textit{rdfs:comment} which  is used to provide a comment. 
-Unfortunately annotation properties are often used with empty literal values that couse inconsistences in data.
+A simple example for annotation property is \textit{rdfs:comment} which is used to provide a comment. 
+Unfortunately annotation properties are often used with empty literal values that cause inconsistences in data.
 The problem can be solved by the corresponding triples or by replacing empty literals by annotation strings.
 The following annotation properties were used in this metric:
 \begin{itemize}
@@ -73,3 +101,8 @@ The metric values vary in the interval [0,1], where  the 0 indicates the best qu
 \paragraph{Labels Using Capitals}
 \paragraph{Low Blank Node Usage}
 \paragraph{Whitespace in Annotation}
+
+%%%%%%% Bibliography
+
+% Hogan2012 : Aidan Hogan and Jürgen Umbrich and Andreas Harth and Richard Cyganiak and Axel Polleres and Stefan Decker. An empirical survey of Linked Data conformance. Web Semantics: Science, Services and Agents on the World Wide Web, 2012%
+

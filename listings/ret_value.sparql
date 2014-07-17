@@ -1,0 +1,12 @@
+SELECT ?metric, ?value WHERE {
+	?graph a daq:QualityGraph .
+	GRAPH ?graph {
+		?metric a ?metricType .
+		?metric daq:hasObservation ?obs .
+		?obs daq:value ?value .
+		?obs daq:dateComputed ?dateComputed .
+	}
+	GRAPH <http://www.diachron-fp7.eu/dqm#> {
+		?metricType rdfs:subClassOf daq:Metric .
+	}
+} ORDER BY DESC(?dateComputed) LIMIT 1

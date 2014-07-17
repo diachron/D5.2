@@ -2,5 +2,120 @@
 
 \subsection{Ranking of Quality-Computed Datasets}
 \label{sec:Ranking} 
+Tools for data consumers, such as CKAN, usually provide features such as faceted browsing and sorting, in order to allow prospective dataset users to search within the large dataset archive.
+Using faceted browsing, datasets could be filtered according to tags or values of metadata properties.
+The datasets could also be ranked or sorted according to values of properties such as relevance, size or the date of last modification.
+With many datasets available, filtering or ranking by quality can become a challenge.
+Talking about ``quality'' as a whole might not make sense, as different aspects of quality matter for different applications.
+It does, however, make sense to restrict quality-based filtering or ranking to those quality categories and/or dimensions that are relevant in the given situation, or to assign custom weights to different dimensions, and compute the overall quality as a weighted sum.
+The daQ vocabulary provides flexible filtering and ranking possibilities in that it facilitates access to dataset quality metrics in these different dimensions and thus facilitates the (re)computation of custom aggregated metrics derived from base metrics.
+To keep quality metrics information easily accessible, each assessed dataset contains the relevant daQ metadata graph in the dataset itself.
 
-%write about how datasets can be ranked using the CKAN example in LDOW
+We aim to achieve a quality-biased ranking of LOD datasets, promoting:
+\begin{enumerate}
+\item High quality datasets;
+\item Datasets on which a larger number of quality metrics is calculated. 
+\end{enumerate}
+Therefore, datasets of poor quality but having more quality metadata might end up ranked higher than those with excellent quality on the only metric assessed on.
+Publishers might be doubtful about the data they publish and they will hide their doubt in the dataset itself.
+One possibility is that the publishers might hide this psychological nature by claiming that their dataset is of good quality in certain aspects.
+Quality assessment frameworks should not be only about positive or negative assertions of a the dataset, but also it should place the publishers doubts in the assertion spectrum.
+With our proposed ranking algorithm, such effects will also be given a small share of the \emph{ranking-glory}.
+
+The approach we take for ranking takes into consideration the total number of metrics assessed by the most complete dataset available in the datastore\footnote{We are assuming that the metrics used are common to all datasets in the domain}.
+It also takes into consideration any facet filters chosen by the user, enabling the dynamic change of weights and thus the final ranking.
+The ranking algorithm is split into a number of steps:
+\begin{enumerate}
+\item Get the total number of metrics assessed ($m$);
+\item Adjust weight for those metrics selected in the facet (Definition~\ref{def:weight_adjustment});
+\item Adjust weight for the rest of the metrics (Definition~\ref{def:weight_adjustment_smaller});
+\item Calculate the metric value by weight to find out ranking (Definition~\ref{def:ranking}) and rank;
+\end{enumerate}
+
+\subsubsection{Weight Assignment}
+The weight assignment is the most crucial aspect of the ranking algorithm.
+It should be evenly distributed amongst the chosen (filtered) metrics, whilst also giving a share of the weight to the other metrics.
+In this way we ensure the quality-bias ranking and promote not just the high quality datasets, but also giving a smaller share to those that give more information about quality than others.
+In Definition~\ref{def:weight_adjustment} we calculate a weight value for the number of metrics chosen ($f_{m}$).
+Together with the number of metrics chosen, we add 1 to represent a small share which will be divided equally with the rest of the metrics ($\overline{f_{m}}$ represents the metrics not chosen).
+This is defined in Definition~\ref{def:weight_adjustment_smaller}.
+To explain this in a simpler manner, if we have five metrics and only one was chosen, then the chosen metric will have a weight of 0.5 whilst the rest will have 0.5 shared equally (i.e. 0.125).
+
+\begin{Def1}
+\label{def:weight_adjustment}
+\begin{align*}
+\theta = \frac{1}{(f_{m} + 1)}
+\end{align*}
+\end{Def1}
+
+\begin{Def1}
+\label{def:weight_adjustment_smaller}
+\begin{align*}
+\rho = \frac{1}{((f_{m} + 1) \times \overline{f_{m}})}
+\end{align*}
+\end{Def1}
+
+\subsubsection{Ranking}
+After the weights have been distributed, the ranking algorithm retrieves all the metric values from the quality graph.
+The values of chosen metrics $f_{m_{i}}$ (where i is a range from 0 to the number of possible metrics) are added together and multiplied by the weight $\theta$.
+Similarly, those which are not chosen ($\overline{f_{m_{i}}}$) are multiplied by the weight $\rho$.
+These two are added together which gives us a value $\tau$ for the dataset (Definition~\ref{def:ranking}).
+This is repeated for all possible datasets and then are ranked accordingly.
+\begin{Def1}
+\label{def:ranking}
+\begin{align*}
+\tau = (\sum_{f_{m}}^m f_{m_{i}} \times \theta) + (\sum_{\overline{f_{m}}}^m \overline{f_{m_{i}}} \times \rho)
+\end{align*}
+\end{Def1}
+
+Listing~\ref{lst:rank_sparql} shows a typical configuration of the retrieval of metric assessment values from the Quality Graph.
+In this query the metric value of the latest observation is taken into consideration.
+\lstinputlisting[caption={Retrieving metric assessment value from the Quality Graph.},label=lst:rank_sparql, language=SPARQL]{listings/ret_value.sparql}
+
+\subsubsection{Ranking Example}
+In the following subsection we introduce an example to further help the reader to understand how ranking will work.
+Consider the following dataset scenario in Table~\ref{tbl:datasets}.
+In our datastore we have four datasets each having a Quality Graph with a number of assessed metrics and their values.
+\textit{Dataset D} has been assessed by all eight metrics whilst the others have been assessed with six, five and five respectively.
+\begin{table}[tbph]
+\center
+    \begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{Metric} & \textbf{Dataset A} & \textbf{Dataset B} & \textbf{Dataset C} & \textbf{Dataset D} \\   \hline
+    A      & 0.2       & 0.9       & 0.5       & 0.3       \\  \hline
+    B      & 0.5       & 0.9       & 0.8       & 0.4       \\  \hline
+    C      & 0.9       & 0.3       & 0.7       & 0.7       \\  \hline
+    D      & 0.8       & -         & 0.9       & 0.1       \\  \hline
+    E      & 0.7       & -         & 0.4       & 0.1       \\  \hline
+    F      & -         & 0.2       & -         & 0.5       \\  \hline
+    G      & -         & 0.8       & -         & 0.9       \\  \hline
+    H      & 0.3       & -         & -         & 0.9       \\  \hline
+    \end{tabular}
+    \label{tbl:datasets}
+    \caption{Dataset example}
+\end{table}
+
+In Table~\ref{tbl:dataset_ranking} we show how the ranking value $\tau$ would dynamically change for different scenarios.
+Initially, no filter is chosen by the user.
+A possible scenario for this is on page load.
+When no filter is chosen (in this example) all weights have a $\rho$ value of 0.125.
+\textit{Dataset D} will be ranked first, followed by \textit{Dataset A}, \textit{Dataset C} and \textit{Dataset B}.
+This shows that although at first glance it seems that \textit{Dataset B} is a high quality dataset (three out of five assess quality metrics are over 0.8), it got penalised by the fact that other datasets had more quality metadata about their dataset.
+The single filters \textbf{A} and \textbf{E} gave expected results, with \textit{Dataset B} and \textit{Dataset A} being top ranked respectively. 
+The multiple filter \textbf{A,B} also gave expected results, with \textit{Dataset D} being ranked third ahead of \textit{Dataset A} due to the it having more quality metadata.
+More examples of different scenarios are in the Table~\ref{tbl:dataset_ranking}, where the blue coloured cells shows the top-ranked dataset.
+\begin{table}[tbph]
+    \begin{tabular}{|l|l|l|l|l|l|l|l|}
+    \hline
+    \textbf{Chosen Filter} & \textbf{Dataset A}                                 & \textbf{Dataset B}                                 & \textbf{Dataset C}  & \textbf{Dataset D}                                  & ~ & $\theta$ & $\rho$ \\  \hline
+     \textbf{No Filter}     & 0.425                                     & 0.3875                                    & 0.4125     &      \cellcolor{blue!25} 0.4875 & ~ & 1                   & 0.125             \\  \hline
+     \textbf{A}             & 0.32857143                                & \cellcolor{blue!25} 0.60714286 & 0.45       & 0.40714286                                 & ~ & 0.5                 & 0.07142857        \\  \hline
+    \textbf{E}             & \cellcolor{blue!25} 0.54285714 & 0.22142857                                & 0.40714286 & 0.32142857                                 & ~ & 0.5                 & 0.07142857        \\  \hline
+     \textbf{A,B}           & 0.38333333                                & \cellcolor{blue!25} 0.67222222 & 0.54444444 & 0.41111111                                 & ~ & 0.33333333          & 0.05555556        \\  \hline
+    \textbf{A,B,C}         & 0.49                                      & \cellcolor{blue!25} 0.575      & 0.565      & 0.475                                      & ~ & 0.25                & 0.05              \\  \hline
+    \textbf{A,E}           & \cellcolor{blue!25} 0.43888889 & 0.42222222                                & 0.43333333 & 0.32777778                                 & ~ & 0.33333333          & 0.05555556        \\  \hline
+    \textbf{B,D,E,H}       & \cellcolor{blue!25} 0.515      & 0.29                                      & 0.48       & 0.42                                       & ~ & 0.2                 & 0.05              \\  \hline
+    \end{tabular}
+    \label{tbl:dataset_ranking}
+    \caption{Dataset Ranking for different Scenarios}
+\end{table}

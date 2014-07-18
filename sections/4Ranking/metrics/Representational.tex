@@ -41,10 +41,13 @@ The metric will return the average length of all the URIs locally defined in the
 
 \subsubsection{Understandability}
 
-Data understandability is a very important prerequisite for an information consumer.
+Understandability is the quality of information that enables users to comprehend its meaning. 
+Understandability is an ultimate prerequisite for information consumer. 
+The better users understand data, the more effectively they can use it. 
+The metrics presented below reflect different aspects of understandability by a numerical value.
 
 \paragraph{Empty Annotation Value}
-
+\label{par:emptyAnnotation}
 In some languages, e.g. OWL annotation properties are distinguished.
 Annotation properties are predicates that provide informal documentation annotations about ontologies, statements, or IRIs. 
 A simple example for annotation property is \textit{rdfs:comment} which is used to provide a comment. 
@@ -76,6 +79,7 @@ The metric Empty Annotation Value identifies triples whose property is an annota
 \emph{Calculates the ratio of annotations with empty values to all annotations in the data set.}
 \end{mdframed}
 
+The algorithm \ref{lst:emptyAnnotationValue} provides detailed description of metric computation. The algorithm first identifyes annotation properties, that are properties from the list above and then checks if the property value is not an empty string.
 % pseudocode
 \begin{algorithm}
 \caption{Empty Annotation Value Algorithm}\label{lst:emptyAnnotationValue}
@@ -97,10 +101,94 @@ The metric Empty Annotation Value identifies triples whose property is an annota
 The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
 
 
-\paragraph{Human Readable Labelling}
-\paragraph{Labels Using Capitals}
-\paragraph{Low Blank Node Usage}
 \paragraph{Whitespace in Annotation}
+
+
+In contrast to the previous metric \ref{par:emptyAnnotation} which identifies triples with empty annotation value, the Whitespace in Annotation metric deals with the case when the annotation value is available, but contains leading or trailing whitespaces.
+This is not a crucial for data understanding, but should be at least reported to the user who wants to improve data quality.
+The metric is defined as follows:
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of annotations with leading or trailing whitespace to all annotations in the data set.}
+\end{mdframed}
+
+An important prerequisite for metric computation is a predefined list of annotation properties  which we presented in the previous metric \ref{par:emptyAnnotation}.
+The algorithm \ref{lst:whitespace} provides detailed description of metric computation. The algorithm first identifyes annotation properties, that are properties from the list above and then checks if the property value is not an empty string.
+
+
+% pseudocode
+\begin{algorithm}
+\caption{Whitespace in Annotation Algorithm}\label{lst:whitespace}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalAnnotations = 0 ;
+\State whitespaceInAnnotations = 0 ;
+\EndProcedure
+
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isAnnotation(?p)} totalAnnotations++; \EndIf
+\If {containsLeadingORTrailingWhitespace(?o)} whitespaceInAnnotations++ ; \EndIf
+\Return{whitespaceInAnnotations/totalAnnotations}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The \textit{isAnnotation()} method  only checks if the property belongs to the list of annotation properties, 
+
+The metric values vary in the interval [0,1], where  the 0 indicates that data set is free of the leading or trailing whitespace in annotations.
+
+
+\paragraph{Labels Using Capitals}
+
+Similar to the two previous metrics the metric Labels Using Capitals considers a specific kind of properties, namely label properties.
+The metrics identifies the triples with label property whose object uses a bad style of capitalisation. 
+We define "bad" capitalisation as "camel case" where compound words or phrases  are written such that each next word or abbreviation begins with a capital letter, e.g. \textit{InterestingThing}.
+The following widely used label properties are considered by the metric:
+\begin{itemize}
+\item \textit{skos:altLabel}
+\item \textit{skos:hiddenLabel}
+\item \textit{skos:prefLabel}
+ \item \textit{rdfs:label}
+		
+
+
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Calculates the ratio of labels with "bad capitalisation" to all labels}
+\end{mdframed}
+
+The algorithm \ref{lst:badCapitals} first identifyes label properties and using a regular expression checks if the property value is bad capitalized.
+
+
+% pseudocode
+\begin{algorithm}
+\caption{Labels Using Capitals Algorithm}\label{lst:badCapitals}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalLabels = 0 ;
+\State badCapitalizedLabels = 0 ;
+\EndProcedure
+
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isLabel(?p)} totalLabels++; \EndIf
+\If {isBadCapitalized(?o)}badCapitalizedLabels++ ; \EndIf
+\Return{badCapitalizedLabels/totalLabels}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+The metric values vary in the interval [0,1], where  the 0 indicates that data set doesn't contain bad capitalized labels.
+
+\paragraph{Human Readable Labelling}
+
+
+\paragraph{Low Blank Node Usage}
+
+
+
+
 
 %%%%%%% Bibliography
 

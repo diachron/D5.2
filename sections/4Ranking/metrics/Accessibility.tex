@@ -40,5 +40,80 @@ This metric (listing~\ref{let:deref}) will count the number of valid dereference
 The metric will return a ratio of the number of dereferenced URIs (deref) against the total number of triples in a dataset (totalTriples). The expected range is [0..1], where 0 is the worst rating and 1 is the best rating.
 
 
+\paragraph{Performance Dimension}~\\ % dimension name 
+In a broad sense, performance refers to the ability to get access to the Linked Data source efficiently, without causing any major delays in the client application when querying the data. It constitutes a highly important quality feature, as low performance can seriously affect the ability of clients to access the data (availability) and its usability. There are a variety of factors that can have an effect on performance, such as networking issues, server configurations and usage of complex RDF features.
+
+\paragraph{Low Latency Metric} ~\\ %metric name
+% background for the metric
+Latency is a measure of the response-time of a data source, defined by Bizer as \cite{Bizer2007}: "the delay between submission of a request by the user and reception of the response from the system". Achieving low latency should be one of the main goals, from a performance perspective, of a Linked Data service, as it negatively affects the responsiveness of client applications and hence, their ability to provide the user with timely information.
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Estimates the efficiency with which a system can bind to the dataset, by measuring the delay between the submission of a request  and the reception of the corresponding response, sent back from the system.}
+\end{mdframed}
+
+% pseudocode
+As shown in algorithm \ref{alg:lowLatency}, the implementation of this metric consists in figuring out the URI of the dataset from which the triples were obtained, to afterwards send several HTTP requests to their source. The respective response times are then averaged to obtain a measure of the latency. Note that this metric refers to the resource itself, not to its contents.
+\begin{algorithm}
+\caption{Low Latency Algorithm} \label{alg:lowLatency}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalDelay = -1;
+\State requestsToSend = 2;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isDataSetURI(?s)} 
+\State startTimer();
+\For{$i=0$ to requestsToSend}
+\State sendSynchronousRequestTo(?s);
+\EndFor
+\State timeElapsedSinceStart = stopTimer();
+\State totalDelay += timeElapsedSinceStart;
+\EndIf
+\Return{totalDelay/requestsToSend;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The result of the metric is a real number in the range [1, $+\infty$], as it represents the average time (in  milliseconds) elapsed between the issuing of the request and the reception of its response. The lower the value, the better, as it represents how long does it take to get access to the dataset.
+
+% end-of Low Latency metric
+
+\paragraph{High Throughput Metric} ~\\ %metric name
+% background for the metric
+As latency, throughput is a determining factor when assessing the performance of a data source, since it measures the rate at which a service can provide data as response to client requests. If a service is unable to handle a reasonable amount of data requests, in a timely fashion, its usability and the performance of clients themselves could be severely affected. Therefore, it is desirable that the Linked Data source is able to properly respond to as many requests as possible during a limited period of time.
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Measures the efficiency with which a system can access the dataset, as the average number of requests responded by the service hosting it, per second.}
+\end{mdframed}
+
+% pseudocode
+The throughput of the resource is measured by sequentially sending it a fixed number of requests and by totalling the response time of all of them (time elapsed between the sending of the request and the reception of the response). Afterwards, the total number of requests is divided by their total response time. Algorithm \ref{alg:highThroughput} provides additional details.
+\begin{algorithm}
+\caption{High Throughput Algorithm} \label{alg:highThroughput}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State totalDelay = -1;
+\State requestsToSend = 3;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isDataSetURI(?s)} 
+\State startTimer();
+\For{$i=0$ to requestsToSend}
+\State sendSynchronousRequestTo(?s);
+\EndFor
+\State timeElapsedSinceStart = stopTimer();
+\State totalDelay += timeElapsedSinceStart;
+\EndIf
+\Return{requestsToSend/totalDelay;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The value of the metric is in the range [1, +$\infty$) and represents the average number of requests successfully served by the resource's host per millisecond. The higher the value, the better, as it represents the number of requests per second, that the data-source is able to serve.
+
+% end-of High Throughput Metric
+
 %%%%%%% Bibliography
 % Yang2011 : https://dl.dropboxusercontent.com/u/4138729/paper/dereference_iswc2011.pdf
+
+% Bizer2007 : Bizer, Christian. Quality-Driven Information Filtering in the Context of Web-Based Information Systems. Phd Thesis, Freie Universität Berlin, March 2007. %

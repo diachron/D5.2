@@ -6,12 +6,10 @@
 The intrinsic category metrics are independent of the user's context.
 They reflect whether information presented in data correctly represent the real world and whether information is logically consistent itself.
 
-\subsubsection{Accuracy} % dimension name 
-
+\paragraph{Accuracy Dimension} % dimension name 
 Accuracy dimension metrics reflect the degree of correctness and precision with which the given dataset represent the real world facts.
 
-
-\paragraph{Malformed Datatype Literals} ~\\ %metric name
+\paragraph{Malformed Datatype Literals Metric} ~\\ %metric name
 \label{par:malformed}
 % background for the metric
 % short description
@@ -52,9 +50,8 @@ The metric values vary in the interval [0, 1], where the 0 indicates the best qu
 
 % metric value, range and rating
 
-\paragraph{Literals Incompatible with Datatype Range} ~\\ 
+\paragraph{Literals Incompatible with Datatype Range Metric} ~\\ 
 \label{par:incompartible}
-
 Similar to the previous metric the 'literals incompatible with datatype range' metric verifies the correctness of literals regarding their datatype. 
 Apart from typed literals described below a Literal datatype can also be defined through the predicate of a triple.
 The range of attribute property (property corresponding to recourse with literal value) may be constrained to be a certain datatype.
@@ -87,9 +84,70 @@ Only the literals referring by the property with the range characteristic are co
 The metric values vary in the interval [0, 1], where  the 0 indicates the best quality.
 
 
-\paragraph{Defined Ontology Author} ~\\ 
-\paragraph{POBO Definition Usage}~\\ 
-\paragraph{Synonym Usage}~\\ 
+\paragraph{Defined Ontology Author Metric} ~\\ 
+This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
+Imported ontologies should have common metadata which includes the definition of an author.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Checks whether the creator \texttt{efo:creator} is defined in the ontology}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{Defined Ontology Author Algorithm}
+\begin{algorithmic}[1]
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {?o is owl:Ontology} ontologyList.add(?s); \EndIf
+\If {?p is efo:creator \&\& ?s in ontologyList} definedCreator = 1 ; \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric will return a 1 (best rating) if the creator of the ontology is defined or 0 if otherwise.
+
+\paragraph{POBO Definition Usage Metric}~\\ 
+This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
+For this use case, it is required to check that each ontology class has a corresponding human readable definition.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Provides a measure for an ontology to check the usage of \texttt{pobo:def} in defined classes}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{POBO Definition Usage Algorithm}
+\begin{algorithmic}[1]
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {?o is owl:Class} ontologyClassList.add(?s); \EndIf
+\If {?p is pobo:def \&\& ?s in ontologyClassList} 
+\State definitionHashMap.put(?s,?o);
+\EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric will return a ratio of the number of classes without definitions against the total number defined classes. The expected range is [0..1], where 0 is the worst rating and 1 is the best rating
+
+\paragraph{Synonym Usage Metric}~\\ 
+This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
+Scientific terms usually have a number of synonyms.
+Each ontology term should have at least one more synonym, thus in this metric we check if defined terms have a synonym attached to their description.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Measures the number of classes which has a synonym \texttt{efo:alternative\_term} described}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{Synonym Usage Algorithm}
+\begin{algorithmic}[1]
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {?o is owl:Class} ontologyClassList.add(?s); \EndIf
+\If {?p is efo:alternative\_term \&\& ?s in ontologyClassList} 
+\State synonomHashMap.put(?s,?o);
+\EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric will return a ratio of the number of classes without synonyms against the total number defined classes. The expected range is [0..1], where 0 is the worst rating and 1 is the best rating
 
 \subsubsection{Consistency}~\\ 
 
@@ -320,7 +378,7 @@ The following list of predicates indicate that the object of the quad must be a 
 The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
 
 
-\subsubsection{Conciseness}
+\paragraph{Conciseness Dimension}
 
 \paragraph{Duplicate Instance Metric} ~\\
 % background for the metric

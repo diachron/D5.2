@@ -21,6 +21,41 @@
 \usepackage{amsthm}
 \usepackage[table]{xcolor}
 
+\usepackage[backend=bibtex,hyperref=auto,
+% LNCS-style setup:
+firstinits=true,style=numeric,
+urldate=iso8601,isbn=false,doi=false]{biblatex}
+\iffalse
+% RefTeX for Emacs does not yet support multiple \addbibresource statements
+\bibliography{aksw,kwarc,literature}
+\fi
+\addbibresource{aksw}
+\addbibresource{kwarc}
+\addbibresource{literature}
+% poor man's LNCS styling
+\setlength{\biblabelsep}{\labelsep}
+\DeclareNameAlias{author}{last-first}
+\DeclareNameAlias{editor}{last-first}
+\DeclareNameAlias{translator}{last-first}
+\DeclareFieldFormat{labelnumberwidth}{#1.}
+\DeclareFieldFormat{title}{#1}
+\DeclareFieldFormat
+  [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+  {title}{#1}
+\DeclareFieldFormat{journaltitle}{#1}
+\newbibmacro*{volume+number+eid}{%
+  \printfield{volume}%
+  \iffieldundef{number}
+    {}
+    {(%
+      \printfield{number}%
+     )%
+    }%
+  \setunit{\addcomma\space}%
+  \printfield{eid}}
+\DeclareFieldFormat{url}{\url{#1}}
+\renewcommand{\finalnamedelim}{\addcomma\space}
+
 % Style settings for D5.2
 \global
 \mdfdefinestyle{metricdefinition}{% 
@@ -201,6 +236,8 @@ Managing the Evolution and Preservation of the Data Web DIACHRON
 \input{sections/4Ranking/Introduction}
 \input{sections/5Crawling/Introduction}
 \input{sections/6Conclusions/Conclusion}
+
+\printbibliography
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ...and in the words of Terry Tibbs:

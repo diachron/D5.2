@@ -60,6 +60,7 @@ Contents (Responsability):
 
 7. References
 
+BTW please add any BibTeX entries to literature.bib, as the other databases are maintained at different sources and may be overwritten.
 
 Contact Persons
 ===============

@@ -19,14 +19,15 @@ We aim to achieve a quality-biased ranking of LOD datasets, promoting:
 Therefore, datasets of poor quality but having more quality metadata might end up ranked higher than those with excellent quality on the only metric assessed on.
 Publishers might be doubtful about the data they publish and they will hide their doubt in the dataset itself.
 One possibility is that the publishers might hide this psychological nature by claiming that their dataset is of good quality in certain aspects.
-Quality assessment frameworks should not only be about positive or negative assertions of a dataset, but also it should place the publishers doubts in the assertion spectrum.
-With our proposed ranking algorithm, such effects will also be given a small share of the \emph{ranking-glory}.
+Quality assessment frameworks should not only be about positive or negative assertions of a dataset, but also it should place the publishers` doubts in the assertion spectrum.
+With our proposed ranking algorithm we do not just promote those datasets that have a high value to one particular metric, but we promote those datasets, which although might lack in particular metric assessment, have more coverage of assessed metrics.
 
 The approach we take for ranking takes into consideration the total number of metrics assessed by the most complete dataset available in the datastore\footnote{We are assuming that the metrics used are common to all datasets in the domain}.
 It also takes into consideration any facet filters chosen by the user, enabling the dynamic change of weights and thus the final ranking.
+Consider $F_{m} = \lbrace m_{1},m_{2},\dots,m_{n} \rbrace$ where $F_{m}$ is the set of all metrics $m$ available.
 The ranking algorithm is split into a number of steps:
 \begin{enumerate}
-\item Get the total number of metrics assessed ($m$);
+\item Get the total number of metrics assessed ($n$);
 \item Adjust weight for those metrics selected in the facet (Definition~\ref{def:weight_adjustment});
 \item Adjust weight for the rest of the metrics (Definition~\ref{def:weight_adjustment_smaller});
 \item Calculate the metric value by weight to find out ranking (Definition~\ref{def:ranking}) and rank;
@@ -36,35 +37,37 @@ The ranking algorithm is split into a number of steps:
 The weight assignment is the most crucial aspect of the ranking algorithm.
 It should be evenly distributed amongst the chosen (filtered) metrics, whilst also giving a share of the weight to the other metrics.
 In this way we ensure the quality-bias ranking and promote not just the high quality datasets, but also giving a smaller share to those that give more information about quality than others.
-In Definition~\ref{def:weight_adjustment} we calculate a weight value for the number of metrics chosen ($f_{m}$).
-Together with the number of metrics chosen, we add 1 to represent a small share which will be divided equally with the rest of the metrics ($\overline{f_{m}}$ represents the metrics not chosen).
+In Definition~\ref{def:weight_adjustment} we calculate a weight value for the number of metrics chosen ($\#X$) i.e. those metrics given a preference by the user.
+Together with the number of metrics chosen, we add 1 to represent a small share which will be divided equally with the rest of the metrics ($\#\overline{X}$ represents the metrics not chosen).
 This is defined in Definition~\ref{def:weight_adjustment_smaller}.
 To explain this in a simpler manner, if we have five metrics and only one was chosen, then the chosen metric will have a weight of 0.5 whilst the rest will have 0.5 shared equally (i.e. 0.125).
 
 \begin{Def1}
 \label{def:weight_adjustment}
 \begin{align*}
-\theta = \frac{1}{(f_{m} + 1)}
+Let~X~\subseteq~(F_{m}~\cup~\emptyset) \\
+\theta = \frac{1}{(\#X + 1)}
 \end{align*}
 \end{Def1}
 
 \begin{Def1}
 \label{def:weight_adjustment_smaller}
 \begin{align*}
-\rho = \frac{1}{((f_{m} + 1) \times \overline{f_{m}})}
+Let~\overline{X}~=~(X~\cap~{F_{m}}^{\complement}) \\
+\rho = \frac{1}{((\#X + 1) \times \#\overline{X})}
 \end{align*}
 \end{Def1}
 
-\subsubsection{Ranking}
+\subsubsection{Ranking Datasets}
 After the weights have been distributed, the ranking algorithm retrieves all the metric values from the quality graph.
-The values of chosen metrics $f_{m_{i}}$ (where i is a range from 0 to the number of possible metrics) are added together and multiplied by the weight $\theta$.
-Similarly, those which are not chosen ($\overline{f_{m_{i}}}$) are multiplied by the weight $\rho$.
+The values of chosen metrics i.e. the set $X$, are added together and multiplied by the weight $\theta$.
+Similarly, the complement set ($\overline{X}$) are multiplied by the weight $\rho$.
 These two are added together which gives us a value $\tau$ for the dataset (Definition~\ref{def:ranking}).
 This is repeated for all possible datasets and then are ranked accordingly.
 \begin{Def1}
 \label{def:ranking}
 \begin{align*}
-\tau = (\sum_{f_{m}}^m f_{m_{i}} \times \theta) + (\sum_{\overline{f_{m}}}^m \overline{f_{m_{i}}} \times \rho)
+\tau = (\sum_{i~=~0}^{\#X} X_{i}~.~\theta) + (\sum_{i~=~0}^{\#\overline{X}} \overline{X_{i}}~.~\rho)
 \end{align*}
 \end{Def1}
 

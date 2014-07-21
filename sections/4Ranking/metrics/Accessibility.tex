@@ -48,7 +48,7 @@ In a broad sense, performance refers to the ability to get access to the Linked 
 
 \paragraph{Low Latency Metric} ~\\ %metric name
 % background for the metric
-Latency is a measure of the response-time of a data source, defined by Bizer as \cite{Bizer2007}: "the delay between submission of a request by the user and reception of the response from the system". Achieving low latency should be one of the main goals, from a performance perspective, of a Linked Data service, as it negatively affects the responsiveness of client applications and hence, their ability to provide the user with timely information.
+Latency is a measure of the response-time of a data source, defined by Bizer as \cite{Bizer2008:PhDThesis:biblatex}: "the delay between submission of a request by the user and reception of the response from the system". Achieving low latency should be one of the main goals, from a performance perspective, of a Linked Data service, as it negatively affects the responsiveness of client applications and hence, their ability to provide the user with timely information.
 % short description
 \begin{mdframed}[style=metricdefinition]
 \emph{Estimates the efficiency with which a system can bind to the dataset, by measuring the delay between the submission of a request  and the reception of the corresponding response, sent back from the system.}
@@ -116,9 +116,118 @@ The value of the metric is in the range [1, +$\infty$) and represents the averag
 
 % end-of High Throughput Metric
 
-\paragraph{Licensing Dimension}
-\paragraph{Machine Readable License Metric} 
+
+\paragraph{Scalability of a Data Source Metric} ~\\ %metric name
+% background for the metric
+A Linked Data resource that scales well will be able to handle a high, growing amount of requests in an acceptable period of time. This capability will prevent the service from becoming overloaded and hence unresponsive under heavy demand. Thus, scalability helps assure  that the data source will be accessible at any time and is an important quality factor regarding performance.
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Measures the scalability of the data source, by determining whether the average response time of several requests (ten by default), sent simultaneously, is approximately equal to the response time of a single request \cite{Flemming2008}.}
+\end{mdframed}
+
+% pseudocode
+All the requests whose response times (delays) are to be averaged, are sent simultaneously (in parallel), in order to increase the workload on the server. After all these parallel requests have been responded, their respective delays are averaged. Subsequently, a single request is sent, and its delay is compared with the average delay of the parallel requests. This process is outlined in algorithm \ref{alg:scalabilityData}.
+\begin{algorithm}
+\caption{Scalability of a Data Source Algorithm} \label{alg:scalabilityData}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State numSimultaneousRequests = 10;
+\State totalDelaySimultaneousReqs = -1;
+\State totalDelaySingleReq = -1;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isDataSetURI(?s)} 
+\State startTimer();
+\State sendAsynchronousRequestsTo(?s, numSimultaneousRequests);
+\State totalDelaySimultaneousReqs = stopTimer();
+\State startTimer();
+\State sendSynchronousRequestTo(?s);
+\State totalDelaySingleReq = stopTimer();
+\EndIf
+\Return{(totalDelaySimultaneousReqs/numSimultaneousRequests)-totalDelaySingleReq;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The value of the metric is in the range [0, +$\infty$) it consist of the difference in milliseconds, between the average response time of the data source, when exposed to several, simultaneous requests and the response time of a single, isolated request. The lower the value, the better. Higher values suggest poor scalability of the data-source, as they mean that it gets overwhelmed by multiple, simultaneous requests.
+
+% end-of Scalability of a Data Source Metric
+
+
+\paragraph{Security Dimension}~\\ % dimension name
+Security refers to the capability of restricting access to the data and of guaranteeing that communication between the Linked Data source and its consumers is confidential and protected against tampering, as defined by Flemming in \cite{Flemming2008}. Conspicuously, the importance of security strongly depends on the nature of the data contained in the resource and also on the application domain, up to the extent that this dimension becomes a critical quality feature when dealing with sensitive information.
+
+
+\paragraph{HTTPS Data Access Metric} ~\\ %metric name
+% background for the metric
+A dataset hosted under a properly configure HTTPS service ensures that communications with its clients are secured by the SSL/TLS protocol. This prevents unauthorized parties from intercepting and getting access to sensitive information and from impersonating the legitimate data provider. Offering a secure connection through HTTPS, has a positive effect on the accessibility of Linked Data resources containing sensitive data, as consumers could otherwise be reluctant to even consult them.
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Verifies whether the authenticity of the data source is assured and the communication channel is confidential, by verifying that access to it is carried out through a sound, HTTPS connection.}
+\end{mdframed}
+
+% pseudocode
+As shown in algorithm \ref{alg:httpsDataAccess}, once the URI of the dataset has been determined, it is tested to correspond to the HTTPS protocol, if so, an HTTPS connection is attempted to be established. If no errors occur, and a request is successfully sent through such connection, the data source is considered to be safe.
+\begin{algorithm}
+\caption{HTTPS Data Access Algorithm} \label{alg:httpsDataAccess}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State httpsConnectionSucceeded = 0;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isDataSetURI(?s) \&\& isHTTPS(?s)} 
+\State httpsConnectionSucceeded = sendTestRequestHTTPS(?s);
+\EndIf
+\Return{httpsConnectionSucceeded;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The value of the metric is binary: it will return 1 if an HTTPS connection was successfully established with the data source and 0 otherwise. Thus, a value of 1 corresponds to the best possible quality rating.
+
+% end-of HTTPS Data Access Metric
+
+
+\paragraph{Licensing Dimension}~\\ % dimension name
+In an open data world, such as that of Linked Open Data, it is important to be aware of the terms under which data sources can be accessed and used. In order to prevent any inconveniences and to assure that information is distributed according to the publisher's rules, consumers should make sure that the datasets they use are available under clear legal terms.
+
+
+\paragraph{Machine-readable Indication of a License Metric} ~\\ %metric name
+% background for the metric
+As stated by Hogan et al. \cite{Hogan2012:LDC}, each dataset should contain a license specifying how the content can be used. Such a license can be machine-readable, if provided by means of any of the several properties defined for that purpose. Having access to the license this way, enables customers to automatically check that the permissions granted upon the data have been specified and hence, leverages accessibility to the dataset.
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Checks whether consumers of the dataset are explicitly granted permission to re-use it, under defined conditions, by annotating the resource with a machine-readable indication of the license.}
+\end{mdframed}
+
+% pseudocode
+Algorithm \ref{alg:machineReadLicense} details how the metric is computed. Firstly, the URI of the dataset is determined from the triples as they are processed. Having the dataset's URI, the triples providing licensing information about it can be looked for.
+\begin{algorithm}
+\caption{Machine-readable Indication of a License Algorithm} \label{alg:machineReadLicense}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State dataSetURI = null;
+\State hasMachineReadLicense = 0;
+\EndProcedure
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {isDataSetURI(?s)} 
+\State dataSetURI = ?s;
+\EndIf
+\If {isLicensingProperty(?p) \&\& ?s == dataSetURI} 
+\State hasMachineReadLicense = 1;
+\EndIf ~\\
+\Return{hasMachineReadLicense;}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+% metric value, range and rating
+The value of the metric is binary: a value of 1 indicates that machine-readable licensing information was found as part of the dataset, whereas 0 indicates that it was not. Therefore, 1 elicits a higher quality ranking.
+
+% end-of Machine-readable Indication of a License Metric
+
 
 %%%%%%% Bibliography
 % Yang2011 : https://dl.dropboxusercontent.com/u/4138729/paper/dereference_iswc2011.pdf
-% Bizer2007 : Bizer, Christian. Quality-Driven Information Filtering in the Context of Web-Based Information Systems. Phd Thesis, Freie Universität Berlin, March 2007. %
+

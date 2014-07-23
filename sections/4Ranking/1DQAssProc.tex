@@ -10,15 +10,15 @@ The schema features a number of key aspects that allow data to be traceable (ind
 Due to the nature of the heterogenous data that might originate from different models (e.g. triple-based, tuple-based, multidimensional etc.), the DIACHRON model is highly based on reified RDF.
 This enables the description of resources as RDF statements (expanding a triple to a reification quad\footnote{\url{http://www.w3.org/TR/2004/REC-rdf-primer-20040210/#reification}}), recording further information such as provenance, attributes, relations and also changes.
 Therefore, if we take for example the triple\footnote{This example does not follow the DIACHRON data model, but rather to illustrate a simple example of reification}:
-\begin{lstlisting}[language=RDF]
+\begin{lstlisting}[language=N3]
 ex:resourceSubject ex:property "value" .
 \end{lstlisting}
 it will be represented as a set of \texttt{rdf:Statement} triples:
-\begin{lstlisting}[language=RDF]
-ex:refiedResource rdf:type rdf:Statement .
-ex:refiedResource rdf:subject ex:resourceSubject .
-ex:refiedResource rdf:predicate ex:property .
-ex:refiedResource rdf:object "value" .
+\begin{lstlisting}[language=N3]
+ex:reifiedResource rdf:type rdf:Statement .
+ex:reifiedResource rdf:subject ex:resourceSubject .
+ex:reifiedResource rdf:predicate ex:property .
+ex:reifiedResource rdf:object "value" .
 \end{lstlisting}
 
 In Section~\ref{sec:streamProcessor} we described how the \emph{Stream Processor} sequentially passes quads to the metrics in the \emph{Quality Assessment Layer}.
@@ -29,3 +29,9 @@ Therefore, DIACHRON resources have to be de-reified into RDF triple prior to the
 
 
 % describe the process (similar to the activity diagram in 6.1). Mention the initialisation of metrics as required for each use case, and how the streaming process is done
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../diachron-D5_2"
+%%% End: 

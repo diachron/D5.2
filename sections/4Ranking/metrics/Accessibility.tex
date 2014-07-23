@@ -1,3 +1,4 @@
+%~(required by: \textbf{ALL}, \textbf{DP}, \textbf{EBI})
 %!TEX root = ../../../diachron-D5_2.tex
 
 \subsubsection{Accessibility Category}
@@ -7,12 +8,12 @@
 \paragraph{Availability Dimension}~\\% dimension name 
 Availability of a dataset is the extent to which data (or some portion of it) is present, obtainable and ready for use~\cite{Zaveri2012:LODQ}.
 
-\paragraph{Dereferenceability Metric} ~\\ %metric name
+\paragraph{Dereferenceability Metric}~(required by: \textbf{ALL}, \textbf{EBI})~\\ %metric name
 % background for the metric
 HTTP URIs should be dereferencable, i.e. HTTP clients can retrieve the resources identified by the URI.
 A typical web URI resource would return a \texttt{200 OK} code indicating that a request is successful and \texttt{4xx} or \texttt{5xx} if the request is unsuccessful. 
 In Linked Data, a successful request should return a document (RDF) containing the description (triples) of the requested resource.
-In Linked Data, there are two possible ways which allow publishers make URIs dereferencable.
+There are two possible ways which allow publishers make URIs dereferencable.
 These are the \texttt{303} URIs and the \texttt{hash} URIs~\cite{W3C:CoolURIs}.
 Yang et. al~\todo{CL: Where does this Dropbox source come from?  Google does not know this paper; has it never been published?  Can we cite something else?}\cite{Yang2011} describes a mechanism to identify the dereferenceability process of linked data resource.
 % short description
@@ -21,7 +22,7 @@ Yang et. al~\todo{CL: Where does this Dropbox source come from?  Google does not
 \end{mdframed}
 
 % pseudocode
-This metric (listing~\ref{let:deref}) will count the number of valid dereferenceable URI resources found in the subject (?s) and object (?o) position of a triple. The \texttt{isDereferenceable(resource)} method uses the rules defined in~\todo{CL: please add to bib}\cite{Yang2011}.
+The dereferenceability metric (listing~\ref{lst:deref}) counts the number of valid dereferenceable URI resources found in the subject (?s) and object (?o) position of a triple. The \texttt{isDereferenceable(resource)} method uses the rules defined in~\todo{CL: please add to bib}\cite{Yang2011}.
 \begin{algorithm}
 \caption{Dereferenceablity Algorithm}\label{lst:deref}
 \begin{algorithmic}[1]
@@ -39,9 +40,9 @@ This metric (listing~\ref{let:deref}) will count the number of valid dereference
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The metric will return a ratio of the number of dereferenced URIs (deref) against the total number of triples in a dataset (totalTriples). The expected range is [0..1], where 0 is the worst rating and 1 is the best rating.
+The metric returns a ratio of the number of dereferenced URIs (deref) against the total number of triples in a dataset (totalTriples). The expected range is [0..1], where 0 is the worst rating and 1 is the best rating.
 
-\paragraph{RDF Accessibility Metric}~\\
+\paragraph{RDF Accessibility Metric}~(required by: \textbf{EBI})~\\
 A data source should be available as a LOD format (e.g. RDF) dump which can be downloaded by a consumer.
 This dump should be stated in the dataset and accessible under the given URI.
 
@@ -64,10 +65,10 @@ This dump should be stated in the dataset and accessible under the given URI.
 \end{algorithmic}
 \end{algorithm}
 
-The metric will return a ratio of the number of defined LOD data dumps (lodDumps) against the total number of accessible data dumps (accessibleLodDumps). 
-The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no data dump is found, then the metric would return 0 and the dataset fails this metric
+The metric returns a ratio between the number of defined LOD data dumps (lodDumps) and the total number of accessible data dumps (accessibleLodDumps). 
+The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no data dump is found, then the metric would return 0 and thus the dataset fails this metric
 
-\paragraph{SPARQL Accessibility Metric}~\\
+\paragraph{SPARQL Accessibility Metric}~(required by: \textbf{EBI})~\\
 This metric follows the previous (RDF Accessibility Metric), where a dataset is assessed to check if a SPARQL endpoint is defined.
 
 \begin{mdframed}[style=metricdefinition]
@@ -92,22 +93,22 @@ This metric follows the previous (RDF Accessibility Metric), where a dataset is 
 \end{algorithmic}
 \end{algorithm}
 
-The metric will return a ratio of the number of defined SPARQL end points (endPoints) against the total number of accessible SPARQL endpoints (accessibleEndPoints). 
-The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no data dump is found, then the metric would return 0 and the dataset fails this metric
+The metric returns a ratio between the number of defined SPARQL endpoints (endPoints) and the total number of accessible SPARQL endpoints (accessibleEndPoints). 
+The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no endpoint is defined, then the metric would return 0 and the dataset fails this metric
 
 \paragraph{Performance Dimension}~\\ % dimension name 
 In a broad sense, performance refers to the ability to get access to the Linked Data source efficiently, without causing any major delays in the client application when querying the data. It constitutes a highly important quality feature, as low performance can seriously affect the ability of clients to access the data (availability) and its usability. There are a variety of factors that can have an effect on performance, such as networking issues, server configurations and usage of complex RDF features.
 
-\paragraph{Low Latency Metric} ~\\ %metric name
+\paragraph{Low Latency Metric}~(required by: \textbf{EBI}) ~\\ %metric name
 % background for the metric
-Latency is a measure of the response-time of a data source, defined by Bizer as \cite{Bizer2008:PhDThesis:biblatex}: "the delay between submission of a request by the user and reception of the response from the system". Achieving low latency should be one of the main goals, from a performance perspective, of a Linked Data service, as it negatively affects the responsiveness of client applications and hence, their ability to provide the user with timely information.
+Latency is a measure of the response-time of a data source, defined by Bizer as \cite{Bizer2008:PhDThesis:biblatex}: ``the delay between submission of a request by the user and reception of the response from the system''. Achieving low latency should be one of the main goals, from a performance perspective, of a Linked Data service, as it negatively affects the responsiveness of client applications and hence, their ability to provide the user with timely information.
 % short description
 \begin{mdframed}[style=metricdefinition]
 \emph{Estimates the efficiency with which a system can bind to the dataset, by measuring the delay between the submission of a request  and the reception of the corresponding response, sent back from the system.}
 \end{mdframed}
 
 % pseudocode
-As shown in algorithm \ref{alg:lowLatency}, the implementation of this metric consists in figuring out the URI of the dataset from which the triples were obtained, to afterwards send several HTTP requests to their source. The respective response times are then averaged to obtain a measure of the latency. Note that this metric refers to the resource itself, not to its contents.
+As shown in algorithm~\ref{alg:lowLatency}, the implementation of this metric consists in figuring out the URI of the dataset from which the triples were obtained, to afterwards send several HTTP requests to their source. The respective response times are then averaged to obtain a measure of the latency. Note that this metric refers to the resource itself, not to its contents.
 \begin{algorithm}
 \caption{Low Latency Algorithm} \label{alg:lowLatency}
 \begin{algorithmic}[1]
@@ -129,11 +130,11 @@ As shown in algorithm \ref{alg:lowLatency}, the implementation of this metric co
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The result of the metric is a real number in the range [1, $+\infty$], as it represents the average time (in  milliseconds) elapsed between the issuing of the request and the reception of its response. The lower the value, the better, as it represents how long does it take to get access to the dataset.
+The result of the metric is a real number in the range [1, $+\infty$), as it represents the average time (in  milliseconds) elapsed between the issuing of the request and the reception of its response. The lower the value, the better, as it represents how long does it take to get access to the dataset.
 
 % end-of Low Latency metric
 
-\paragraph{High Throughput Metric} ~\\ %metric name
+\paragraph{High Throughput Metric}~(required by: \textbf{EBI}) ~\\ %metric name
 % background for the metric
 As latency, throughput is a determining factor when assessing the performance of a data source, since it measures the rate at which a service can provide data as response to client requests. If a service is unable to handle a reasonable amount of data requests, in a timely fashion, its usability and the performance of clients themselves could be severely affected. Therefore, it is desirable that the Linked Data source is able to properly respond to as many requests as possible during a limited period of time.
 % short description
@@ -169,7 +170,7 @@ The value of the metric is in the range [1, +$\infty$) and represents the averag
 % end-of High Throughput Metric
 
 
-\paragraph{Scalability of a Data Source Metric} ~\\ %metric name
+\paragraph{Scalability of a Data Source Metric}~(required by: \textbf{EBI}) ~\\ %metric name
 % background for the metric
 A Linked Data resource that scales well will be able to handle a high, growing amount of requests in an acceptable period of time. This capability will prevent the service from becoming overloaded and hence unresponsive under heavy demand. Thus, scalability helps assure  that the data source will be accessible at any time and is an important quality factor regarding performance.
 % short description
@@ -210,7 +211,7 @@ The value of the metric is in the range [0, +$\infty$) it consist of the differe
 Security refers to the capability of restricting access to the data and of guaranteeing that communication between the Linked Data source and its consumers is confidential and protected against tampering, as defined by Flemming in \cite{Flemming2008}. Conspicuously, the importance of security strongly depends on the nature of the data contained in the resource and also on the application domain, up to the extent that this dimension becomes a critical quality feature when dealing with sensitive information.
 
 
-\paragraph{HTTPS Data Access Metric} ~\\ %metric name
+\paragraph{HTTPS Data Access Metric~$\star$}~(required by: \textbf{EBI}) ~\\ %metric name
 % background for the metric
 A dataset hosted under a properly configure HTTPS service ensures that communications with its clients are secured by the SSL/TLS protocol. This prevents unauthorized parties from intercepting and getting access to sensitive information and from impersonating the legitimate data provider. Offering a secure connection through HTTPS, has a positive effect on the accessibility of Linked Data resources containing sensitive data, as consumers could otherwise be reluctant to even consult them.
 
@@ -240,13 +241,21 @@ The value of the metric is binary: it will return 1 if an HTTPS connection was s
 
 % end-of HTTPS Data Access Metric
 
-
 \paragraph{Licensing Dimension}~\\ % dimension name
 In an open data world, such as that of Linked Open Data, it is important to be aware of the terms under which data sources can be accessed and used. In order to prevent any inconveniences and to assure that information is distributed according to the publisher's rules, consumers should make sure that the datasets they use are available under clear legal terms.
 
 \paragraph{Machine-readable Indication of a License Metric} ~\\ %metric name
 % background for the metric
 As stated by Hogan et al. \cite{Hogan2012:LDC}, each dataset should contain a license specifying how the content can be used. Such a license can be machine-readable, if provided by means of any of the several properties defined for that purpose. Having access to the license this way, enables customers to automatically check that the permissions granted upon the data have been specified and hence, leverages accessibility to the dataset.
+The dataset is assessed by checking if triples contain any of the following predicates:
+\begin{itemize}
+\item \url{http://purl.org/dc/terms/license}
+\item \url{http://purl.org/dc/terms/accessRights}
+\item \url{http://purl.org/dc/terms/rights}
+\item \url{http://purl.org/dc/elements/1.1/rights}
+\item \url{http://www.w3.org/1999/xhtml/vocab#license}
+\item \url{http://creativecommons.org/ns#license}
+\end{itemize}
 
 % short description
 \begin{mdframed}[style=metricdefinition]

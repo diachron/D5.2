@@ -3,5 +3,11 @@
 \subsection{Scope and Objectives}
 \label{sec:ScopeAndObjectives} 
 
-
-% Define the scope and objectives of WP5 in general and tasks 5.2 and 5.3
+This document describes the Diachron quality assessment service and its general applications.
+Taking a broad view of quality as ``fitness for use''~\cite{Juran1974:biblatex}, we have designed a generic, extensible quality assessment framework, which is intended to serve all purposes envisaged in the Diachron project but also beyond.
+We initially support quality assessment on RDF data, no matter whether they are streamed, e.g.\ from a big dataset dump, or obtained from a SPARQL endpoint.
+We represent the output of quality assessment once more as an RDF graph of \emph{quality metadata}, which can be stored as annotations to the original dataset.
+This approach enables flexible reuse of the quality metadata for visual quality analysis, quality-based filtering and ranking of datasets, and many other applications, without unnecessary recomputation.
+This document also describes the implementation of a large number of concrete quality metrics within the framework.
+We have so far implemented \todo{CL@JD: or even \emph{all}?}the majority of the quality metrics required for the Diachron pilot applications, focusing on those metrics that can be computed by analysing the dataset itself, the vocabularies it uses, and its immediate outgoing links to other datasets.
+\todo{CL: Hanzo to write something about quality-driven crawling}

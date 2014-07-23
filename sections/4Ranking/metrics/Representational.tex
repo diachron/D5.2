@@ -1,14 +1,14 @@
+%!TEX root = ../../../diachron-D5_2.tex
 
+%~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})
 \subsubsection{Representational Category}
 \label{sec:Representational} 
-
 Representational dimensions reflect the quality aspects like conciseness, consistency and interpretability of information.
 
-\subsubsection{Representational Conciseness}~\\ % dimension name
-Representational conciseness is determined by how compact, properly formatted and clear is the data. As defined by Pipino et al. in \cite{Pipino2002}, this dimension is defined as "the extent to which information is compactly represented". 
+\paragraph{Representational Conciseness Dimension}~\\ % dimension name
+Representational conciseness is determined by how compact, properly formatted and clear is the data. As defined by Pipino et al. in \cite{Pipino2002}, this dimension is defined as ``the extent to which information is compactly represented''. 
 
-
-\paragraph{Short URIs} ~\\
+\paragraph{Short URIs}~\\
 % background for the metric
 URIs play a key role in how information is represented in Linked Data resources, as they are used to name the entities being described. Therefore, having compact, well formatted URIs has a positive effect in the clearness and conciseness of data. 
 As suggested by \cite{Hogan2012:LDC}, data providers that locally mint (on average) shorter URIs are deemed as being more compliant with Linked Data best practices.
@@ -41,19 +41,16 @@ The metric will return the average length of all the URIs locally defined in the
 
 % end-of Short URIs Metric
 
-\subsubsection{Understandability}
-
+\paragraph{Understandability Dimension}
 Understandability is the quality of information that enables users to comprehend its meaning. 
-Understandability is an ultimate prerequisite for information consumer. 
+It is an ultimate prerequisite for information consumer. 
 The better users understand data, the more effectively they can use it. 
-The metrics presented below reflect different aspects of understandability by a numerical value.
 
-\paragraph{Empty Annotation Value}
-\label{par:emptyAnnotation}
-In some languages, e.g. OWL annotation properties are distinguished.
+\paragraph{Empty Annotation Value}~(required for: \textbf{DP}, \textbf{EBI})~\\
+In some languages, eg. OWL, annotation properties are distinguished.
 Annotation properties are predicates that provide informal documentation annotations about ontologies, statements, or IRIs. 
 A simple example for annotation property is \textit{rdfs:comment} which is used to provide a comment. 
-Unfortunately annotation properties are often used with empty literal values that cause inconsistences in data.
+%Unfortunately annotation properties are often used with empty literal values that cause inconsistences in data.
 The problem can be solved by the corresponding triples or by replacing empty literals by annotation strings.
 The following annotation properties were used in this metric:
 \begin{itemize}
@@ -73,15 +70,13 @@ The following annotation properties were used in this metric:
 \item \textit{rdf:comment}
 \end{itemize}
 
-% background for the metric
-The metric Empty Annotation Value identifies triples whose property is an annotation property and whose object is an empty string.
- 
 % short description
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of annotations with empty values to all annotations in the data set.}
+\emph{Measures a percentage of triples whose property is an annotation property and whose object is an empty string.}
+
 \end{mdframed}
 
-The algorithm \ref{lst:emptyAnnotationValue} provides detailed description of metric computation. The algorithm first identifyes annotation properties, that are properties from the list above and then checks if the property value is not an empty string.
+The algorithm \ref{lst:emptyAnnotationValue} provides detailed description of metric computation. 
 % pseudocode
 \begin{algorithm}
 \caption{Empty Annotation Value Algorithm}\label{lst:emptyAnnotationValue}
@@ -99,15 +94,10 @@ The algorithm \ref{lst:emptyAnnotationValue} provides detailed description of me
 \end{algorithmic}
 \end{algorithm}
 
+The metric gives a percentage (as a decimal) in the range of [0..1], where 0 indicates the best quality.
 
-The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
-
-
-\paragraph{Whitespace in Annotation}
-
-
-In contrast to the previous metric \ref{par:emptyAnnotation} which identifies triples with empty annotation value, the Whitespace in Annotation metric deals with the case when the annotation value is available, but contains leading or trailing whitespaces.
-This is not a crucial for data understanding, but should be at least reported to the user who wants to improve data quality.
+\paragraph{Whitespace in Annotation}~\\
+In contrast to the previous metric which identifies triples with empty annotation value, this metric deals with the case when the annotation value is available, but contains leading or trailing whitespaces.
 The metric is defined as follows:
 
 % short description
@@ -115,9 +105,7 @@ The metric is defined as follows:
 \emph{Calculates the ratio of annotations with leading or trailing whitespace to all annotations in the data set.}
 \end{mdframed}
 
-An important prerequisite for metric computation is a predefined list of annotation properties  which we presented in the previous metric \ref{par:emptyAnnotation}.
-The algorithm \ref{lst:whitespace} provides detailed description of metric computation. The algorithm first identifyes annotation properties, that are properties from the list above and then checks if the property value is not an empty string.
-
+A predefined list of annotation properties, described in the previous metric, are used. 
 
 % pseudocode
 \begin{algorithm}
@@ -136,32 +124,24 @@ The algorithm \ref{lst:whitespace} provides detailed description of metric compu
 \end{algorithmic}
 \end{algorithm}
 
-The \textit{isAnnotation()} method  only checks if the property belongs to the list of annotation properties, 
+The metric value ranges between [0..1], where  0 indicates that data set is free of the leading or trailing whitespace in annotations.
 
-The metric values vary in the interval [0,1], where  the 0 indicates that data set is free of the leading or trailing whitespace in annotations.
-
-
-\paragraph{Labels Using Capitals}
-
-Similar to the two previous metrics the metric Labels Using Capitals considers a specific kind of properties, namely label properties.
-The metrics identifies the triples with label property whose object uses a bad style of capitalisation. 
+\paragraph{Labels Using Capitals}~\\
+This metric identifies the triples with label property whose object uses a bad style of capitalisation. 
 We define "bad" capitalisation as "camel case" where compound words or phrases  are written such that each next word or abbreviation begins with a capital letter, e.g. \textit{InterestingThing}.
+Regular expression rules are defined for this metric.
 The following widely used label properties are considered by the metric:
 \begin{itemize}
 \item \textit{skos:altLabel}
 \item \textit{skos:hiddenLabel}
 \item \textit{skos:prefLabel}
- \item \textit{rdfs:label}
-		\end{itemize}
-
-
+\item \textit{rdfs:label}
+\end{itemize}
 
 \begin{mdframed}[style=metricdefinition]
 \emph{Calculates the ratio of labels with "bad capitalisation" to all labels}
 \end{mdframed}
-
-The algorithm \ref{lst:badCapitals} first identifyes label properties and using a regular expression checks if the property value is bad capitalized.
-
+.
 
 % pseudocode
 \begin{algorithm}
@@ -169,34 +149,23 @@ The algorithm \ref{lst:badCapitals} first identifyes label properties and using 
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State totalLabels = 0 ;
-\State badCapitalizedLabels = 0 ;
+\State badCapitalisedLabels = 0 ;
 \EndProcedure
 
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isLabel(?p)} totalLabels++; \EndIf
-\If {isBadCapitalized(?o)}badCapitalizedLabels++ ; \EndIf
-\Return{badCapitalizedLabels/totalLabels}
+\If {isBadCapitalised(?o)}badCapitalisedLabels++ ; \EndIf
+\Return{badCapitalisedLabels/totalLabels}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
+\paragraph{Human Readable Labelling}~(required for: \textbf{DP}, \textbf{EBI})~\\
+TODO TODO
 
-The metric values vary in the interval [0,1], where  the 0 indicates that data set doesn't contain bad capitalized labels.
-
-\paragraph{Human Readable Labelling}
-
-
-\paragraph{Low Blank Node Usage}
-
-
-
-
-
+\paragraph{Low Blank Node Usage}~(required for: \textbf{DP}, \textbf{EBI})~\\
+TODO TODO
 
 %%%%%%% Bibliography
 
 % Hogan2012 : Aidan Hogan and Jürgen Umbrich and Andreas Harth and Richard Cyganiak and Axel Polleres and Stefan Decker. An empirical survey of Linked Data conformance. Web Semantics: Science, Services and Agents on the World Wide Web, 2012%
-
-
-\paragraph{Whitespace in Annotation}
->>>>>>> a4c4c94652b70802ece9a29e21ffb893aa3178f0

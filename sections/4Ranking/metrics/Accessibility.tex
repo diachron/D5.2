@@ -1,4 +1,4 @@
-%~(required by: \textbf{ALL}, \textbf{DP}, \textbf{EBI})
+%~(required for: \textbf{ALL}, \textbf{DP}, \textbf{EBI})
 %!TEX root = ../../../diachron-D5_2.tex
 
 \subsubsection{Accessibility Category}
@@ -8,7 +8,7 @@
 \paragraph{Availability Dimension}~\\% dimension name 
 Availability of a dataset is the extent to which data (or some portion of it) is present, obtainable and ready for use~\cite{Zaveri2012:LODQ}.
 
-\paragraph{Dereferenceability Metric}~(required by: \textbf{ALL}, \textbf{EBI})~\\ %metric name
+\paragraph{Dereferenceability Metric}~(required for: \textbf{ALL}, \textbf{EBI})~\\ %metric name
 % background for the metric
 HTTP URIs should be dereferencable, i.e. HTTP clients can retrieve the resources identified by the URI.
 A typical web URI resource would return a \texttt{200 OK} code indicating that a request is successful and \texttt{4xx} or \texttt{5xx} if the request is unsuccessful. 
@@ -42,7 +42,7 @@ The dereferenceability metric (listing~\ref{lst:deref}) counts the number of val
 % metric value, range and rating
 The metric returns a ratio of the number of dereferenced URIs (deref) against the total number of triples in a dataset (totalTriples). The expected range is [0..1], where 0 is the worst rating and 1 is the best rating.
 
-\paragraph{RDF Accessibility Metric}~(required by: \textbf{EBI})~\\
+\paragraph{RDF Accessibility Metric}~(required for: \textbf{EBI})~\\
 A data source should be available as a LOD format (e.g. RDF) dump which can be downloaded by a consumer.
 This dump should be stated in the dataset and accessible under the given URI.
 
@@ -68,7 +68,7 @@ This dump should be stated in the dataset and accessible under the given URI.
 The metric returns a ratio between the number of defined LOD data dumps (lodDumps) and the total number of accessible data dumps (accessibleLodDumps). 
 The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no data dump is found, then the metric would return 0 and thus the dataset fails this metric
 
-\paragraph{SPARQL Accessibility Metric}~(required by: \textbf{EBI})~\\
+\paragraph{SPARQL Accessibility Metric}~(required for: \textbf{EBI})~\\
 This metric follows the previous (RDF Accessibility Metric), where a dataset is assessed to check if a SPARQL endpoint is defined.
 
 \begin{mdframed}[style=metricdefinition]
@@ -99,7 +99,7 @@ The expected range is [0..1], where 0 is the worst rating and 1 is the best rati
 \paragraph{Performance Dimension}~\\ % dimension name 
 In a broad sense, performance refers to the ability to get access to the Linked Data source efficiently, without causing any major delays in the client application when querying the data. It constitutes a highly important quality feature, as low performance can seriously affect the ability of clients to access the data (availability) and its usability. There are a variety of factors that can have an effect on performance, such as networking issues, server configurations and usage of complex RDF features.
 
-\paragraph{Low Latency Metric}~(required by: \textbf{EBI}) ~\\ %metric name
+\paragraph{Low Latency Metric}~(required for: \textbf{EBI}) ~\\ %metric name
 % background for the metric
 Latency is a measure of the response-time of a data source, defined by Bizer as \cite{Bizer2008:PhDThesis:biblatex}: ``the delay between submission of a request by the user and reception of the response from the system''. Achieving low latency should be one of the main goals, from a performance perspective, of a Linked Data service, as it negatively affects the responsiveness of client applications and hence, their ability to provide the user with timely information.
 % short description
@@ -134,7 +134,7 @@ The result of the metric is a real number in the range [1, $+\infty$), as it rep
 
 % end-of Low Latency metric
 
-\paragraph{High Throughput Metric}~(required by: \textbf{EBI}) ~\\ %metric name
+\paragraph{High Throughput Metric}~(required for: \textbf{EBI}) ~\\ %metric name
 % background for the metric
 As latency, throughput is a determining factor when assessing the performance of a data source, since it measures the rate at which a service can provide data as response to client requests. If a service is unable to handle a reasonable amount of data requests, in a timely fashion, its usability and the performance of clients themselves could be severely affected. Therefore, it is desirable that the Linked Data source is able to properly respond to as many requests as possible during a limited period of time.
 % short description
@@ -170,7 +170,7 @@ The value of the metric is in the range [1, +$\infty$) and represents the averag
 % end-of High Throughput Metric
 
 
-\paragraph{Scalability of a Data Source Metric}~(required by: \textbf{EBI}) ~\\ %metric name
+\paragraph{Scalability of a Data Source Metric}~(required for: \textbf{EBI}) ~\\ %metric name
 % background for the metric
 A Linked Data resource that scales well will be able to handle a high, growing amount of requests in an acceptable period of time. This capability will prevent the service from becoming overloaded and hence unresponsive under heavy demand. Thus, scalability helps assure  that the data source will be accessible at any time and is an important quality factor regarding performance.
 % short description
@@ -211,7 +211,7 @@ The value of the metric is in the range [0, +$\infty$) it consist of the differe
 Security refers to the capability of restricting access to the data and of guaranteeing that communication between the Linked Data source and its consumers is confidential and protected against tampering, as defined by Flemming in \cite{Flemming2008}. Conspicuously, the importance of security strongly depends on the nature of the data contained in the resource and also on the application domain, up to the extent that this dimension becomes a critical quality feature when dealing with sensitive information.
 
 
-\paragraph{HTTPS Data Access Metric~$\star$}~(required by: \textbf{EBI}) ~\\ %metric name
+\paragraph{HTTPS Data Access Metric~$\star$}~(required for: \textbf{EBI}) ~\\ %metric name
 % background for the metric
 A dataset hosted under a properly configure HTTPS service ensures that communications with its clients are secured by the SSL/TLS protocol. This prevents unauthorized parties from intercepting and getting access to sensitive information and from impersonating the legitimate data provider. Offering a secure connection through HTTPS, has a positive effect on the accessibility of Linked Data resources containing sensitive data, as consumers could otherwise be reluctant to even consult them.
 

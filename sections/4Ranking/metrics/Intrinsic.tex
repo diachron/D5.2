@@ -1,29 +1,22 @@
 %!TEX root = ../../../diachron-D5_2.tex
 
+%~(required for: \textbf{ALL}, \textbf{DP}, \textbf{EBI})
 \subsubsection{Intrinsic Category}
 \label{sec:Intrinsic}
-
 The intrinsic category metrics are independent of the user's context.
 They reflect whether information presented in data correctly represent the real world and whether information is logically consistent itself.
 
-\paragraph{Accuracy Dimension} % dimension name 
+\paragraph{Accuracy Dimension}~\\% dimension name 
 Accuracy dimension metrics reflect the degree of correctness and precision with which the given dataset represent the real world facts.
 
-\paragraph{Malformed Datatype Literals Metric} ~\\ %metric name
-\label{par:malformed}
-% background for the metric
-% short description
-Literals that are incorrect regarding their data type are a very common problem.
-Literals are nodes in an RDF graph, used to identify values such as numbers and dates.
-The RDF specifies two types of literals: plain and typed.
-A plain literal is a string combined with an optional language tag.
-A typed literal comprises a string (the lexical form of the literal) and a datatype (identified by a URI) which is supposed to denote a mapping from lexical forms to some space of values.
-In the Turtle syntax typed literals are notated with syntax such as: \textit{"13"^^xsd:int}
-This Malformed Datatype Literals metric intends to check if the value of a typed literal is valid with regards to the given \textit{xsd} datatype.
+\paragraph{Malformed Datatype Literals Metric}~(required for: \textbf{ALL}, \textbf{DP}, \textbf{EBI})~\\ %metric name
+Literals in RDF are values, plain or typed, containing a textual string (eg. ``13''\string^\string^xsd:int).
+It is common problem in LOD datasets that the literal value does not match its describing data type. 
+The Malformed Datatype Literals metric intends to check this inconsistency.
 The algorithm \ref{lst:malformedLiterals} describes the metric computation in more details.
 
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of typed literals  not valid regarding its datatype to all literals}
+\emph{Calculates the ratio of invalid typed literals against all literals}
 \end{mdframed}
 
 \begin{algorithm}
@@ -44,24 +37,15 @@ The algorithm \ref{lst:malformedLiterals} describes the metric computation in mo
 \end{algorithm}
 
 Only the typed literals are considered by the metric. 
-The metric values vary in the interval [0, 1], where the 0 indicates the best quality.
+The metric values vary in the interval [0...1], where the 0 indicates the best quality.
 
-% pseudocode
-
-% metric value, range and rating
-
-\paragraph{Literals Incompatible with Datatype Range Metric} ~\\ 
-\label{par:incompartible}
-Similar to the previous metric the 'literals incompatible with datatype range' metric verifies the correctness of literals regarding their datatype. 
-Apart from typed literals described below a Literal datatype can also be defined through the predicate of a triple.
-The range of attribute property (property corresponding to recourse with literal value) may be constrained to be a certain datatype.
-Please see \ref{alg:dataRange} the computational algorithm for more details.
-
+\paragraph{Literals Incompatible with Datatype Range Metric}~(required for: \textbf{ALL}, \textbf{DP}, \textbf{EBI})~\\
+Similar to the previously described metric, this verifies the correctness of literals regarding their datatype. 
+By correctness, we mean that the data type attached to the literal is different than the one specified by the range of the used property in the ontology.
+Algorithm~\ref{alg:dataRange} describes this metric.
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of literals incompatible with datatype range to all literals}
+\emph{Calculates the ratio of incorrectly defined literals against all literals in the dataset.}
 \end{mdframed}
-
-% pseudocode
 
 \begin{algorithm}
 \caption{Literals Incompatible with datatype range}\label{alg:dataRange}
@@ -83,8 +67,7 @@ Please see \ref{alg:dataRange} the computational algorithm for more details.
 Only the literals referring by the property with the range characteristic are considered by the metric. 
 The metric values vary in the interval [0, 1], where  the 0 indicates the best quality.
 
-
-\paragraph{Defined Ontology Author Metric} ~\\ 
+\paragraph{Defined Ontology Author Metric$\star$}~(required for: \textbf{EBI})~\\ 
 This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
 Imported ontologies should have common metadata which includes the definition of an author.
 
@@ -104,7 +87,7 @@ Imported ontologies should have common metadata which includes the definition of
 
 The metric will return a 1 (best rating) if the creator of the ontology is defined or 0 if otherwise.
 
-\paragraph{POBO Definition Usage Metric}~\\ 
+\paragraph{POBO Definition Usage Metric$\star$}~(required for: \textbf{EBI})~\\ 
 This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
 For this use case, it is required to check that each ontology class has a corresponding human readable definition.
 
@@ -126,7 +109,7 @@ For this use case, it is required to check that each ontology class has a corres
 
 The metric will return a ratio of the number of classes without definitions against the total number defined classes. The expected range is [0..1], where 0 is the worst rating and 1 is the best rating
 
-\paragraph{Synonym Usage Metric}~\\ 
+\paragraph{Synonym Usage Metric$\star$}~(required for: \textbf{EBI})~\\ 
 This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
 Scientific terms usually have a number of synonyms.
 Each ontology term should have at least one more synonym, thus in this metric we check if defined terms have a synonym attached to their description.

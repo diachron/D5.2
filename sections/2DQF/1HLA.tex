@@ -56,7 +56,7 @@ Listing~\ref{lst:qualityreport} represent these three problems using the Quality
 \subsubsection{Processing Unit}
 \label{sec:processingUnit}
 The Processing Unit is an integral part of the Quality Framework.
-In this framework, we provide two main scalable processing units: a sequential stream processor (cf. Section~\ref{sec:StreamProcessor}) and SPARQL processor\footnote{This processor is still being investigated and will not be ready by the deliverable deadline.}.
+In this framework, we provide two main scalable processing units: a sequential stream processor (cf. Section~\ref{sec:StreamProcessor}) and a SPARQL processor\footnote{This processor is still being investigated and will not be ready by the deliverable deadline.}.
 The former streams triples from RDF date dumps one by one in a sequential fashion.
 The latter allows the framework to assess quality on data that is available only in SPARQL endpoints. 
 This unit is one of the two extensible modules (the other being Quality Assessment Layer) in the Quality Framework.
@@ -90,7 +90,7 @@ Each metric implementing this interface, must implement the following classes:
 \begin{figure*}[tbph]
 \center
 \includegraphics[scale=0.3]{images/classdiagram.pdf} 
-\caption{Quality Assessment Layer Class Diagram - A Quality Framework as a Pluggable Platform} 
+\caption{Quality Assessment Layer Class Diagram – A Quality Framework as a Pluggable Platform} 
 \label{fig:classDiagram}
 \end{figure*}
 
@@ -109,7 +109,7 @@ These inferencing queries enable the framework to create a complete metadata des
 
 \subsubsection{Visualisation Layer}
 \label{sec:vislayer_hla}
-CubeViz is an OntoWiki\footnote{http://ontowiki.eu/Welcome} extension for visualising data cubes (observation instances).
+CubeViz is an OntoWiki\footnote{\url{http://ontowiki.eu/Welcome}} extension for visualising data cubes (observation instances).
 Figures~\ref{fig:hor_chart},~\ref{fig:ver_chart},~\ref{fig:rad_chart}, and~\ref{fig:line_chart} depicts four different CubeViz chart visualisations from computed quality metadata\footnote{The quality metadata used can be found in \url{https://raw.githubusercontent.com/diachron/quality/master/src/test/resources/cube_qg.trig}}.
 
 \begin{figure*}[tbph]

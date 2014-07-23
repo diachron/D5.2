@@ -15,10 +15,10 @@ ex:resourceSubject ex:property "value" .
 \end{lstlisting}
 it will be represented as a set of \texttt{rdf:Statement} triples:
 \begin{lstlisting}[language=N3]
-ex:refiedResource rdf:type rdf:Statement .
-ex:refiedResource rdf:subject ex:resourceSubject .
-ex:refiedResource rdf:predicate ex:property .
-ex:refiedResource rdf:object "value" .
+ex:reifiedResource rdf:type rdf:Statement .
+ex:reifiedResource rdf:subject ex:resourceSubject .
+ex:reifiedResource rdf:predicate ex:property .
+ex:reifiedResource rdf:object "value" .
 \end{lstlisting}
 
 In Section~\ref{sec:streamProcessor} we described how the \emph{Stream Processor} sequentially passes quads to the metrics in the \emph{Quality Assessment Layer}.
@@ -35,8 +35,7 @@ This is the preferred method of flatting down RDF triples from the DIACHRON data
 For this, a SPARQL endpoint is desirable so that we could query the model directly and do not require to load the dataset into memory for the construction of the model.
 Listing~\ref{lst:dereifiedRDF} illustrates the SPARQL query\footnote{Thank you Marios Meimaris (Athena) for your providing this query.} used to de-reify a dataset.
 The place holder \texttt{::datasetUri::} will be replaced by the dataset URI provided.
-\begin{lstlisting}[language=N3]
-\label{lst:dereifiedRDF}
+\begin{lstlisting}[language=N3,label=lst:dereifiedRDF]
 CONSTRUCT {
 	?s ?p ?o
 }
@@ -52,3 +51,8 @@ Once the graph is constructed, it is passed to the stream processor which in tur
 \paragraph{Parsing dataset dump}~\\
 In the unlikely event that a SPARQL endpoint is not available, a data wrapper is provided with the stream processor module.
 This data wrapper parse the RDF statements and creates triples on the fly, which are then passed to the stream processor to sequentially deliver into the \emph{Quality Assessment Layer}.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../diachron-D5_2"
+%%% End: 

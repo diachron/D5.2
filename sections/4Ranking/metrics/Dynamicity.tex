@@ -1,13 +1,12 @@
 %!TEX root = ../../../diachron-D5_2.tex
-
+%~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})
 \subsubsection{Dynamicity Category}
 \label{sec:Dynamicity} 
-
 
 \paragraph{Currency Dimension}~\\ % dimension name 
 Virtually all application domains are interested in getting access to data that is as up-to-date as possible. Actually, it is generally the case that data sources decrease in value as they become outdated. Therefore, the currency dimension is a key feature of Liked Data resources. The following metrics, intended to assess the currency of datasets, are based in the definition of this dimension provided by Kahn et al. (\cite{Kahn2002}) as "the degree to which information is up-to-date".
 
-\paragraph{Currency of Documents/Statements Metric} ~\\ %metric name
+\paragraph{Currency of Documents/Statements Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
 This metric is based in the definition of currency provided by Rula et al. (\cite{Rula2012}) as "the age of a value, where the age of a value is computed as the difference between the current time (the observation time) and the time when the value was last modified". The age of a dataset can be computed at both, the resource level (by comparing its last time of modification with the observation time) and the triples level (by comparing the value of last-modified statements instead).
 % short description
@@ -39,11 +38,11 @@ As listed in algorithm~\ref{alg:currencyDocsStm}, the metric is computed as the 
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The metric will return the average of the difference between one and the ratio of the time elapsed since the last modification of each triple to the total time the dataset has been available. Since the former time span cannot be larger that the latter, the expected range is [0, 1]. The higher the value, the better, as it reflects how recently have the resources been updated. A value of 0 indicates that the resources have never been updated after their publication.
+The metric will return the average of the difference between one and the ratio of the time elapsed since the last modification of each triple to the total time the dataset has been available. Since the former time span cannot be larger that the latter, the expected range is [0..1]. The higher the value, the better, as it reflects how recently have the resources been updated. A value of 0 indicates that the resources have never been updated after their publication.
 
 % end-of Currency of Documents/Statements Metric
 
-\paragraph{Time Since Modification Metric} ~\\ %metric name
+\paragraph{Time Since Modification Metric}~\\ %metric name
 % background for the metric
 As suggested above, the difference between the observation time (the time at which the resource is examined) and the time when the data was last modified, is a natural measure of how current is the information provided by a dataset. In contrast with the Currency of Documents/Statements metric, a simpler approach can be taken in order to measure the degree to which data is up to date. This metric does so by computing the plain difference between the observation time and the time when the data values were last modified (note that the normalization factor, based on the publishing time of the document is omitted here).
 % short description
@@ -75,7 +74,7 @@ The result is in the range [0, $+\infty$] and represents an amount of time in mi
 
 % end-of Time Since Modification Metric
 
-\paragraph{Exclusion of Outdated Data Metric} ~\\ %metric name
+\paragraph{Exclusion of Outdated Data Metric}~\\ %metric name
 % background for the metric
 The currency of a Linked Data resource can also be measured relative to the amount of outdated entities it contains. However, in order to do so, it is necessary to somehow be able recognize when an entity is to be deemed as outdated, which in turn requires that temporal metadata is available and represented according to an appropriate model, such as those proposed by Rula et al. in \cite{Rula2012A}. In this particular case, we consider an entity to be outdated, if information about its period of validity is provided and according to it, data has already expired. The proportion of outdated data present in a dataset is an important quality factor, since it is usually the case that outdated data is no longer valid.
 % short description
@@ -108,14 +107,13 @@ The implementation of the metric, as presented in algorithm \ref{alg:exclusionOu
 \end{algorithm}
 % metric value, range and rating
 The metric values vary in the interval [0, 1], where a value of 1 indicates the best quality (no entities were found to be outdated).
-
 % end-of Exclusion of Outdated Data Metric
 
 \paragraph{Volatility Dimension}~\\ % dimension name 
 %\subparagraph{Background for Volatility Quality Metrics} ~\\ %general background
 In Linked Data evolution appeared almost at each new published version of data. Following the idea of Papavassiliou et al.~\cite{TODS13} curators could define a list of changes that occur frequently and correspond to one or more low-level changes (added or deleted triples). These changes termed as Simple Changes also in the context of DIACHRON and comprise an upper abstract level of changes which is pilot-specific to describe group of changes that appear a special interest for each pilot. The detection of Simple Changes achieved accordingly to the methodology presented in~\cite{TODS13} and followed in change detection service of DIACHRON (cf.\ Deliverable 3.1~\cite{diachron-D3.1}). The following three volatility metrics take into account these assumptions and background information.
 
-\paragraph{Versions Volatility Metric} ~\\ %metric name
+\paragraph{Versions Volatility Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
 The comparison of two sequential (or not) versions of datasets could contain a number of simple changes for each pilot. In other cases, it makes sense to compare an old version of a dataset with the newest one. 
 
@@ -145,12 +143,11 @@ of defined versions to count the detected number of Simple Changes. This achieve
 % metric value, range and rating
 The metric will return the total number of Simple Changes between two versions [integer number].
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\paragraph{Average Volatility Metric} ~\\ %metric name
+\paragraph{Average Volatility Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
-The number of detected simple changes could be varied accross different published versions for each curator/pilot. According to different scenarios some versions are similar while others appear many deltas. Thus, it is meaningful to examine all available published versions of datasets in order to find the average detected Simple Changes across each pair of versions. 
+The number of detected simple changes could be varied across different published versions for each curator/pilot. According to different scenarios some versions are similar while others appear many deltas. Thus, it is meaningful to examine all available published versions of datasets in order to find the average detected Simple Changes across each pair of versions. 
 
 % short description
 \begin{mdframed}[style=metricdefinition]
@@ -159,7 +156,6 @@ The number of detected simple changes could be varied accross different publishe
 
 % pseudocode
 The Average Volatility Metric firstly calculates the total number of published versions through a SPARQL query. Afterwards, it calculates the detected Simple Changes per versions pair and aggregate the sum of changes. Finally, it calculates and returns the ratio between aggregated sum and the number of examined pairs.
-
 
 % algorithm
 \begin{algorithm}
@@ -185,12 +181,9 @@ The Average Volatility Metric firstly calculates the total number of published v
 
 % metric value, range and rating
 The metric will return the ratio [0..1] of average detected simple changes across the published dataset versions. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\paragraph{Weighted Volatility Metric} ~\\ %metric name
+\paragraph{Weighted Volatility Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
 In some applications pilots are interested more in evolution of specified versions. By applying a weighted sum model \todo{CL: please add to bib}\cite{WSM} for each sequential pair of versions, we could adapt this preference for each pilot.
 
@@ -236,8 +229,7 @@ from the curator preference table. Afterwards, it calculates the simple changes 
 % metric value, range and rating
 The metric will return the ratio of [0..1] aggregated weighted sum detected simple changes across the published dataset versions.
 
-
-\paragraph{Time Validity Interval Metric} ~\\ %metric name
+\paragraph{Time Validity Interval Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
 An alternative to measure how frequently the data varies with time, is to make use of information about the expiration of entities in order to assess how long does data remain valid. Consequently, such measurement would require two pieces of information about entities described in the dataset: the expiry time of entities (i.e. validity) and the time when data became available (i.e. publishing time). By combining these two components, the interval during which the information will remain valid can be computed.
 % short description
@@ -269,11 +261,10 @@ The result is in the range [0, $+\infty$] and represents an amount of time in se
 
 % end-of Time Validity Interval Metric
 
-
 \paragraph{Timeliness Dimension}~\\ % dimension name 
 The degree to which Linked Data is considered to be up-to-date or outdated can heavily depend on the task at hand. Depending on the application, information updated one month ago can be considered highly current (e.g. the list of pet shops in a city) or unacceptably outdated (e.g. a pricing list of foreign currencies). Therefore, in order to align the quality measures related to the age of data with the application of interest, it makes sense to provide currency measures relative to a specific task. The metrics part of this dimension, are based on the concept of timeliness as defined by Gamble et al. (\cite{Gamble2011}): "Timeliness is a measure of utility, is a comparison of the date the annotation was updated with the consumer's requirement".
 
-\paragraph{Timeliness of the Resource Metric} ~\\ %metric name
+\paragraph{Timeliness of the Resource Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
 If the expiration time of the data comprised by a Linked Data resource is provided, it is reasonable to expect such data to be updated before or shortly after that time. Otherwise, it would suggest that the data might be outdated. This, added up to the fact that the expiration time of information is closely associated to the application domain, allows to define Timeliness of the Resource as an application-domain-related metric that measures the currency of data.
 % short description

@@ -1,8 +1,29 @@
 %!TEX root = ../../../diachron-D5_2.tex
-
+%~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})
 \subsubsection{Contextual Category}
 \label{sec:Contextual} 
 
-Amount of data Dimesion
+\paragraph{Amount of Data Dimension}~\\ % dimension name 
+Amount of data, similar to relevancy, is all about the volume of appropriate data for the task at hand.
+Flemming defined this dimension as the ``criterion influencing the usability of a data source''~\cite{Flemming2008}
+The only metric available in this dimension is purely statistical.
 
-Amount of triples metric
+\paragraph{Amount of Triples Metric}~(required for: \textbf{GEN})~\\ %metric name
+% background for the metric
+This metric counts the number of triples present in the dataset. 
+It will check on the size of the dataset which is the lower bound for the number of triples present in the dataset.
+In order to identify the volume of the data a range\footnote{Taken from \url{http://lod-cloud.net}} was defined as follows:
+\begin{itemize}
+\item high (metric value 1)\:  > 1000000000 triples;
+\item mediumHigh (metric value 0.8)\: 10000000 triples~$<~x~\leq~$ 1000000000 triples;
+\item medium (metric value 0.6)\: 500000 triples~$<~x~\leq~$ 10000000 triples;
+\item mediumLow (metric value 0.4)\: 10000 triples~$<~x~\leq~$ 500000 triples;
+\item low (metric value 0.2)\: < 10000 triples.
+\end{itemize}
+
+% short description
+\begin{mdframed}[style=metricdefinition]
+\emph{Measures the size of the dataset in terms of the number of triples.}
+\end{mdframed}
+
+The algorithm counts the number of triples and returns a value according to the range defined above.

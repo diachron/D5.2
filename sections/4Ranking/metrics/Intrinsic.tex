@@ -130,7 +130,7 @@ Each ontology term should have at least one more synonym, thus in this metric we
 
 The metric will return a ratio of the number of classes without synonyms against the total number defined classes. The expected range is [0..1], where 0 is the worst rating and 1 is the best rating
 
-\subsubsection{Consistency}~\\ 
+\paragraph{Consistency Dimension}~\\ 
 Consistency metrics intend to identify any kinds of contradictions in data.
 %\paragraph{Entities As Members of Disjoint Classes}~\\
 \paragraph{Homogeneous Datatypes}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\
@@ -307,7 +307,7 @@ The missing classes should be defined in the dataset itself or an external ontol
 \end{algorithm}
 
 \paragraph{Undefined Properties}~(required for: \textbf{GEN})~\\ 
-Similar to the Undefined Classes metric \ref{par:undefClass} the Undefined Properties metric identifies terms in the predicate position that are used without any formal definition.
+Similar to the Undefined Classes metric, this metric identifies terms in the predicate position that are used without any formal definition.
 %The following list of predicates indicate that the object of the quad must be a defined property:\textit{rdfs:subPropertyOf}, \textit{owl:onProperty}, \textit{owl:assertionProperty}, \textit{owl:equivalentProperty}, \textit{owl:propertyDisjointWith}.
 
 \begin{mdframed}[style=metricdefinition]

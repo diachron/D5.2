@@ -234,7 +234,7 @@ The metric gives a value between [0..1], where  the 0 indicates the best quality
 
 \paragraph{Obsolete Concepts in Ontology$\star$}~(required for: \textbf{EBI})~\\
 Over time and versions, classes and properties change and old versions get deprecated.
-If an ontology is creating a lot of obsolete concepts between different versions, then this is an indicator that the ontology is going through a lot of changes, and is potentially in a state of poor quality.
+If an ontology is creating a considerable amount of obsolete concepts between different versions, then this is an indicator that the ontology is going through numerous changes and is potentially in a state of poor quality.
 Typically, in LOD datasets deprecated classes and properties are identified by \texttt{owl:DepricatedClass} and \texttt{owl:DepricatedProperty} respectively.
 The pilot use case requires that this metric assess datasets (which contain an ontology) for the identification of deprecated classes and properties.
 These deprecated concepts should be \texttt{rdfs:subClassOf} by the \texttt{oboInOwl:ObsoleteClass} and \texttt{oboInOwl:ObsoleteProperty}.
@@ -247,13 +247,13 @@ These deprecated concepts should be \texttt{rdfs:subClassOf} by the \texttt{oboI
 \caption{Obsolete Concepts Metric}
 \begin{algorithmic}[1]
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
-\If {(?p is rdfs:subClassOf ) \wedge ((?o is oboInOwl:ObsoleteClass) \vee (?o is oboInOwl:ObsoleteProperty))  obsoleteConcept++; }  \EndIf 
-\If {(?p is rdf:type ) \wedge (?o is owl:Class)  concept++; }  \EndIf 
+\If {(?p is rdfs:subClassOf ) $\wedge$ ((?o is oboInOwl:ObsoleteClass) $\vee$ (?o is oboInOwl:ObsoleteProperty))}  obsoleteConcept++;  \EndIf 
+\If {(?p is rdf:type ) $\wedge$ (?o is owl:Class)}  concept++;   \EndIf 
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The value of this metric is computed by measuring the percentage of deprecated classes & properties (obsoleteConcept) against the total number of classes & properties (concept) in the ontology. 
+The value of this metric is computed by measuring the percentage of deprecated classes and properties (obsoleteConcept) against the total number of classes and properties (concept) in the ontology. 
 Value is given between the range of [0..1], with 0 being the best possible value.
 
 \paragraph{Ontology Hijacking}~(required for: \textbf{EBI})~\\
@@ -421,5 +421,20 @@ In the implementation of this metric (algorithm~\ref{alg:extConciseness}), objec
 The metric will return a ratio of the number of unique objects in the dataset (i.e. objects whose properties and their values are not duplicated in another object), to the total number of objects described in the dataset. The expected range is [0..1], where 0 is the worst rating (all objects are the same) and 1 is the best rating (all objects are unique).
 % end-of Extensional Conciseness Metric
 
-\paragraph{Ontology Versioning Conciseness}
-TODO TODO TODO
+\paragraph{Ontology Versioning Conciseness$\star$}~(required for: \textbf{EBI})~\\
+In order to make sure that redundancy of entities is avoided, checking for a single defined ontology version is desirable.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Checks if the ontology has only one instance of <owl:versionInfo>.}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{Ontology Versioning Conciseness Metric}
+\begin{algorithmic}[1]
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {(?p is owl:versionInfo )} versionInfo++;   \EndIf 
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+This metric returns 1 if there is only one instance of the property, 0 if more.

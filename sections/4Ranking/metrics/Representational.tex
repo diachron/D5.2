@@ -141,7 +141,6 @@ The following widely used label properties are considered by the metric:
 \begin{mdframed}[style=metricdefinition]
 \emph{Calculates the ratio of labels with "bad capitalisation" to all labels}
 \end{mdframed}
-.
 
 % pseudocode
 \begin{algorithm}
@@ -161,7 +160,23 @@ The following widely used label properties are considered by the metric:
 \end{algorithm}
 
 \paragraph{Human Readable Labelling}~(required for: \textbf{DP}, \textbf{EBI})~\\
-TODO TODO
+Having human readable labels enable human consumers to better understand the data.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Measures the percentage of entities having a $\langle$rdfs:label$\rangle$ or $\langle$rdfs:comment$\rangle$ defined}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{Human Readable Labelling Metric}
+\begin{algorithmic}[1]
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {?p is rdf:type} instanceMap.put(?s,0)
+\If {(?p is rdfs:label $\vee ?p is rdfs:comment) $\wedge$ isNotEmptyLiteral(?o)} instanceMap.update(?s,humanLabel++);   \EndIf 
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric returns a value between [0..1]. This value is calculated by finding a ratio of total number of human readable labels against total number of instances.
 
 \paragraph{Low Blank Node Usage}~(required for: \textbf{DP}, \textbf{EBI})~\\
 TODO TODO

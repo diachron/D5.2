@@ -1,6 +1,6 @@
 %!TEX root = ../../../diachron-D5_2.tex
 
-%~(required for: \textbf{ALL}, \textbf{DP}, \textbf{EBI})
+%~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})
 \subsubsection{Intrinsic Category}
 \label{sec:Intrinsic}
 The intrinsic category metrics are independent of the user's context.
@@ -9,7 +9,7 @@ They reflect whether information presented in data correctly represent the real 
 \paragraph{Accuracy Dimension}~\\% dimension name 
 Accuracy dimension metrics reflect the degree of correctness and precision with which the given dataset represent the real world facts.
 
-\paragraph{Malformed Datatype Literals Metric}~(required for: \textbf{ALL}, \textbf{DP}, \textbf{EBI})~\\ %metric name
+\paragraph{Malformed Datatype Literals Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 Literals in RDF are values, plain or typed, containing a textual string (eg. ``13''\string^\string^xsd:int).
 It is common problem in LOD datasets that the literal value does not match its describing data type. 
 The Malformed Datatype Literals metric intends to check this inconsistency.
@@ -31,7 +31,6 @@ The algorithm \ref{lst:malformedLiterals} describes the metric computation in mo
 \If {(isLiteral(?o))} totalLiterals++ ;
 \If {(isTypedLiteral(?o)) \&\& (!hasValidDatatype(?o))} malformedLiterals++ ; \EndIf
  \EndIf
-\Return {malformedLiterals/totalLiterals}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -39,7 +38,7 @@ The algorithm \ref{lst:malformedLiterals} describes the metric computation in mo
 Only the typed literals are considered by the metric. 
 The metric values vary in the interval [0...1], where the 0 indicates the best quality.
 
-\paragraph{Literals Incompatible with Datatype Range Metric}~(required for: \textbf{ALL}, \textbf{DP}, \textbf{EBI})~\\
+\paragraph{Literals Incompatible with Datatype Range Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\
 Similar to the previously described metric, this verifies the correctness of literals regarding their datatype. 
 By correctness, we mean that the data type attached to the literal is different than the one specified by the range of the used property in the ontology.
 Algorithm~\ref{alg:dataRange} describes this metric.
@@ -59,7 +58,6 @@ Algorithm~\ref{alg:dataRange} describes this metric.
 \If {hasRange(?p) \&\& (literalDatatype(?o)!=rangeDatatype(?p)) } imcompartibleLiterals++; 
 \EndIf
 \EndIf
-\Return {incompartibleLiterals/totalLiterals}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -133,29 +131,23 @@ Each ontology term should have at least one more synonym, thus in this metric we
 The metric will return a ratio of the number of classes without synonyms against the total number defined classes. The expected range is [0..1], where 0 is the worst rating and 1 is the best rating
 
 \subsubsection{Consistency}~\\ 
-
 Consistency metrics intend to identify any kinds of contradictions in data.
-
-\paragraph{Entities As Members of Disjoint Classes}~\\
-
-
-\paragraph{Homogeneous Datatypes}~\\
-
-This metric deal with literals that conflict regarding their datatype.
-Having restrictions to the literal datatype it's easy to validate the correctness of the data.
-However, even if no restriction regarding literals is defined, different datatypes for a literals corresponding to the same property could point to inconsistences in the data.
-In contrast to the previous metrics described in \ref{par:malformed} and in \ref{par:incompartible}, this metric deals only with literals which data type is  not defined. 
+%\paragraph{Entities As Members of Disjoint Classes}~\\
+\paragraph{Homogeneous Datatypes}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\
+In some cases, the range of a property in a vocabulary is either (i) not defined; or (ii) given an open/generic type (such as \texttt{rdfs:Literal}).
+This could cause inconsistencies in a dataset since values defined by the same property can be used with literals of different datatypes.
+In contrast to the \emph{Malformed Literal} metric and \emph{Incompatible Datatype} metric, this metric deals  with the object in a triple where its property has an undefined/open range. 
 The metric computation therefore contains the following steps:
 \begin{itemize}
-\item Count frequency of different datatypes occurring with a particular predicates.
-\item Identify properties corresponding to heterogeneous datatype literals.
+\item Count the frequency of different datatypes occurring with a particular predicates.
+\item Identify the properties corresponding to heterogeneous datatype literals.
 \end{itemize}
+
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of properties containing heterogeneous datatype literals to all properties}
+\emph{Calculates the ratio of inconsistent object values in a dataset}
 \end{mdframed}
 
 % pseudocode
-
 \begin{algorithm}
 \caption{Homogeneous Datatypes}\label{lst:heterogeneous}
 \begin{algorithmic}[1]
@@ -169,68 +161,57 @@ The metric computation therefore contains the following steps:
 \EndProcedure
 \Procedure{compute}{}
 \ForAll {Properties in propertyMap}
-\If {size(Set<Datatype>) > 1 } heterogeneousDatatypeProperties++; 
+\If {size(Set$\langle$Datatype$\rangle$) $\rangle$ 1 } heterogeneousDatatypeProperties++; 
 \EndIf
 totalProperties ++;
 \EndFor
-\Return {eterogeneousDatatypeProperties/totalProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary in the interval [0,1], when the 0 indicates no properties containing heterogeneous datatype literals
-
-If there are just a few triples of one predicate having a datatype different from all other triples, they are considered as outliers and are all reported.
-In case if there is no obvious ratio of possibly wrong and possibly right triples the conflicting property will be reported to the user.
+The metric values vary between [0...1], when the 0 indicates no properties containing heterogeneous datatype literals.
   
-\paragraph{Misplaced Classes or Properties} ~\\
-
-In some cases a URI that occurs in the predicate position of a triple is defined in the corresponding vocabulary as a class, or a contrariwise a URI in the object position is a property.
-The common problem is e.g. the usage of property assigned to \textit{rdf:type} predicate.  
-These kind of inconsistences make machine interpretation of the data more complex.
-More details about the metric computation are presented in \ref{lst:misplacedCl}.
-
+\paragraph{Misplaced Classes or Properties}~\\
+In some cases a URI that occurs in the predicate position of a triple is defined in the corresponding vocabulary as a class, or a contrariwise a URI in the subject or object position is a defined property.
+These kind of inconsistencies make machine interpretation of the data more complex.
+More details about the metric computation are shown in \ref{lst:misplacedCl}.
 
 \begin{mdframed}[style=metricdefinition]
-\emph{Number of properties in a class position + number of classes used as predicate to number of all classes and properties.}
+\emph{Identifies the percentage of misplaced classes and properties in a dataset.}
 \end{mdframed}
-
 
 \begin{algorithm}
 \caption{Misplaced Classes or Properties Metric Algorithm}\label{lst:misplacedCl}
 \begin{algorithmic}[1]
 \Procedure{init}{}
-\State totalClassesUndProperties = 0 ;
+\State totalClassesAndProperties = 0 ;
 \State misplacedClasses = 0 ;
 \State misplacedProperties = 0 ;
 \EndProcedure
 
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
-\If {isURI(?p)} totalClassesUndProperties++ ;\EndIf 
+\If {isURI(?p)} totalClassesAndProperties++ ;\EndIf 
 \If {!isProperty(?p)} misplacedProperties++ ; \EndIf 
 
-\If {isURI(?o)} totalClassesUndProperties++; \EndIf  
+\If {isURI(?o)} totalClassesAndProperties++; \EndIf  
 \If {!isClass(?o)} misplacedClasses++ ; \EndIf 
-\Return{(misplacedClasses+misplacedProperties)/totalClassesUndProperties}
+\Return{(misplacedClasses+misplacedProperties)/totalClassesAndProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary in the interval [0, 1], where  the 0 indicates the best quality.
+The metric values vary between  [0..1], where  the 0 indicates the best quality.
 
-
-\paragraph{Misused Owl Datatype or Object Properties} ~\\
-
+\paragraph{Misused Owl Datatype or Object Properties}~(required for: \textbf{EBI})~\\
 OWL language defines additional characteristics to some properties. 
-If it's defined, a property can be either an instance of the \textit{owl:ObjectProperty} or \textit{owl:DatatypeProperty} class.
-A datatype property relates some resource to a literal value, while an object property describes the relation between two resources.
-Wrong usage of the datatype and object properties indicates inconsistences in the data.
+A property can be either an instance of the \textit{owl:ObjectProperty} or \textit{owl:DatatypeProperty} class.
+A datatype property relates some resource to a literal value, while an object property describes a relation between two resources.
+Wrong usage of the datatype and object properties indicates inconsistencies in the data.
 The following algorithm  \ref{lst:misusedCl} presents more details about how the metric is computed.
 
 \begin{mdframed}[style=metricdefinition]
 \emph{Number of misused datatype and object properties to all properties}
 \end{mdframed}
-
 
 \begin{algorithm}
 \caption{Misused Owl Datatype or Object Properties Metric Algorithm} \label{lst:misusedCl}
@@ -245,37 +226,39 @@ The following algorithm  \ref{lst:misusedCl} presents more details about how the
 \If {isURI(?p)} totalProperties++ ;\EndIf 
 \If {isDatatypeProperty(?p) \&\& isURI(?o)} misusedDatatypeProperties++ ; \EndIf 
 \If {isObjectProperty(?p) \&\& isLiteral(?o)} misusedObjectProperties++ ; \EndIf 
-\Return{(misusedObjectProperties + misusedDatatypeProperties)/totalProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary in the interval [0,1], where  the 0 indicates the best quality.
+The metric gives a value between [0..1], where  the 0 indicates the best quality.
 
+\paragraph{Obsolete Concepts in Ontology$\star$}~(required for: \textbf{EBI})~\\
+TODO TODO
 
-\paragraph{Obsolete Concepts in Ontology} ~\\
-
-
-\paragraph{Ontology Hijacking}  ~\\
-
-The 'ontology hijacking' term was first introduced in Hogan et. al~\cite{Hogan08} and is defined as 'the contribution of statements about classes and/or properties in a non-authoritative source such that reasoning on those classes and/or properties is affected'. 
+\paragraph{Ontology Hijacking}~(required for: \textbf{EBI})~\\
+\emph{Ontology Hijacking} was introduced by Hogan et. al~\cite{Hogan08} and is defined as ``the contribution of statements about classes and/or properties in a non-authoritative source such that reasoning on those classes and/or properties is affected''. 
 In other words ontology hijacking refers to cases where external concepts are redefined in a local ontology.
-Defining new super classes or properties of third-party classes or properties is an example for this problem, e.g. declaring \textit{rdfs:subPropertyOf} which is defined as a property,  to be a \textit{rdfs:Class}. 
-The challenging question is how to define authoritative source.
-We assume the ontologies/vocabularies published according to the best-practices as authoritative, while all other vocabularies as third parties documents.
-More formal, a concept (class or property) is authoritative if it's not a blank node and if the corresponding vocabulary is retrievable.
-To identify hijacked terms  we define a set of properties $P$ = {\textit{rdf:type}, \textit{rdf:domain}, \textit{rdf:range}, \textit{rdfs:subClassOf}, \textit{rdfs:subPropertyOf}\textit{owl:equivalentClass}, \textit{owl:equivalentProperty}, \textit{owl:inverseOf}, \textit{owl:onProperty}, \textit{owl:hasValue}, \textit{owl:someValuesFrom}, \textit{owl:allValuesFrom}, \textit{owl:intersectionOf}, \textit{owl:unionOf}, \textit{owl:maxCardinality}, \textit{owl:cardinality}, \textit{owl:oneOf} and a set of classes $C$ = {\textit{owl:FunctionalProperty}, \textit{owl:InverseFunctionalProperty}, \textit{owl:TransitiveProperty}, \textit{owl:SymmetricProperty}.
+Defining new super classes or properties of third-party classes or properties is an example for this problem, e.g. declaring \textit{rdfs:subPropertyOf} which is defined as a property, to be a \textit{rdfs:Class}. 
+%The challenging question is how to define authoritative source.
+%We assume the ontologies/vocabularies published according to the best-practices as authoritative, while all other vocabularies as third parties documents.
+%More formal, a concept (class or property) is authoritative if it's not a blank node and if the corresponding vocabulary is retrievable.
+To identify hijacked terms  we define a set of properties $P$:
+\begin{itemize}
+\item\textit{rdf:type}, \item\textit{rdf:domain}, \item\textit{rdf:range}, \item\textit{rdfs:subClassOf}, \item\textit{rdfs:subPropertyOf}\item\textit{owl:equivalentClass}, \item\textit{owl:equivalentProperty}, \item\textit{owl:inverseOf}, \item\textit{owl:onProperty}, \item\textit{owl:hasValue}, \item\textit{owl:someValuesFrom}, \item\textit{owl:allValuesFrom}, \item\textit{owl:intersectionOf}, \item\textit{owl:unionOf}, \item\textit{owl:maxCardinality}, \item\textit{owl:cardinality}, \item\textit{owl:oneOf};
+\end{itemize}
+and a set of classes $C$: 
+\begin{itemize}
+\item\textit{owl:FunctionalProperty}, \item\textit{owl:InverseFunctionalProperty}, \item\textit{owl:TransitiveProperty}, \item\textit{owl:SymmetricProperty}.
+\end{itemize}
 Metric check the two following cases:
 \begin{itemize}
-\item Classes in \textbf{C} appear in a position other than the object of a \textit{rdf:type} triple. This is the a property redefinition.
+\item Classes in \textbf{C} appear in a position other than the object of a \textit{rdf:type} triple. 
 \item Properties in \textbf{P} appear in a position other than the predicate position.
 \end{itemize}
-Hogan et. al ~\cite{Hogan08} present more detail about the metric computation.
 
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the ratio of hijacked triples to all triples}
+\emph{Checks for the re-definition of defined concepts breaking the consistency.}
 \end{mdframed}
-
 
 \begin{algorithm}
 \caption{Ontology Hijacking Algorithm}\label{lst:undefCl}
@@ -286,31 +269,26 @@ Hogan et. al ~\cite{Hogan08} present more detail about the metric computation.
 \EndProcedure
 
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
-\If {(($?s \in \textbf{C}$)||($?o \in \textbf{C}$))\&\& ($?p== \textit{rdf:type}$)} hijackedTriples++ ;\EndIf
+\If {(($?s \in \textbf{C}$) or ($?o \in \textbf{C}$))\&\& ($?p== \textit{rdf:type}$)} hijackedTriples++ ;\EndIf
 \If {($?p \in \textbf{P}$) \&\& isAuthority(?s) \&\& !isAuthority(?o)} hijackedTriples++; \EndIf
-\Return{hijackedTriples/totalTriples}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph{Undefined Classes Metric} ~\\ 
-\label{par:undefClass}
-
-Oftentimes a terms which is used in the object position of a triple and is not a literal is not formally defined as being a class.
-'Being defined' means that the term is defined either in some external ontology or at an earlier position in the given dataset. 
-Regarding to Hogan~\todo{CL: please add to bib}\cite{hogan2010} to the most used undefined classes belong \texttt{foaf:UserGroup}, \texttt{rss:item}, \texttt{linkedct:link}, \texttt{politico:Term} .
-The probability for undefined class in the subject position is very low, because the subject of a quad never references classes or properties in external vocabularies.
-Therefore they is no need to analyze the subject for this metric.
-For the most LOD data sets is sufficient to check object by the predicate \texttt{rdf:type}. 
-In the case when LOD data set defines its own vocabulary the following predicates indicate that the object must be a defined class:  \texttt{rdfs:domain}, \texttt{rdfs:range}, \texttt{rdfs:subClassOf}, \texttt{owl:allValuesFrom}, \texttt{owl:someValuesFrom}, \texttt{owl:equivalentClass}, \texttt{owl:complementOf}, \texttt{owl:onClass}, \texttt{owl:disjointWith}.
+\paragraph{Undefined Classes Metric}~(required for: \textbf{GEN})~\\ 
+A class is defined in a vocabulary or dataset by the predicate \texttt{rdf:type} and an object value of \texttt{rdf:Class} or \texttt{owl:Class}.
+In the case when LOD dataset defines its own vocabulary the following predicates indicate that the object must be a defined class:  \texttt{rdfs:domain}, \texttt{rdfs:range}, \texttt{rdfs:subClassOf}, \texttt{owl:allValuesFrom}, \texttt{owl:someValuesFrom}, \texttt{owl:equivalentClass}, \texttt{owl:complementOf}, \texttt{owl:onClass}, \texttt{owl:disjointWith}.
+%'Being defined' means that the term is defined either in some external ontology or at an earlier position in the given dataset. 
+%According to Hogan~\todo{CL: please add to bib}\cite{hogan2010} to the most used undefined classes belong \texttt{foaf:UserGroup}, \texttt{rss:item}, \texttt{linkedct:link}, \texttt{politico:Term} .
+%The probability for undefined class in the subject position is very low, because the subject of a quad never references classes or properties in external vocabularies.
+%Therefore they is no need to analyze the subject for this metric.
+%For the most LOD datasets is sufficient to check object by the predicate \texttt{rdf:type}. 
 The undefined classes problem occurs due to spelling or syntactic mistakes resolvable through minor fixes to the respective ontologies.
-The missing classes should be defining in corresponding ontology or in a separate namespaces.
-
+The missing classes should be defined in the dataset itself or an external ontology.
 
 \begin{mdframed}[style=metricdefinition]
 \emph{Calculates the ratio of undefined classes to all classes in the object position in a dataset}
 \end{mdframed}
-
 
 \begin{algorithm}
 \caption{Undefined Classes Metric Algorithm}\label{lst:undefCl}
@@ -328,15 +306,9 @@ The missing classes should be defining in corresponding ontology or in a separat
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary in the interval [0, 1], where  the 0 indicates the best quality.
-
-
-\paragraph{Undefined Properties}  ~\\ 
-
-
+\paragraph{Undefined Properties}~(required for: \textbf{GEN})~\\ 
 Similar to the Undefined Classes metric \ref{par:undefClass} the Undefined Properties metric identifies terms in the predicate position that are used without any formal definition.
- Hogan~\todo{CL: please add to bib}\cite{hogan2010} identified the following properties that are often used without being defined:  \textit{foaf:image}, \textit{cycann:label} , \textit{foaf:tagLine}.
-The following list of predicates indicate that the object of the quad must be a defined property:\textit{rdfs:subPropertyOf}, \textit{owl:onProperty}, \textit{owl:assertionProperty}, \textit{owl:equivalentProperty}, \textit{owl:propertyDisjointWith}.
+%The following list of predicates indicate that the object of the quad must be a defined property:\textit{rdfs:subPropertyOf}, \textit{owl:onProperty}, \textit{owl:assertionProperty}, \textit{owl:equivalentProperty}, \textit{owl:propertyDisjointWith}.
 
 \begin{mdframed}[style=metricdefinition]
 \emph{Calculates the ratio of undefined properties to all properties in the given data set}
@@ -352,22 +324,20 @@ The following list of predicates indicate that the object of the quad must be a 
 
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {(isURI(?p)} totalProperties++; \EndIf 
-\If {!isDefined(?p)} udefinedProperties++; \EndIf
+\If {!isDefined(?p)} undefinedProperties++; \EndIf
 
-\If {isFromList(?p) \&\&  !isDefined(?o)} udefinedProperties++ ; \EndIf
+\If {isFromList(?p) \&\&  !isDefined(?o)} undefinedProperties++ ; \EndIf
 \Return{undefinedProperties/totalProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary in the interval [0,1], where  the 0 indicates the best quality, namely no undefined classes in the data set.
-
+The metric value ranges between [0..1], where  the 0 indicates the best quality, namely no undefined classes in the data set.
 
 \paragraph{Conciseness Dimension}~\\ % dimension name 
 High quality data sources should not contain redundant information, since it could lead to contradictions and in general would affect the clearness and manageability of data. Mendes et al. (\cite{Mendes2012}) identifies two levels of conciseness. Intensional, which refers to the schema level, that is, to the absence of redundant properties, and Extensional, referring to the extent to which instances (i.e. objects) described by the dataset, are unique.
 
-
-\paragraph{Duplicate Instance Metric} ~\\
+\paragraph{Duplicate Instance Metric}~(required for: \textbf{GEN})~\\
 % background for the metric
 The information contained in Linked Data resources should not be redundant, which means that the instances contained in a dataset should, ideally, be unique. As stated by Yuangui Lei et al in \cite{Lei2007}, the mapping between the real-world objects described by the data sources and the instances contained in the semantic metadata should be one to one. That is, each statement about the existence of a real-world object should correspond to one and only one instance declaration.
 Resources are divided into groups called classes. The members of a class are known as instances of the class. A triple of the form: R rdf:type C, states that C is an instance of rdfs:Class and R is an instance of C, as defined in the RDF Schema specification \footnote{\url{http://www.w3.org/TR/rdf-schema/#ch_type}}.
@@ -401,7 +371,7 @@ The metric will return one minus the ratio of the number of unique instance decl
 
 % end-of Duplicate Instance Metric
 
-\paragraph{Extensional Conciseness Metric} ~\\ 
+\paragraph{Extensional Conciseness Metric}~(required for: \textbf{DP})~\\ 
 % background for the metric
 The conciseness of a dataset can be considered at the data level, as the redundancy of objects (i.e. instances) contained into the dataset. As defined by Mendes et al.~\cite{Mendes2012}, a dataset is concise (on the extensional or instance level), if it does not contain redundant objects, that is, objects being equivalent in their contents, yet having different identifiers.
 Ideally, Linked Data resources should not contain redundant information, which implies that all the objects described by them should be unique. Uniqueness of objects is determined from their properties: one object is said to be unique if and only if there are no other objects with the same set of properties and corresponding values.
@@ -410,7 +380,6 @@ Ideally, Linked Data resources should not contain redundant information, which i
 \begin{mdframed}[style=metricdefinition]
 \emph{Calculates the ratio of the number of unique objects (i.e. instances) to the Total Number of objects. Two objects are equivalent if they have the same set of properties, all with the same values (but not necessarily the same ids).}
 \end{mdframed}
-
 
 % pseudocode
 In the implementation of this metric (algorithm~\ref{alg:extConciseness}), objects are identified by their URI (the value of the subject attribute of the triples). The uniqueness of objects is determined from its properties: one object is said to be unique if and only if there is no other subject equivalent to it. Note that two equivalent objects may differ in their URI.
@@ -432,3 +401,4 @@ The metric will return a ratio of the number of unique objects in the dataset (i
 % end-of Extensional Conciseness Metric
 
 \paragraph{Ontology Versioning Conciseness}
+TODO TODO TODO

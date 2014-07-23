@@ -4,7 +4,8 @@
 \label{sec:Accessibility} 
 
 %Availability
-\paragraph{Availability Dimension} % dimension name 
+\paragraph{Availability Dimension}~\\% dimension name 
+Availability of a dataset is the extent to which data (or some portion of it) is present, obtainable and ready for use~\cite{Zaveri2012}.
 
 \paragraph{Dereferenceability Metric} ~\\ %metric name
 % background for the metric
@@ -40,8 +41,59 @@ This metric (listing~\ref{let:deref}) will count the number of valid dereference
 % metric value, range and rating
 The metric will return a ratio of the number of dereferenced URIs (deref) against the total number of triples in a dataset (totalTriples). The expected range is [0..1], where 0 is the worst rating and 1 is the best rating.
 
-\paragraph{RDF Accessibility Metric} 
-\paragraph{SPARQL Accessibility Metric} 
+\paragraph{RDF Accessibility Metric}~\\
+A data source should be available as a LOD format (e.g. RDF) dump which can be downloaded by a consumer.
+This dump should be stated in the dataset and accessible under the given URI.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Check if data dumps (void:dataDump) exists and are reachable and parsable.}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{RDF Accessibility Algorithm}\label{lst:deref}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State lodDumps = 0 ;
+\State accessibleLodDumps = 0 ;
+\EndProcedure
+
+\Procedure{RDFAccessibility}{$\langle?s,?p,?o,?g\rangle$}
+\If {?p is void:dataDump} lodDumps++ ; \EndIf
+\If {isAccessible(?o)} accessibleLodDumps++ ; \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric will return a ratio of the number of defined LOD data dumps (lodDumps) against the total number of accessible data dumps (accessibleLodDumps). 
+The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no data dump is found, then the metric would return 0 and the dataset fails this metric
+
+\paragraph{SPARQL Accessibility Metric}~\\
+This metric follows the previous (RDF Accessibility Metric), where a dataset is assessed to check if a SPARQL endpoint is defined.
+
+\begin{mdframed}[style=metricdefinition]
+\emph{Check if a SPARQL endpoint (matching void:sparqlEndpoint) is available and returns a result.}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{SPARQL Accessibility Algorithm}\label{lst:deref}
+\begin{algorithmic}[1]
+\Procedure{init}{}
+\State endPoints = 0 ;
+\State accessibleEndPoints = 0 ;
+\EndProcedure
+
+\Procedure{SPARQLAccessibility}{$\langle?s,?p,?o,?g\rangle$}
+\If {?p is void:sparqlEndpoint} 
+\State endPoints++ ; 
+\State query ?o ;
+\If {returnResult(?o)} accessibleEndPoints++ ; \EndIf
+\EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric will return a ratio of the number of defined SPARQL end points (endPoints) against the total number of accessible SPARQL endpoints (accessibleEndPoints). 
+The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no data dump is found, then the metric would return 0 and the dataset fails this metric
 
 \paragraph{Performance Dimension}~\\ % dimension name 
 In a broad sense, performance refers to the ability to get access to the Linked Data source efficiently, without causing any major delays in the client application when querying the data. It constitutes a highly important quality feature, as low performance can seriously affect the ability of clients to access the data (availability) and its usability. There are a variety of factors that can have an effect on performance, such as networking issues, server configurations and usage of complex RDF features.

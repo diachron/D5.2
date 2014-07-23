@@ -54,6 +54,7 @@ Listing~\ref{lst:qualityreport} represent these three problems using the Quality
 \lstinputlisting[caption={An corresponding Quality Report for Listing~\ref{lst:dataset_qr}},label=lst:qualityreport, language=N3]{listings/qualityreport.trig}
 
 \subsubsection{Processing Unit}
+\label{sec:processingUnit}
 The Processing Unit is an integral part of the Quality Framework.
 In this framework, we provide two main scalable processing units: a sequential stream processor (cf. Section~\ref{sec:StreamProcessor}) and SPARQL processor\footnote{This processor is still being investigated and will not be ready by the deliverable deadline.}.
 The former streams triples from RDF date dumps one by one in a sequential fashion.
@@ -71,6 +72,7 @@ Finally, memory clean up ensures that no unused objects are using unnecessary co
 \lstinputlisting[caption={IO Processor Interface},label=lst:int_ioprocessor, language=Java]{listings/ioprocessor.java} 
 
 \subsubsection{Quality Assessment Layer}
+\label{sec:qaLayer}
 The Quality Assessment Layer is unarguably the most important layer in this Quality Framework.
 The framework can be extended by any third party providing their own custom specific metric.
 This is already done in the DIACHRON project, where a number of metrics (cf. Section~\ref{sec:DQMetrics}) required to assess the various use cases specified in Deliverable ??? are implemented.

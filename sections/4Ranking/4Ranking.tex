@@ -10,7 +10,9 @@ Talking about ``quality'' as a whole might not make sense, as different aspects 
 It does, however, make sense to restrict quality-based filtering or ranking to those quality categories and/or dimensions that are relevant in the given situation, or to assign custom weights to different dimensions, and compute the overall quality as a weighted sum.
 The daQ vocabulary provides flexible filtering and ranking possibilities in that it facilitates access to dataset quality metrics in these different dimensions and thus facilitates the (re)computation of custom aggregated metrics derived from base metrics.
 To keep quality metrics information easily accessible, each assessed dataset contains the relevant daQ metadata graph in the dataset itself.
+We provide two ranking possibilities to the user: (i) Unbiased Automatic Quality Ranking, and (ii) User-Driven Quality Ranking.
 
+\subsubsection{Unbiased Automatic Quality Ranking}
 We aim to achieve a quality-biased ranking of LOD datasets, promoting:
 \begin{enumerate}
 \item High quality datasets;
@@ -122,3 +124,5 @@ More examples of different scenarios are in the Table~\ref{tbl:dataset_ranking},
     \label{tbl:dataset_ranking}
     \caption{Dataset Ranking for different Scenarios}
 \end{table}
+
+\subsubsection{User-Driven Quality Ranking}

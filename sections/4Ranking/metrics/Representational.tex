@@ -179,8 +179,24 @@ Having human readable labels enable human consumers to better understand the dat
 The metric returns a value between [0..1]. This value is calculated by finding a ratio of total number of human readable labels against total number of instances.
 
 \paragraph{Low Blank Node Usage}~(required for: \textbf{DP}, \textbf{EBI})~\\
-TODO TODO
+Blank nodes reduce the understandability of a dataset.
+The lower the number of blank nodes is, the higher the quality is.
 
+\begin{mdframed}[style=metricdefinition]
+\emph{Provides a measure calculating the number of blank nodes used in a dataset.}
+\end{mdframed}
+
+\begin{algorithm}
+\caption{Human Readable Labelling Metric}
+\begin{algorithmic}[1]
+\Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
+\If {blankNode(?s)} blankNodes++; \EndIf
+\If {blankNode(?o)} blankNodes++;   \EndIf 
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The metric returns a value between [0..1], i.e. the result of dividing the number of blankNodes against the total number of non-literal subject and object entities.
 %%%%%%% Bibliography
 
 % Hogan2012 : Aidan Hogan and Jürgen Umbrich and Andreas Harth and Richard Cyganiak and Axel Polleres and Stefan Decker. An empirical survey of Linked Data conformance. Web Semantics: Science, Services and Agents on the World Wide Web, 2012%

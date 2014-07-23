@@ -113,7 +113,7 @@ The metric values vary in the interval [0, 1], where a value of 1 indicates the 
 %\subparagraph{Background for Volatility Quality Metrics} ~\\ %general background
 In Linked Data evolution appeared almost at each new published version of data. Following the idea of Papavassiliou et al.~\cite{TODS13} curators could define a list of changes that occur frequently and correspond to one or more low-level changes (added or deleted triples). These changes termed as Simple Changes also in the context of DIACHRON and comprise an upper abstract level of changes which is pilot-specific to describe group of changes that appear a special interest for each pilot. The detection of Simple Changes achieved accordingly to the methodology presented in~\cite{TODS13} and followed in change detection service of DIACHRON (cf.\ Deliverable 3.1~\cite{diachron-D3.1}). The following three volatility metrics take into account these assumptions and background information.
 
-\paragraph{Versions Volatility Metric}}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
+\paragraph{Versions Volatility Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
 The comparison of two sequential (or not) versions of datasets could contain a number of simple changes for each pilot. In other cases, it makes sense to compare an old version of a dataset with the newest one. 
 
@@ -183,7 +183,7 @@ The Average Volatility Metric firstly calculates the total number of published v
 The metric will return the ratio [0..1] of average detected simple changes across the published dataset versions. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\paragraph{Weighted Volatility Metric}}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
+\paragraph{Weighted Volatility Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
 In some applications pilots are interested more in evolution of specified versions. By applying a weighted sum model \todo{CL: please add to bib}\cite{WSM} for each sequential pair of versions, we could adapt this preference for each pilot.
 
@@ -228,7 +228,6 @@ from the curator preference table. Afterwards, it calculates the simple changes 
 
 % metric value, range and rating
 The metric will return the ratio of [0..1] aggregated weighted sum detected simple changes across the published dataset versions.
-
 
 \paragraph{Time Validity Interval Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric

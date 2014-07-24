@@ -27,13 +27,13 @@ The main problem is that the most metrics would not just require the \emph{objec
 Therefore, DIACHRON resources have to be de-reified into RDF triple prior to them being passed to the metric.
 
 In order to support the DIACHRON data model, datasets would require preprocessing to de-reify they to a flat RDF structure.
-This can be done in two ways: (1) Constructing a new dataset using SPARQL CONSTRUCT; (2) Parsing dataset dump.
+This can be done in two ways: (1) Constructing a new dataset using SPARQL CONSTRUCT; (2) Parsing a dump of the dataset.
 These are explained further below.
 
 \paragraph{Constructing de-reified RDF triples}~\\
-This is the preferred method of flatting down RDF triples from the DIACHRON data model.
+This is the preferred method of flattening down RDF triples from the DIACHRON data model.
 For this, a SPARQL endpoint is desirable so that we could query the model directly and do not require to load the dataset into memory for the construction of the model.
-Listing~\ref{lst:dereifiedRDF} illustrates the SPARQL query\footnote{Thank you Marios Meimaris (Athena) for your providing this query.} used to de-reify a dataset.
+Listing~\ref{lst:dereifiedRDF} illustrates the SPARQL query\footnote{Thank you Marios Meimaris (Athena) for providing this query.} used to de-reify a dataset.
 The place holder \texttt{::datasetUri::} will be replaced by the dataset URI provided.
 \begin{lstlisting}[language=N3,label=lst:dereifiedRDF]
 CONSTRUCT {
@@ -48,7 +48,7 @@ WHERE{
 \end{lstlisting}
 Once the graph is constructed, it is passed to the stream processor which in turn starts the assessment.
 
-\paragraph{Parsing dataset dump}~\\
+\paragraph{Parsing a dump of the dataset}~\\
 In the unlikely event that a SPARQL endpoint is not available, a data wrapper is provided with the stream processor module.
 This data wrapper parse the RDF statements and creates triples on the fly, which are then passed to the stream processor to sequentially deliver into the \emph{Quality Assessment Layer}.
 

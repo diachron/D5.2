@@ -99,10 +99,10 @@ Therefore, an interface (\texttt{ComplexQualityMetric}) extending \texttt{Qualit
 This interface allow metric developers to perform such processing using the \texttt{\textbf{void} before()} and \texttt{\textbf{void} after()} methods.
 
 In order to facilitate further such development of pluggable metrics, the \texttt{AbstractQualityMetric} class was developed, implementing the \texttt{QualityMetric} interface.
-In this abstract class, the method \texttt{List$\langle$Statement$\rangle$ toDAQTriples()} is implemented, generating daQ observation instances (cf. Section~\ref{sec:DAQ}) for the metric being assessed. 
+In this abstract class, the method \texttt{List$\langle$Statement$\rangle$ toDAQTriples()} is implemented, generating daQ \todo{CL@JD: not sure this term will be understood.  Maybe speak of ``quality metadata'' here, and only introduce it (but then with an explanation) below for data cubes.}observation instances (cf. Section~\ref{sec:DAQ}) for the metric being assessed. 
 
 \subsubsection{Semantic Annotation Unit}
-The Semantic Annotation Unit takes the generated triples (from the \texttt{toDAQTriples()} method) in order to create the quality metadata in a dataset.
+The Semantic Annotation Unit takes the generated triples (from the \texttt{toDAQTriples()} method) in order \todo{CL@JD: again I wouldn't give the impression that we are taking care of storage.  These metadata \emph{can} be stored inside the dataset, but we are not in charge of it.}to create the quality metadata in a dataset.
 The unit provides a number of helper classes that provide inferencing queries on vocabularies that describe metrics (such as DQM) based on the core ontology daQ.
 Therefore, RDF descriptions of metrics extending the daQ (cf. Section~\ref{sec:extendingDAQ}) ontology is absolutely required.
 These inferencing queries enable the framework to create a complete metadata description (cf. Section~\ref{sec:DAQ}) of an assessed quality metric.
@@ -162,3 +162,5 @@ The lines emphasise the points where the values of the metrics changed noticeabl
 %%% mode: latex
 %%% TeX-master: "../../diachron-D5_2"
 %%% End: 
+
+

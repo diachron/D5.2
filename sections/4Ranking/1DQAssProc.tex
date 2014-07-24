@@ -3,7 +3,7 @@
 \subsection{Data Quality Assessment Process}
 \label{sec:DQAssessment} 
 In Deliverable 6.1 (Section 6.1.7.3), we described the assessment process in an activity diagram.
-Since we need to cater for datasets modelled on the DIACHRON Data Model (cf. D1.3), the Stream Processor described in Section~\ref{sec:streamProcessor} requires some adaptation.
+Since we need to cater for datasets modelled on the DIACHRON Data Model (cf. D1.3), the Stream Processor described in Section~\ref{sec:StreamProcessor} requires some adaptation.
 The DIACHRON data model is used as an underlying schema to store and query data from various heterogeneous sources using one standardised representation.
 The schema features a number of key aspects that allow data to be traceable (indicating the provenance), reproducible, and overall enable the DIACHRON services (cf. D1.3).
 
@@ -21,7 +21,7 @@ ex:reifiedResource rdf:predicate ex:property .
 ex:reifiedResource rdf:object "value" .
 \end{lstlisting}
 
-In Section~\ref{sec:streamProcessor} we described how the \emph{Stream Processor} sequentially passes quads to the metrics in the \emph{Quality Assessment Layer}.
+In Section~\ref{sec:StreamProcessor} we described how the \emph{Stream Processor} sequentially passes quads to the metrics in the \emph{Quality Assessment Layer}.
 Although data based on the DIACHRON data model would be sufficient for the \emph{Stream Processor}, metric assessment will not give the desired results.
 The main problem is that the most metrics would not just require the \emph{object} value, but would also require the \emph{subject} and the \emph{predicate}.
 Therefore, DIACHRON resources have to be de-reified into RDF triple prior to them being passed to the metric.

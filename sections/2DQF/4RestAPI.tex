@@ -11,7 +11,7 @@ In Deliverable 6.1 we define the following two parameters:
 \end{description}
 The input parameter we introduce in this Deliverable is \textbf{MetricsConfiguration}.
 This parameter is an object with a list of metrics (cf. Listing~\ref{lst:conf_metric}) in JSON-LD format, identifying the metrics required to be used for the dataset quality assessment.
-Listing~\ref{lst:api_format} shows a sample input message format with the newly added parameter \textbf{MetricsConfiguration}.
+Listing~\ref{lst:api_format} shows a sample input message format with the newly added parameter \textbf{MetricsConfiguration}\todo{CL@JD: If others implement their own metrics in packages other than de.unibonn.iai.eis... how will this work?  It currently implicitly maps to de.unibonn..., doesn't it?}.
 \lstinputlisting[caption={API Call Input Message Format},label=lst:api_format, language=json]{listings/api_format.json} 
 % relate to 6.1
 

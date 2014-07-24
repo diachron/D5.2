@@ -36,7 +36,7 @@ The algorithm \ref{lst:malformedLiterals} describes the metric computation in mo
 \end{algorithm}
 
 Only the typed literals are considered by the metric. 
-The metric values vary in the interval [0...1], where the 0 indicates the best quality.
+The metric values vary in the interval $[0,\ldots,1]$, where the 0 indicates the best quality.\todo{CL@JD: I think this is a good candidate for making the value ranges more uniform.  As with many other metrics we should say 0 is worst.  Can we change it now (and then in the implementation soon)?}
 
 \paragraph{Literals Incompatible with Datatype Range Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\
 Similar to the previously described metric, this verifies the correctness of literals regarding their datatype. 
@@ -63,7 +63,7 @@ Algorithm~\ref{alg:dataRange} describes this metric.
 \end{algorithm}
 
 Only the literals referring by the property with the range characteristic are considered by the metric. 
-The metric values vary in the interval [0, 1], where  the 0 indicates the best quality.
+The metric values vary in the interval $[0, 1]$, where  0 indicates the best quality\todo{CL@JD: once more I'd define 0 = worst}.
 
 \paragraph{Defined Ontology Author Metric$\star$}~(required for: \textbf{EBI})~\\ 
 This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
@@ -256,6 +256,7 @@ Metric check the two following cases:
 \item Properties in \textbf{P} appear in a position other than the predicate position.
 \end{itemize}
 
+\todo{CL: we actually only check for redefinition, don't we?  Without an OWL reasoner we can't check whether such a redefinition breaks consistency.}
 \begin{mdframed}[style=metricdefinition]
 \emph{Checks for the re-definition of defined concepts breaking the consistency.}
 \end{mdframed}
@@ -307,6 +308,8 @@ The missing classes should be defined in the dataset itself or an external ontol
 \end{algorithm}
 
 \paragraph{Undefined Properties}~(required for: \textbf{GEN})~\\ 
+\todo{CL: metric value range?}
+
 Similar to the Undefined Classes metric, this metric identifies terms in the predicate position that are used without any formal definition.
 %The following list of predicates indicate that the object of the quad must be a defined property:\textit{rdfs:subPropertyOf}, \textit{owl:onProperty}, \textit{owl:assertionProperty}, \textit{owl:equivalentProperty}, \textit{owl:propertyDisjointWith}.
 
@@ -340,7 +343,7 @@ High quality data sources should not contain redundant information, since it cou
 \paragraph{Duplicate Instance Metric}~(required for: \textbf{GEN})~\\
 % background for the metric
 The information contained in Linked Data resources should not be redundant, which means that the instances contained in a dataset should, ideally, be unique. As stated by Yuangui Lei et al in \cite{Lei2007}, the mapping between the real-world objects described by the data sources and the instances contained in the semantic metadata should be one to one. That is, each statement about the existence of a real-world object should correspond to one and only one instance declaration.
-Resources are divided into groups called classes. The members of a class are known as instances of the class. A triple of the form: R rdf:type C, states that C is an instance of rdfs:Class and R is an instance of C, as defined in the RDF Schema specification \footnote{\url{http://www.w3.org/TR/rdf-schema/#ch_type}}.
+Resources are divided into groups called classes. The members of a class are known as instances of the class. A triple of the form: R rdf:type C, states that C is an instance of rdfs:Class and R is an instance of C, as defined in the RDF Schema specification \footnote{\url{http://www.w3.org/TR/rdf-schema/#ch_type}}.\todo{CL: Interesting that here we have a $1-x$ construction.  Wouldn't this be the key to achieving ``0 = worst'' almost everywhere?}
 
 % short description
 \begin{mdframed}[style=metricdefinition]

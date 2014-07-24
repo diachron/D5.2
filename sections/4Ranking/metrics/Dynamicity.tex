@@ -8,14 +8,14 @@ Virtually all application domains are interested in getting access to data that 
 
 \paragraph{Currency of Documents/Statements Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
-This metric is based in the definition of currency provided by Rula et al. (\cite{Rula2012}) as "the age of a value, where the age of a value is computed as the difference between the current time (the observation time) and the time when the value was last modified". The age of a dataset can be computed at both, the resource level (by comparing its last time of modification with the observation time) and the triples level (by comparing the value of last-modified statements instead).
+This metric is based in the definition of currency provided by Rula et al. as ``the age of a value, where the age of a value is computed as the difference between the current time (the observation time) and the time when the value was last modified''~\cite{Rula2012}. The age of a dataset can be computed at both, the resource level (by comparing its last time of modification with the observation time) and the triples level (by comparing the value of \todo{CL: How would you do this?  If statements are reified?}last-modified statements instead).
 % short description
 \begin{mdframed}[style=metricdefinition]
 \emph{Measures the degree to which data is up to date, by comparing the time when the data was observed (approximately the current time), with the time when the data (the document and each triple) was last modified.}
 \end{mdframed}
 
 % pseudocode
-As listed in algorithm~\ref{alg:currencyDocsStm}, the metric is computed as the average of the comparisons of the observation time versus the last modification time of each triple, normalized by the time elapsed since the publication of the document and the observation time. The last modification time is extracted from the properties: \textit{http://purl.org/dc/terms/modified} and \textit{http://semantic-mediawiki.org/swivt/1.0\#wikiPageModificationDate}. Likewise, the publication time of the document is extracted from \textit{http://purl.org/dc/terms/created}, \textit{http://purl.org/dc/terms/issued} and \textit{http://semantic-mediawiki.org/swivt/1.0\#creationDate}, as suggested by the study conducted by Rula et al. at \cite{Rula2012}.
+As listed in algorithm~\ref{alg:currencyDocsStm}, the metric is computed as the average of the comparisons of the observation time versus the last modification time of each triple, normalized by the time elapsed since the publication of the document and the observation time. The last modification time is extracted from the properties: \textit{http://purl.org/dc/terms/modified} and \textit{http://semantic-mediawiki.org/swivt/1.0\#wikiPageModificationDate}. Likewise, the publication time of the document is extracted from \textit{http://purl.org/dc/terms/created}, \textit{http://purl.org/dc/terms/issued} and \textit{http://semantic-mediawiki.org/swivt/1.0\#creationDate}, as suggested by the study conducted by Rula et al.~\cite{Rula2012}.
 \begin{algorithm}
 \caption{Currency of Documents/Statements Algorithm} \label{alg:currencyDocsStm}
 \begin{algorithmic}[1]

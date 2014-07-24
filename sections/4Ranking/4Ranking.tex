@@ -26,7 +26,7 @@ With our proposed ranking algorithm we do not just promote those datasets that h
 
 The approach we take for ranking takes into consideration the total number of metrics assessed by the most complete dataset available in the datastore\footnote{We are assuming that the metrics used are common to all datasets in the domain}.
 It also takes into consideration any facet filters chosen by the user, enabling the dynamic change of weights and thus the final ranking.
-Consider $F_{m} = \lbrace m_{1},m_{2},\dots,m_{n} \rbrace$ where $F_{m}$ is the set of all metrics $m$ available.
+Consider $F_{m} = \lbrace m_{1},m_{2},\dots,m_{n} \rbrace$ where $F_{m}$ is the set of \todo{CL: IIUC $m_1$ is the \emph{value} of metric 1, right?}the values of all metrics $m$ available.
 The ranking algorithm is split into a number of steps:
 \begin{enumerate}
 \item Get the total number of metrics assessed ($n$);
@@ -74,7 +74,7 @@ This is repeated for all possible datasets and then are ranked accordingly.
 \end{Def1}
 
 Listing~\ref{lst:rank_sparql} shows a typical configuration of the retrieval of metric assessment values from the Quality Graph.
-In this query the metric value of the latest observation is taken into consideration.
+In this query the metric value of the latest observation is taken into consideration\todo{CL: is ``dqm\#'' meant to be the URI of the DQM vocabulary?  Then why not use the PURL?}.
 \lstinputlisting[caption={Retrieving metric assessment value from the Quality Graph.},label=lst:rank_sparql, language=SPARQL]{listings/ret_value.sparql}
 
 \subsubsection{Ranking Example}

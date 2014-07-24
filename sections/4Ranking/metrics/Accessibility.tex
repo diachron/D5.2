@@ -40,7 +40,7 @@ The dereferenceability metric (listing~\ref{lst:deref}) counts the number of val
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The metric returns a ratio of the number of dereferenced URIs (deref) against the total number of triples in a dataset (totalTriples). The expected range is [0..1], where 0 is the worst rating and 1 is the best rating.
+The metric returns a ratio of the number of dereferenced URIs (deref) against the total number of triples in a dataset (totalTriples). The expected range is $[0,\ldots,1]$, where 0 is the worst rating and 1 is the best rating.
 
 \paragraph{RDF Accessibility Metric}~(required for: \textbf{EBI})~\\
 A data source should be available as a LOD format (e.g. RDF) dump which can be downloaded by a consumer.
@@ -66,7 +66,7 @@ This dump should be stated in the dataset and accessible under the given URI.
 \end{algorithm}
 
 The metric returns a ratio between the number of defined LOD data dumps (lodDumps) and the total number of accessible data dumps (accessibleLodDumps). 
-The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no data dump is found, then the metric would return 0 and thus the dataset fails this metric
+The expected range is $[0,\ldots,1]$, where 0 is the worst rating and 1 is the best rating. If no data dump is found, then the metric would return 0 and thus the dataset fails this metric.
 
 \paragraph{SPARQL Accessibility Metric}~(required for: \textbf{EBI})~\\
 This metric follows the previous (RDF Accessibility Metric), where a dataset is assessed to check if a SPARQL endpoint is defined.
@@ -94,7 +94,7 @@ This metric follows the previous (RDF Accessibility Metric), where a dataset is 
 \end{algorithm}
 
 The metric returns a ratio between the number of defined SPARQL endpoints (endPoints) and the total number of accessible SPARQL endpoints (accessibleEndPoints). 
-The expected range is [0..1], where 0 is the worst rating and 1 is the best rating. If no endpoint is defined, then the metric would return 0 and the dataset fails this metric
+The expected range is $[0,\ldots,1]$, where 0 is the worst rating and 1 is the best rating. If no endpoint is defined, then the metric would return 0 and the dataset fails this metric
 
 \paragraph{Performance Dimension}~\\ % dimension name 
 In a broad sense, performance refers to the ability to get access to the Linked Data source efficiently, without causing any major delays in the client application when querying the data. It constitutes a highly important quality feature, as low performance can seriously affect the ability of clients to access the data (availability) and its usability. There are a variety of factors that can have an effect on performance, such as networking issues, server configurations and usage of complex RDF features.
@@ -113,7 +113,7 @@ As shown in algorithm~\ref{alg:lowLatency}, the implementation of this metric co
 \caption{Low Latency Algorithm} \label{alg:lowLatency}
 \begin{algorithmic}[1]
 \Procedure{init}{}
-\State totalDelay = -1;
+\State totalDelay = $-1$;
 \State requestsToSend = 2;
 \EndProcedure
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
@@ -125,12 +125,12 @@ As shown in algorithm~\ref{alg:lowLatency}, the implementation of this metric co
 \State timeElapsedSinceStart = stopTimer();
 \State totalDelay += timeElapsedSinceStart;
 \EndIf
-\Return{totalDelay/requestsToSend;}
+\Return{totalDelay / requestsToSend;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The result of the metric is a real number in the range [1, $+\infty$), as it represents the average time (in  milliseconds) elapsed between the issuing of the request and the reception of its response. The lower the value, the better, as it represents how long does it take to get access to the dataset.
+The result of the metric is a real number in the range $[1, +\infty)$, as it represents the average time (in  milliseconds) elapsed between the issuing of the request and the reception of its response. The lower the value, the better, as it represents how long does it take to get access to the dataset.
 
 % end-of Low Latency metric
 
@@ -148,7 +148,7 @@ The throughput of the resource is measured by sequentially sending it a fixed nu
 \caption{High Throughput Algorithm} \label{alg:highThroughput}
 \begin{algorithmic}[1]
 \Procedure{init}{}
-\State totalDelay = -1;
+\State totalDelay = $-1$;
 \State requestsToSend = 3;
 \EndProcedure
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
@@ -160,12 +160,12 @@ The throughput of the resource is measured by sequentially sending it a fixed nu
 \State timeElapsedSinceStart = stopTimer();
 \State totalDelay += timeElapsedSinceStart;
 \EndIf
-\Return{requestsToSend/totalDelay;}
+\Return{requestsToSend / totalDelay;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The value of the metric is in the range [1, +$\infty$) and represents the average number of requests successfully served by the resource's host per millisecond. The higher the value, the better, as it represents the number of requests per second, that the data-source is able to serve.
+The value of the metric is in the range $[1 +\infty)$ and represents the average number of requests successfully served by the resource's host per millisecond. The higher the value, the better, as it represents the number of requests per second, that the data-source is able to serve.
 
 % end-of High Throughput Metric
 
@@ -185,8 +185,8 @@ All the requests whose response times (delays) are to be averaged, are sent simu
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State numSimultaneousRequests = 10;
-\State totalDelaySimultaneousReqs = -1;
-\State totalDelaySingleReq = -1;
+\State totalDelaySimultaneousReqs = $-1$;
+\State totalDelaySingleReq = $-1$;
 \EndProcedure
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isDataSetURI(?s)} 
@@ -197,12 +197,12 @@ All the requests whose response times (delays) are to be averaged, are sent simu
 \State sendSynchronousRequestTo(?s);
 \State totalDelaySingleReq = stopTimer();
 \EndIf
-\Return{(totalDelaySimultaneousReqs/numSimultaneousRequests)-totalDelaySingleReq;}
+\Return{(totalDelaySimultaneousReqs / numSimultaneousRequests) - totalDelaySingleReq;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The value of the metric is in the range [0, +$\infty$) it consist of the difference in milliseconds, between the average response time of the data source, when exposed to several, simultaneous requests and the response time of a single, isolated request. The lower the value, the better. Higher values suggest poor scalability of the data-source, as they mean that it gets overwhelmed by multiple, simultaneous requests.
+The value of the metric is in the range $[0, +\infty)$ it consist of the difference in milliseconds, between the average response time of the data source, when exposed to several, simultaneous requests and the response time of a single, isolated request. The lower the value, the better. Higher values suggest poor scalability of the data source, as they mean that it gets overwhelmed by multiple, simultaneous requests.
 
 % end-of Scalability of a Data Source Metric
 

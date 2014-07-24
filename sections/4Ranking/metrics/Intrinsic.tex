@@ -105,7 +105,7 @@ For this use case, it is required to check that each ontology class has a corres
 \end{algorithmic}
 \end{algorithm}
 
-The metric will return a ratio of the number of classes without definitions against the total number defined classes. The expected range is [0..1], where 0 is the worst rating and 1 is the best rating
+The metric will return a ratio of the number of classes without definitions against the total number defined classes. The expected range is $[0,\ldots,1]$, where 0 is the worst rating and 1 is the best rating
 
 \paragraph{Synonym Usage Metric$\star$}~(required for: \textbf{EBI})~\\ 
 This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
@@ -128,7 +128,7 @@ Each ontology term should have at least one \todo{CL: Do we need the word ``more
 \end{algorithmic}
 \end{algorithm}
 
-The metric will return a ratio of the number of classes without synonyms against the total number defined classes. The expected range is [0..1], where 0 is the worst rating and 1 is the best rating
+The metric will return a ratio of the number of classes without synonyms against the total number defined classes. The expected range is $[0,\ldots,1]$, where 0 is the worst rating and 1 is the best rating
 
 \paragraph{Consistency Dimension}~\\ 
 Consistency metrics intend to identify any kinds of contradictions in data.
@@ -154,10 +154,10 @@ The metric computation therefore contains the following steps:
 \Procedure{init}{}
 \State totalProperties = 0;
 \State heterogeneousDatatypeProperties = 0
-\State  propertyMap = map(Property, List<Datatypes>)
+\State  propertyMap = map(Property, List<Datatype>)
 \EndProcedure
 \Procedure{analyzeProperties}{$\langle?s,?p,?o,?g\rangle$}
-\If {isLiteral(?o)}  propertyMap.put(?p, Set.add.datatypeOf(?o)) \EndIf;
+\If {isLiteral(?o)}  propertyMap.put(?p, Set.add.datatypeOf(?o)); \EndIf
 \EndProcedure
 \Procedure{compute}{}
 \ForAll {Properties in propertyMap}
@@ -169,7 +169,7 @@ totalProperties ++;
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary between [0...1], when the 0 indicates no properties containing heterogeneous datatype literals.
+The metric values vary between $[0,\ldots,1]$, when the 0 indicates no properties containing heterogeneous datatype literals\todo{CL: let's say 0 = worst}.
   
 \paragraph{Misplaced Classes or Properties}~\\
 In some cases a URI that occurs in the predicate position of a triple is defined in the corresponding vocabulary as a class, or a contrariwise a URI in the subject or object position is a defined property.
@@ -195,12 +195,12 @@ More details about the metric computation are shown in algorithm \ref{lst:mispla
 
 \If {isURI(?o)} totalClassesAndProperties++; \EndIf  
 \If {!isClass(?o)} misplacedClasses++ ; \EndIf 
-\Return{(misplacedClasses+misplacedProperties)/totalClassesAndProperties}
+\Return{(misplacedClasses+misplacedProperties) / totalClassesAndProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The metric values vary between  [0..1], where  the 0 indicates the best quality.
+The metric values vary between  $[0,\ldots,1]$, where  the 0 indicates the best quality.
 
 \paragraph{Misused OWL Datatype or Object Properties}~(required for: \textbf{EBI})~\\
 The OWL language defines additional characteristics to some properties. 
@@ -214,7 +214,7 @@ The following algorithm  \ref{lst:misusedCl} presents more details about how the
 \end{mdframed}
 
 \begin{algorithm}
-\caption{Misused Owl Datatype or Object Properties Metric Algorithm} \label{lst:misusedCl}
+\caption{Misused OWL Datatype or Object Properties Metric Algorithm} \label{lst:misusedCl}
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State totalProperties = 0 ;
@@ -230,7 +230,7 @@ The following algorithm  \ref{lst:misusedCl} presents more details about how the
 \end{algorithmic}
 \end{algorithm}
 
-The metric gives a value between [0..1], where  the 0 indicates the best quality.
+The metric gives a value between $[0,\ldots,1]$, where  the 0 indicates the best quality.
 
 \paragraph{Obsolete Concepts in Ontology$\star$}~(required for: \textbf{EBI})~\\
 TODO TODO
@@ -301,7 +301,7 @@ The missing classes should be defined in the dataset itself or an external ontol
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {(isClassProperty(?p) \&\& (isURI(?o))}  totalClasses++ ;\EndIf
 \If {(!isDefinedClass(?o))  undefinedClasses++ }; \EndIf
-\Return{undefinedClasses/totalClasses}
+\Return{undefinedClasses / totalClasses}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -327,12 +327,12 @@ Similar to the Undefined Classes metric, this metric identifies terms in the pre
 \If {!isDefined(?p)} undefinedProperties++; \EndIf
 
 \If {isFromList(?p) \&\&  !isDefined(?o)} undefinedProperties++ ; \EndIf
-\Return{undefinedProperties/totalProperties}
+\Return{undefinedProperties / totalProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The metric value ranges between [0..1], where  the 0 indicates the best quality, namely no undefined classes in the data set.
+The metric value ranges between $[0,\ldots,1]$, where  0 indicates the best quality, namely no undefined classes in the data set.
 
 \paragraph{Conciseness Dimension}~\\ % dimension name 
 High quality data sources should not contain redundant information, since it could lead to contradictions and in general would affect the clarity and manageability of data. Mendes et al.~\cite{Mendes2012} identifies two levels of conciseness: intensional conciseness, which refers to the schema level, that is, to the absence of redundant properties, and extensional conciseness, referring to the extent to which instances (i.e. objects) described by the dataset, are unique.
@@ -367,7 +367,7 @@ countNonUniqueInstances++;
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The metric will return one minus the ratio of the number of unique instance declarations in the dataset, to the total number of instance declarations existing in the dataset. The expected range is [0..1], where 0 is the best rating (no duplicate instance declarations exist) and 1 is the worst rating (all instance declarations in the dataset are redundant).
+The metric will return one minus the ratio of the number of unique instance declarations in the dataset, to the total number of instance declarations existing in the dataset. The expected range is $[0,\ldots,1]$, where 0 is the best rating (no duplicate instance declarations exist) and 1 is the worst rating (all instance declarations in the dataset are redundant).
 
 % end-of Duplicate Instance Metric
 
@@ -392,12 +392,12 @@ In the implementation of this metric (algorithm~\ref{alg:extConciseness}), objec
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \State curDescribedObj = getElementWithKey(mapDescribedObjs, ?s);
 \State setObjectProperty(curDescribedObj, ?p, ?o); ~\\
-\Return{countUniqueObjects(mapDescribedObjs)/countTotalObjects(mapDescribedObjs);}
+\Return{countUniqueObjects(mapDescribedObjs) / countTotalObjects(mapDescribedObjs);}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The metric will return a ratio of the number of unique objects in the dataset (i.e. objects whose properties and their values are not duplicated in another object), to the total number of objects described in the dataset. The expected range is [0..1], where 0 is the worst rating (all objects are the same) and 1 is the best rating (all objects are unique).
+The metric will return a ratio of the number of unique objects in the dataset (i.e. objects whose properties and their values are not duplicated in another object), to the total number of objects described in the dataset. The expected range is $[0,\ldots,1]$, where 0 is the worst rating (all objects are the same) and 1 is the best rating (all objects are unique).
 % end-of Extensional Conciseness Metric
 
 \paragraph{Ontology Versioning Conciseness}

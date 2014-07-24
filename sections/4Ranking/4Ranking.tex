@@ -42,21 +42,21 @@ In this way we ensure the quality-bias ranking and promote not just the high qua
 In Definition~\ref{def:weight_adjustment} we calculate a weight value for the number of metrics chosen ($\#X$) i.e. those metrics given a preference by the user.
 Together with the number of metrics chosen, we add 1 to represent a small share which will be divided equally with the rest of the metrics ($\#\overline{X}$ represents the metrics not chosen).
 This is defined in Definition~\ref{def:weight_adjustment_smaller}.
-To explain this in a simpler manner, if we have five metrics and only one was chosen, then the chosen metric will have a weight of 0.5 whilst the rest will have 0.5 shared equally (i.e. 0.125).
+To explain this in a simpler manner, if we have five metrics and only one was chosen, then the chosen metric will have a weight of 0.5 whilst the rest will have 0.5 shared equally (i.e. 0.125).\todo{CL: I removed the unnecessary ``union emptyset''}
 
 \begin{Def1}
 \label{def:weight_adjustment}
 \begin{align*}
-Let~X~\subseteq~(F_{m}~\cup~\emptyset) \\
-\theta = \frac{1}{(\#X + 1)}
+\mathit{Let} X \subseteq F_{m} \\
+\theta = \frac{1}{\#X + 1}
 \end{align*}
 \end{Def1}
 
 \begin{Def1}
 \label{def:weight_adjustment_smaller}
 \begin{align*}
-Let~\overline{X}~=~(X~\cap~{F_{m}}^{\complement}) \\
-\rho = \frac{1}{((\#X + 1) \times \#\overline{X})}
+\mathit{Let} \overline{X} = X \cap {F_{m}}^{\complement} \\
+\rho = \frac{1}{(\#X + 1) \cdot \#\overline{X}}
 \end{align*}
 \end{Def1}
 
@@ -69,7 +69,7 @@ This is repeated for all possible datasets and then are ranked accordingly.
 \begin{Def1}
 \label{def:ranking}
 \begin{align*}
-\tau = (\sum_{i~=~0}^{\#X} X_{i}~.~\theta) + (\sum_{i~=~0}^{\#\overline{X}} \overline{X_{i}}~.~\rho)
+\tau = \theta \cdot \sum_{m\in X} m + \rho \cdot \sum_{m\in\overline{X}} m
 \end{align*}
 \end{Def1}
 
@@ -82,6 +82,8 @@ In the following subsection we introduce an example to further help the reader t
 Consider the following dataset scenario in Table~\ref{tbl:datasets}.
 In our datastore we have four datasets each having a Quality Graph with a number of assessed metrics and their values.
 \textit{Dataset D} has been assessed by all eight metrics whilst the others have been assessed with six, five and five respectively.
+
+\todo{CL: don't use A,B,C for datasets and for metrics; that's confusing.  I'd rather use $M_A$ vs.\ $D_A$ or $D_1$.}
 \begin{table}[tbph]
 \center
     \begin{tabular}{|l|l|l|l|l|}
@@ -90,11 +92,11 @@ In our datastore we have four datasets each having a Quality Graph with a number
     A      & 0.2       & 0.9       & 0.5       & 0.3       \\  \hline
     B      & 0.5       & 0.9       & 0.8       & 0.4       \\  \hline
     C      & 0.9       & 0.3       & 0.7       & 0.7       \\  \hline
-    D      & 0.8       & -         & 0.9       & 0.1       \\  \hline
-    E      & 0.7       & -         & 0.4       & 0.1       \\  \hline
-    F      & -         & 0.2       & -         & 0.5       \\  \hline
-    G      & -         & 0.8       & -         & 0.9       \\  \hline
-    H      & 0.3       & -         & -         & 0.9       \\  \hline
+    D      & 0.8       & –         & 0.9       & 0.1       \\  \hline
+    E      & 0.7       & –         & 0.4       & 0.1       \\  \hline
+    F      & –         & 0.2       & –         & 0.5       \\  \hline
+    G      & –         & 0.8       & –         & 0.9       \\  \hline
+    H      & 0.3       & –         & –         & 0.9       \\  \hline
     \end{tabular}
     \label{tbl:datasets}
     \caption{Dataset example}

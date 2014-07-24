@@ -37,7 +37,7 @@ Implementation details regarding these metric are provided in algorithm~\ref{alg
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
-The metric will return the average length of all the URIs locally defined in the dataset. The expected range is a real number in the range [0, $+\infty$). Lower values represent better rankings.
+The metric will return the average length of all the URIs locally defined in the dataset. The expected range is a real number in the range $[0, +\infty)$. Lower values represent better rankings.
 
 % end-of Short URIs Metric
 
@@ -89,12 +89,12 @@ The algorithm \ref{lst:emptyAnnotationValue} provides detailed description of me
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isAnnotation(?p)} totalAnnotations++; \EndIf
 \If {isEmpty(?o)} emptyAnnotations++ ; \EndIf
-\Return{emptyAnnotations/totalAnnotations}
+\Return{emptyAnnotations / totalAnnotations}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The metric gives a percentage (as a decimal) in the range of [0..1], where 0 indicates the best quality.
+The metric gives a percentage (as a decimal) in the range of $[0,\ldots,1]$, where 0 indicates the best quality.
 
 \paragraph{Whitespace in Annotation}~\\
 In contrast to the previous metric which identifies triples with empty annotation value, this metric deals with the case when the annotation value is available, but contains leading or trailing whitespaces.
@@ -119,12 +119,12 @@ A predefined list of annotation properties, described in the previous metric, ar
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isAnnotation(?p)} totalAnnotations++; \EndIf
 \If {containsLeadingORTrailingWhitespace(?o)} whitespaceInAnnotations++ ; \EndIf
-\Return{whitespaceInAnnotations/totalAnnotations}
+\Return{whitespaceInAnnotations / totalAnnotations}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-The metric value ranges between [0..1], where  0 indicates that data set is free of the leading or trailing whitespace in annotations.
+The metric value ranges between $[0,\ldots,1]$, where  0 indicates that data set is free of leading or trailing whitespace in annotations.
 
 \paragraph{Labels Using Capitals}~\\
 This metric identifies the triples with label property whose object uses a bad style of capitalisation. 
@@ -154,8 +154,8 @@ The following widely used label properties are considered by the metric:
 
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isLabel(?p)} totalLabels++; \EndIf
-\If {isBadCapitalised(?o)}badCapitalisedLabels++ ; \EndIf
-\Return{badCapitalisedLabels/totalLabels}
+\If {isBadCapitalised(?o)} badCapitalisedLabels++ ; \EndIf
+\Return{badCapitalisedLabels / totalLabels}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}

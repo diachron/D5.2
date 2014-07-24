@@ -26,7 +26,7 @@ With our proposed ranking algorithm we do not just promote those datasets that h
 
 The approach we take for ranking takes into consideration the total number of metrics assessed by the most complete dataset available in the datastore\footnote{We are assuming that the metrics used are common to all datasets in the domain}.
 It also takes into consideration any facet filters chosen by the user, enabling the dynamic change of weights and thus the final ranking.
-Consider $F_{m} = \lbrace m_{1},m_{2},\dots,m_{n} \rbrace$ where $F_{m}$ is the set of \todo{CL: IIUC $m_1$ is the \emph{value} of metric 1, right?}the values of all metrics $m$ available.
+Consider $F_{m} = \lbrace m_{1},m_{2},\dots,m_{n} \rbrace$ where $F_{m}$ is the set of all metrics $m$ available.
 The ranking algorithm is split into a number of steps:
 \begin{enumerate}
 \item Get the total number of metrics assessed ($n$);
@@ -47,7 +47,7 @@ To explain this in a simpler manner, if we have five metrics and only one was ch
 \begin{Def1}
 \label{def:weight_adjustment}
 \begin{align*}
-\mathit{Let} X \subseteq F_{m} \\
+\mathit{Let}\ X \subseteq F_{m} \\
 \theta = \frac{1}{\#X + 1}
 \end{align*}
 \end{Def1}
@@ -55,13 +55,14 @@ To explain this in a simpler manner, if we have five metrics and only one was ch
 \begin{Def1}
 \label{def:weight_adjustment_smaller}
 \begin{align*}
-\mathit{Let} \overline{X} = X \cap {F_{m}}^{\complement} \\
+\mathit{Let}\ \overline{X} = F_{m} \setminus X \\
 \rho = \frac{1}{(\#X + 1) \cdot \#\overline{X}}
 \end{align*}
 \end{Def1}
 
 \subsubsection{Ranking Datasets}
 After the weights have been distributed, the ranking algorithm retrieves all the metric values from the quality graph.
+Let $v: F_m\to \{ \mathbb{R} \cup \mathbb{N} \cup \mathbb{B} \cup \ldots \}$ be the function that yields the value of a metric (which is, most commonly, a real number, but could also be an integer, a boolean, or any other simple type).
 The values of chosen metrics, i.e. the set $X$, are added together and multiplied by the weight $\theta$.
 Similarly, the complement set ($\overline{X}$) are multiplied by the weight $\rho$.
 These two are added together which gives us a value $\tau$ for the dataset (Definition~\ref{def:ranking}).
@@ -69,7 +70,7 @@ This is repeated for all possible datasets; they are then ranked accordingly.\to
 \begin{Def1}
 \label{def:ranking}
 \begin{align*}
-\tau = \theta \cdot \sum_{m\in X} m + \rho \cdot \sum_{m\in\overline{X}} m
+\tau = \theta \cdot \sum_{m\in X} v(m) + \rho \cdot \sum_{m\in\overline{X}} v(m)
 \end{align*}
 \end{Def1}
 
@@ -130,3 +131,8 @@ More examples of different scenarios are in the Table~\ref{tbl:dataset_ranking},
 \subsubsection{User-Driven Quality Ranking}
 We will also allow the user to define custom weights to their preferred metrics.
 At the moment we are also investigating how ranking can be applied to the category and dimension levels.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../diachron-D5_2"
+%%% End: 

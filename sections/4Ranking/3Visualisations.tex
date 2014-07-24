@@ -2,13 +2,13 @@
 
 \subsection{The User Interface}
 \label{sec:UI} 
-In the following section, we will describe a set of mockups which will be implemented as a Web User Interface (UI) for the assessment and ranking of datasets software prototype.
+In the following section, we will describe a set of mockups which will be implemented as a Web User Interface (UI) for the software prototype for assessment and ranking of datasets.
 The User Interface will be made up of 3 parts: Details, Statistics and Assessment.
 The Quality Framework Web-UI will be a mix of PHP and JavaScript and is envisioned to run on top of OntoWiki, a wiki based on semantic technologies.
 The current technologies and extensions available in OntoWiki allow us to reach both the main objectives in this deliverable, and eventually to commence our initial prototypes of the quality framework (e.g. as an enterprise add-on tool to linked data publishers).
 Further investigation upon the usability of OntoWiki is still necessary in order to discover if the mentioned application can fulfil further the quality framework's ambitions, beyond the initial prototypes.
 The CubeViz extension is used to visualise statistical graphs about the quality metadata of the datasets.
-The UI will communicate with the core assessment framework (cf. Figure~\ref{fig:hla}) via the defined RESTful APIs (cf. Section~\ref{sec:RestAPI}).
+The UI will communicate with the core assessment framework (cf. Figure~\todo{CL: broken reference}\ref{fig:hla}) via the defined RESTful APIs (cf. Section~\ref{sec:RestAPI}).
 
 \subsubsection{Details Tab}
 The Details Tab (Figure~\ref{fig:uiDetailsTab}) will contain the ranked datasets according to a chosen metric by the user from the facet section. 
@@ -18,16 +18,16 @@ This tab will only display those datasets which have a corresponding Quality Gra
 
 The Details Tab will have the following functionality:
 \begin{description}
-\item [1. Facets -]
+\item [1. Facets –]
 When the datasets are retrieved, a SPARQL query is performed to get all available quality categories used. 
 The result set is used to populate the Category box in the facet. 
 Once a category is chosen, the dimension box is populated dynamically via a SPARQL query which fetches the dimensions related to the chosen category. 
-Similar procedure is done to populate the metric box. 
-When a metric is chosen, then the datasets are ranked in ascending order on the right hand side of the container.
-\item [2. Filters -]
+A similar procedure is done to populate the metric box. 
+When a metric is chosen, then the datasets are ranked in ascending order on the right hand side of the container.\todo{CL: The UI should also display the metric value (or some stars)}
+\item [2. Filters –]
 Filters will dynamically change according to the chosen metric. 
 That is, if the \texttt{daq:expectedDatatype} (cf. Section~\ref{sec:DAQ}) of a metric is boolean then we have a filter which can be a true/false checkbox, whilst if we have a metric with a double type then we could have some slider regulating the minimum value for the metric.
-\item [3. Buttons -]
+\item [3. Buttons –]
 The buttons have the same functionality as in CKAN. 
 The additional button \emph{quality metadata/$\langle$file type$\rangle$} returns the quality graph in a specific format. 
 The \emph{Visualise Quality} button takes the user to the Statistics tab in the web page.

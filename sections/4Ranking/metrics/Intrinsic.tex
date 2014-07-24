@@ -110,7 +110,7 @@ The metric will return a ratio of the number of classes without definitions agai
 \paragraph{Synonym Usage Metric$\star$}~(required for: \textbf{EBI})~\\ 
 This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
 Scientific terms usually have a number of synonyms.
-Each ontology term should have at least one \todo{CL: Do we need the word ``more''?}more synonym, thus in this metric we check if defined terms have a synonym attached to their description.
+Each ontology term should have at least one synonym, thus in this metric we check if defined terms have a synonym attached to their description.
 
 \begin{mdframed}[style=metricdefinition]
 \emph{Measures the number of classes which has a synonym \texttt{efo:alternative\_term} described}
@@ -195,7 +195,6 @@ More details about the metric computation are shown in algorithm \ref{lst:mispla
 
 \If {isURI(?o)} totalClassesAndProperties++; \EndIf  
 \If {!isClass(?o)} misplacedClasses++ ; \EndIf 
-\Return{(misplacedClasses+misplacedProperties) / totalClassesAndProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -323,7 +322,6 @@ The missing classes should be defined in the dataset itself or an external ontol
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {(isClassProperty(?p) \&\& (isURI(?o))}  totalClasses++ ;\EndIf
 \If {(!isDefinedClass(?o))  undefinedClasses++ }; \EndIf
-\Return{undefinedClasses / totalClasses}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -351,7 +349,6 @@ Similar to the Undefined Classes metric, this metric identifies terms in the pre
 \If {!isDefined(?p)} undefinedProperties++; \EndIf
 
 \If {isFromList(?p) \&\&  !isDefined(?o)} undefinedProperties++ ; \EndIf
-\Return{undefinedProperties / totalProperties}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -386,7 +383,6 @@ As shown in algorithm~\ref{alg:duplicateInstance}, this metric is implemented by
 countNonUniqueInstances++; 
 \EndIf
 \State countTotalInstances++;  ~\\
-\Return{1.0 - (countNonUniqueInstances / countTotalInstances);}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -416,7 +412,6 @@ In the implementation of this metric (algorithm~\ref{alg:extConciseness}), objec
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \State curDescribedObj = getElementWithKey(mapDescribedObjs, ?s);
 \State setObjectProperty(curDescribedObj, ?p, ?o); ~\\
-\Return{countUniqueObjects(mapDescribedObjs) / countTotalObjects(mapDescribedObjs);}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}

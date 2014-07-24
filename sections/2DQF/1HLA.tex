@@ -42,7 +42,7 @@ This property is attached to a \texttt{qr:QualityReport}. \texttt{qr:hasProblem}
 The mentioned property identifies problem instances in a report. 
 Each \texttt{qr:QualityProblem} \texttt{isDescribedBy} an instance of a \texttt{daq:Metric}\footnote{refer to Section~\ref{sec:DAQ}}. 
 The property \texttt{qr:problematicThing} represent the actual problematic instance from the dataset. This could be a list of resources (\texttt{rdf:Seq}) or a list of reified statements.
-Listing~\ref{lst:dataset_qr} represents an excerpt from a typical dataset showing the instance of \texttt{ex:JoeDoe} who is a \texttt{foaf:Researchers} working for \texttt{ex:UniBonn}.
+Listing~\ref{lst:dataset_qr} represents an excerpt from a typical dataset showing the instance of \texttt{ex:JoeDoe} who is a \texttt{foaf:Researcher} working for \texttt{ex:UniBonn}.
 In these two instances there are three problematic triples:
 \begin{description}
 \item [(A) $\langle$ \texttt{ex:JoeDoe a foaf:Researcher} $\rangle$] - The problem in this triple is caused by the usage of an undefined class, in this case \texttt{foaf:Researcher};
@@ -50,7 +50,7 @@ In these two instances there are three problematic triples:
 \item [(C) $\langle$ \texttt{ex:UniBonn rdfs:label "UniBonn"} $\rangle$] - The literal ("UniBonn") in the triple causes the malformed capitalisation metric to point out a problem in this triple.
 \end{description}
 Listing~\ref{lst:qualityreport} represent these three problems using the Quality Problem Report ontology.
-\lstinputlisting[caption={An excerpt of a typical Dataset},label=lst:dataset_qr, language=N3]{listings/qrtest.trig}
+\lstinputlisting[caption={An excerpt of a typical dataset},label=lst:dataset_qr, language=N3]{listings/qrtest.trig}
 \lstinputlisting[caption={An corresponding Quality Report for Listing~\ref{lst:dataset_qr}},label=lst:qualityreport, language=N3]{listings/qualityreport.trig}
 
 \subsubsection{Processing Unit}
@@ -78,7 +78,7 @@ The framework can be extended by any third party providing their own custom spec
 This is already done in the DIACHRON project, where a number of metrics (cf. Section~\ref{sec:DQMetrics}) required to assess the various use cases specified in Deliverable ??? are implemented.
 The Quality Assessment Layer provides two interfaces and an abstract class (cf. Figure~\ref{fig:classDiagram}) which facilitate the quality framework to be a pluggable and extensible platform.
 The interface \texttt{QualityMetric} is the core interface class which describes the metric classes.
-Each metric implementing this interface, must implement the following classes:
+Each metric implementing this interface, must implement the following methods:
 \begin{description}
 \item[compute - ] This method assess the quad/triple which is passed by the stream processor by the defined metric;
 \item[metricValue - ] This method returns the value computed by the quality metric;

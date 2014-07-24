@@ -51,7 +51,7 @@ Algorithm~\ref{alg:dataRange} describes this metric.
 \begin{algorithmic}[1]
 \Procedure{init}{}
 \State totalLiterals = 0
-\State incompartibleLiterals = 0
+\State incompatibleLiterals = 0
 \EndProcedure
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isLiteral(?o)} totalLiterals++ ;
@@ -110,7 +110,7 @@ The metric will return a ratio of the number of classes without definitions agai
 \paragraph{Synonym Usage Metric$\star$}~(required for: \textbf{EBI})~\\ 
 This metric is required of the Scientific Linked Data scenario as defined in Deliverable 5.1.
 Scientific terms usually have a number of synonyms.
-Each ontology term should have at least one more synonym, thus in this metric we check if defined terms have a synonym attached to their description.
+Each ontology term should have at least one \todo{CL: Do we need the word ``more''?}more synonym, thus in this metric we check if defined terms have a synonym attached to their description.
 
 \begin{mdframed}[style=metricdefinition]
 \emph{Measures the number of classes which has a synonym \texttt{efo:alternative\_term} described}
@@ -174,7 +174,7 @@ The metric values vary between [0...1], when the 0 indicates no properties conta
 \paragraph{Misplaced Classes or Properties}~\\
 In some cases a URI that occurs in the predicate position of a triple is defined in the corresponding vocabulary as a class, or a contrariwise a URI in the subject or object position is a defined property.
 These kind of inconsistencies make machine interpretation of the data more complex.
-More details about the metric computation are shown in \ref{lst:misplacedCl}.
+More details about the metric computation are shown in algorithm \ref{lst:misplacedCl}.
 
 \begin{mdframed}[style=metricdefinition]
 \emph{Identifies the percentage of misplaced classes and properties in a dataset.}
@@ -202,15 +202,15 @@ More details about the metric computation are shown in \ref{lst:misplacedCl}.
 
 The metric values vary between  [0..1], where  the 0 indicates the best quality.
 
-\paragraph{Misused Owl Datatype or Object Properties}~(required for: \textbf{EBI})~\\
-OWL language defines additional characteristics to some properties. 
+\paragraph{Misused OWL Datatype or Object Properties}~(required for: \textbf{EBI})~\\
+The OWL language defines additional characteristics to some properties. 
 A property can be either an instance of the \textit{owl:ObjectProperty} or \textit{owl:DatatypeProperty} class.
 A datatype property relates some resource to a literal value, while an object property describes a relation between two resources.
 Wrong usage of the datatype and object properties indicates inconsistencies in the data.
 The following algorithm  \ref{lst:misusedCl} presents more details about how the metric is computed.
 
 \begin{mdframed}[style=metricdefinition]
-\emph{Number of misused datatype and object properties to all properties}
+\emph{Ratio of misused datatype and object properties to all properties}
 \end{mdframed}
 
 \begin{algorithm}
@@ -335,7 +335,7 @@ Similar to the Undefined Classes metric, this metric identifies terms in the pre
 The metric value ranges between [0..1], where  the 0 indicates the best quality, namely no undefined classes in the data set.
 
 \paragraph{Conciseness Dimension}~\\ % dimension name 
-High quality data sources should not contain redundant information, since it could lead to contradictions and in general would affect the clearness and manageability of data. Mendes et al. (\cite{Mendes2012}) identifies two levels of conciseness. Intensional, which refers to the schema level, that is, to the absence of redundant properties, and Extensional, referring to the extent to which instances (i.e. objects) described by the dataset, are unique.
+High quality data sources should not contain redundant information, since it could lead to contradictions and in general would affect the clarity and manageability of data. Mendes et al.~\cite{Mendes2012} identifies two levels of conciseness: intensional conciseness, which refers to the schema level, that is, to the absence of redundant properties, and extensional conciseness, referring to the extent to which instances (i.e. objects) described by the dataset, are unique.
 
 \paragraph{Duplicate Instance Metric}~(required for: \textbf{GEN})~\\
 % background for the metric
@@ -344,7 +344,7 @@ Resources are divided into groups called classes. The members of a class are kno
 
 % short description
 \begin{mdframed}[style=metricdefinition]
-\emph{Computes the Duplicate Instance metric as one minus the ratio of the number of instances violating the uniqueness rule to the total number of instances in the dataset.}
+\emph{One minus the ratio of the number of instances violating the uniqueness rule to the total number of instances in the dataset.}
 \end{mdframed}
 
 % pseudocode

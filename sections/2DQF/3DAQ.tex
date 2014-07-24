@@ -16,7 +16,7 @@ Figure~\ref{fig:daqExtended} depicts the current state of the daQ vocabulary.
 
 Using daQ, the quality metadata is intended to be stored in what we defined to be the \emph{Quality Graph}.
 The latter concept is a subclass of \texttt{rdfg:Graph}~\cite{CBHS:NamedGraphs2005}.
-This means that the quality metadata is stored and managed in a separate named graph from the assessed dataset.
+This means that the quality metadata \todo{CL@JD: once more I'd rephrase to avoid the impression that \emph{we} are storing stuff.}is stored and managed in a separate named graph from the assessed dataset.
 Named graphs are favoured due to
 \begin{itemize}
 \item the capability of separating the aggregated metadata with regard to computed quality metrics of a dataset from the dataset itself;
@@ -79,8 +79,8 @@ The abstract concepts (and their related properties) are described as follows:
    Since this value is multi-typed (for example one metric might return true/false whilst another might require a floating point number), the value's \texttt{daq:hasValue} range is inherited by the actual metric's attribute defined by the property \texttt{daq:expectedDataType}.
   An observation must have the Dimension Properties (\texttt{qb:DimensionProperty}) \texttt{daq:computedOn} and \texttt{daq:metric}, which defines the assessed resource and the metric the mentioned resource was assessed by respectively.
   A metric might also require additional information (e.g.\ a gold standard dataset to compare with).
-  Therefore, a concrete metric representation can also define such properties using subproperties of the \texttt{daq:requires} abstract property.
-  Another important attribute for any observation is the \texttt{daq:dateComputed}, where it records the date of the observation's creation.
+  Therefore, a \todo{CL@JD: to this maybe append ``i.e.\ an instance of a metric class''?}concrete metric representation can also define such properties using subproperties of the \texttt{daq:requires} abstract property.
+  Another important attribute for any observation is the \todo{CL@JD: do you insist on this custom property, or can't we reuse dcterms:date?}\texttt{daq:dateComputed}, where it records the date of the observation's creation.
 \end{description}
 
 \subsubsection{Extending daQ for Custom/Specific Quality Metrics}

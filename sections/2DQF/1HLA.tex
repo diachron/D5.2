@@ -56,13 +56,13 @@ Listing~\ref{lst:qualityreport} represent these three problems using the Quality
 \subsubsection{Processing Unit}
 \label{sec:processingUnit}
 The Processing Unit is an integral part of the Quality Framework.
-In this framework, we provide two main scalable processing units: a sequential stream processor (cf. Section~\ref{sec:StreamProcessor}) and a SPARQL processor\footnote{This processor is still being investigated and will not be ready by the deliverable deadline.}.
+In this framework, we provide two main scalable processing units: a sequential stream processor (cf. Section~\ref{sec:StreamProcessor}) and a SPARQL processor\footnote{The SPARQL processor is still being investigated and will not be ready by the deliverable deadline.}.
 The former streams triples from RDF date dumps one by one in a sequential fashion.
 The latter allows the framework to assess quality on data that is available only in SPARQL endpoints. 
 This unit is one of the two extensible modules (the other being Quality Assessment Layer) in the Quality Framework.
 For DIACHRON, the plan is to extend the sequential stream processor, enabling the de-reification of RDF statements into RDF triples.
 
-Typically, an initialised processor has 2 inputs: the dataset URI (for the sequential stream processor) or the dataset SPARQL endpoint (in the case of the SPARQL processor), and a metric configuration file.
+Typically, an initialised processor has 2 inputs: the dataset URI (for the sequential stream processor) or the dataset SPARQL endpoint (in the case of the SPARQL processor), and a metric configuration file selecting the metrics to be computed on the dataset.
 Listing~\ref{lst:conf_metric} shows an example of a typical metric configuration file.
 \lstinputlisting[caption={An typical metric configuration file},label=lst:conf_metric, language=N3]{listings/conf.trig} 
 Each data processor in the Quality Framework has a defined 3-stage procedure (Listing~\ref{lst:int_ioprocessor}): (i) processor initialisation; (ii) processing; and (iii) memory clean up.
@@ -94,7 +94,7 @@ Each metric implementing this interface, must implement the following methods:
 \label{fig:classDiagram}
 \end{figure*}
 
-Furthermore, a metric might require some pre-processing or post-processing.
+Furthermore, computing a metric might require some pre-processing or post-processing.
 Therefore, an interface (\texttt{ComplexQualityMetric}) extending \texttt{QualityMetric} was developed.
 This interface allow metric developers to perform such processing using the \texttt{\textbf{void} before()} and \texttt{\textbf{void} after()} methods.
 

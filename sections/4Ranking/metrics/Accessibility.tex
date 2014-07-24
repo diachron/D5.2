@@ -108,7 +108,7 @@ Latency is a measure of the response-time of a data source, defined by Bizer as 
 \end{mdframed}
 
 % pseudocode
-As shown in algorithm~\ref{alg:lowLatency}, the implementation of this metric consists in figuring out the URI of the dataset from which the triples were obtained, to afterwards send several HTTP requests to their source. The respective response times are then averaged to obtain a measure of the latency. Note that this metric refers to the resource itself, not to its contents.
+As shown in algorithm~\ref{alg:lowLatency}, the implementation of this metric consists in figuring out the URI of the dataset from which the triples were obtained, to afterwards send several HTTP requests to their source. The respective response times are then averaged to obtain a measure of the latency. Note that this metric refers to the resource itself, not to its contents.\todo{CL: the last algorithm line doesn't get numbered but I can't figure out why}
 \begin{algorithm}
 \caption{Low Latency Algorithm} \label{alg:lowLatency}
 \begin{algorithmic}[1]

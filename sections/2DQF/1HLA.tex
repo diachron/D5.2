@@ -26,14 +26,14 @@ The two main components are the API layer (cf. Section~\ref{sec:RestAPI}) and th
 The core framework is made up of five modules: \emph{Semantic Schema Layer}, \emph{Processing Unit}, \emph{Semantic Annotation Unit}, \emph{Quality Assessment Layer}, and \emph{Visualisation Layer}.
 
 \subsubsection{Semantic Schema Layer}
-The Quality Framework is based on semantic technologies and thus has an underlying semantic vocabulary layer which currently is made up of two ontologies: (i) the Dataset Quality Ontology (daQ)\footnote{\url{http://purl.org/eis/vocab/daq}}; and (ii) the Quality Problem Report Ontology (qr)\footnote{\url{http://purl.org/eis/vocab/qr}}. 
+The Quality Framework is based on semantic technologies and thus has an underlying semantic vocabulary layer which currently is made up of two ontologies: (i) the Dataset Quality Ontology (daQ)\todo{CL@JD: in addition to these URLs, which currently only serve RDF/XML, please also mention the URLs of the TriG source.  BTW I had to create the purl's for dqm and qr today.}\footnote{\url{http://purl.org/eis/vocab/daq}}; and (ii) the Quality Problem Report Ontology (qr)\footnote{\url{http://purl.org/eis/vocab/qr}}. 
 The former describes the quality metadata representation whilst the latter describes quality problems found in the dataset itself. 
 The semantic schema layer is meant to be domain independent, where it could be reused in other similar frameworks. 
 The daQ ontology (cf. Section~\ref{sec:DAQ}) is the core vocabulary of this schema layer, and any other ontology part of this layer builds upon it.
 
 The daQ ontology is a comprehensive generic vocabulary framework, based on three abstract concepts (Category, Dimension and Metric). 
 Any newly implemented specific metric should have its representation in RDF, extending the daQ ontology. In DIACHRON, all metrics are defined in the Diachron Quality Metric vocabulary (dqm)\footnote{\url{http://purl.org/eis/vocab/dqm}}. 
-Such vocabularies are easily integrated in the Quality Framework, since they adopt and extend the generic daQ vocabulary (by inheriting class and properties) as the way quality metadata is represented (cf. Section~\ref{sec:extendingDAQ}).
+Such vocabularies are straightforward to integrate into the Quality Framework, since they adopt and extend the generic daQ vocabulary (by inheriting classes and properties) as the way quality metadata is represented (cf. Section~\ref{sec:extendingDAQ}).
 The Quality Problem Report Ontology (qr) is made up of two classes a \texttt{qr:QualityReport} and \texttt{qr:QualityProblem}. 
 The former represents a report on the problems detected during the assessment of quality on a dataset, whilst the latter represents a quality problem detected during the assessment of quality metrics on triples. 
 Four properties are also defined in the ontology. 
@@ -67,13 +67,13 @@ Listing~\ref{lst:conf_metric} shows an example of a typical metric configuration
 \lstinputlisting[caption={An typical metric configuration file},label=lst:conf_metric, language=N3]{listings/conf.trig} 
 Each data processor in the Quality Framework has a defined 3-stage procedure (Listing~\ref{lst:int_ioprocessor}): (i) processor initialisation; (ii) processing; and (iii) memory clean up.
 In the first process (processor initialisation), the processor create the necessary objects in memory to process data and load the required metrics that are instructed in the configuration file.
-Once the initialisation is ready, then processing is done by passing the streamed triples into the metrics.
-Finally, memory clean up ensures that no unused objects are using unnecessary computational power.
+Once the initialisation is ready, the processing is done by passing the streamed triples into the metrics.
+A finally memory cleanup ensures that no unused objects are using unnecessary computational resources.
 \lstinputlisting[caption={IO Processor Interface},label=lst:int_ioprocessor, language=Java]{listings/ioprocessor.java} 
 
 \subsubsection{Quality Assessment Layer}
 \label{sec:qaLayer}
-The Quality Assessment Layer is unarguably the most important layer in this Quality Framework.
+The Quality Assessment Layer is undeniably the most important layer in this Quality Framework.
 The framework can be extended by any third party providing their own custom specific metric.
 This is already done in the DIACHRON project, where a number of metrics (cf. Section~\ref{sec:DQMetrics}) required to assess the various use cases specified in Deliverable ??? are implemented.
 The Quality Assessment Layer provides two interfaces and an abstract class (cf. Figure~\ref{fig:classDiagram}) which facilitate the quality framework to be a pluggable and extensible platform.

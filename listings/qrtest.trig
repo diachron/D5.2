@@ -3,4 +3,4 @@ ex:JoeDoe a foaf:Researcher ;
  ex:worksFor ex:UniBonn .
  
 ex:UniBonn rdfs:label "UniBonn" ;
- foaf:name "University Bonn" .
+ foaf:name "University of Bonn" .

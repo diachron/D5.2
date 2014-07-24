@@ -10,4 +10,5 @@ We represent the output of quality assessment once more as an RDF graph of \emph
 This approach enables flexible reuse of the quality metadata for visual quality analysis, quality-based filtering and ranking of datasets, and many other applications, without unnecessary recomputation.
 This document also describes the implementation of a large number of concrete quality metrics within the framework.
 We have so far implemented \todo{CL@JD: or even \emph{all}?}the majority of the quality metrics required for the Diachron pilot applications, focusing on those metrics that can be computed by analysing the dataset itself, the vocabularies it uses, and its immediate outgoing links to other datasets.
+The dataset itself is analysed in a triple-by-triple streaming fashion, which ensures scalability over big datasets \todo{CL@JD: I thought I'd mention one limitation}at the expense of ruling out certain complex quality metrics.
 \todo{CL: Hanzo to write something about quality-driven crawling}

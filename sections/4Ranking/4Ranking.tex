@@ -1,14 +1,14 @@
 %!TEX root = ../../diachron-D5_2.tex
 
-\subsection{Ranking of Quality-Computed Datasets}
+\subsection{Ranking of Datasets by Quality}
 \label{sec:Ranking} 
-Tools for data consumers, such as CKAN, usually provide features such as faceted browsing and sorting, in order to allow prospective dataset users to search within the large dataset archive.
+Tools for data consumers, such as the CKAN data portal software\footnote{\url{http://ckan.org}}, usually provide features such as faceted browsing and sorting, in order to allow prospective dataset users to search within the large dataset archive.
 Using faceted browsing, datasets could be filtered according to tags or values of metadata properties.
 The datasets could also be ranked or sorted according to values of properties such as relevance, size or the date of last modification.
 With many datasets available, filtering or ranking by quality can become a challenge.
 Talking about ``quality'' as a whole might not make sense, as different aspects of quality matter for different applications.
 It does, however, make sense to restrict quality-based filtering or ranking to those quality categories and/or dimensions that are relevant in the given situation, or to assign custom weights to different dimensions, and compute the overall quality as a weighted sum.
-The daQ vocabulary provides flexible filtering and ranking possibilities in that it facilitates access to dataset quality metrics in these different dimensions and thus facilitates the (re)computation of custom aggregated metrics derived from base metrics.
+The daQ vocabulary enables flexible filtering and ranking possibilities in that it facilitates access to dataset quality metrics in these different dimensions and thus facilitates the (re)computation of custom aggregated metrics derived from base metrics.
 To keep quality metrics information easily accessible, each assessed dataset contains the relevant daQ metadata graph in the dataset itself.
 We provide two ranking possibilities to the user: (i) Unbiased Automatic Quality Ranking, and (ii) User-Driven Quality Ranking.
 
@@ -21,7 +21,7 @@ We aim to achieve a quality-biased ranking of LOD datasets, promoting:
 Therefore, datasets of poor quality but having more quality metadata might end up ranked higher than those with excellent quality on the only metric assessed on.
 Publishers might be doubtful about the data they publish and they will hide their doubt in the dataset itself.
 One possibility is that the publishers might hide this psychological nature by claiming that their dataset is of good quality in certain aspects.
-Quality assessment frameworks should not only be about positive or negative assertions of a dataset, but also it should place the publishers` doubts in the assertion spectrum.
+Quality assessment frameworks should not only be about positive or negative assertions of a dataset, but should also place the publishers' doubts in the assertion spectrum.
 With our proposed ranking algorithm we do not just promote those datasets that have a high value to one particular metric, but we promote those datasets, which although might lack in particular metric assessment, have more coverage of assessed metrics.
 
 The approach we take for ranking takes into consideration the total number of metrics assessed by the most complete dataset available in the datastore\footnote{We are assuming that the metrics used are common to all datasets in the domain}.

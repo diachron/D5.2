@@ -42,7 +42,7 @@ The \emph{Visualise Quality} button takes the user to the Statistics tab in the 
 
 \subsubsection{Statistics Tab}
 The Quality Assessment Framework Web-UI will also give the opportunity to its users to visualise statistical information about a dataset quality.
-The Statistical Tab (Figure~\ref{fig:uiStatisticsTab}) will present the user with a number of graphs (cf. Section~\ref{sec:vislayer_hla} for the description of the different visualisation graphs).
+The Statistical Tab (Figure~\ref{fig:uiStatisticsTab}) will present the user with a number of graphs (cf. Visualisation Layer - Figure~\ref{fig:qualityFramwork} for the description of the different visualisation graphs).
 Users can compare different datasets together or even how a dataset changed in its quality over time.
 
 \begin{figure*}[tbph]
@@ -51,6 +51,56 @@ Users can compare different datasets together or even how a dataset changed in i
 \caption{Mockup for the Statistics Tab} 
 \label{fig:uiStatisticsTab}
 \end{figure*}
+
+\subsubsection{Visualisation Layer}
+\label{sec:vislayer_hla}
+CubeViz is an extension of the OntoWiki\footnote{\url{http://ontowiki.eu/Welcome}} data wiki for visualising data cubes (observation instances).
+Figures~\ref{fig:hor_chart},~\ref{fig:ver_chart},~\ref{fig:rad_chart}, and~\ref{fig:line_chart} depicts four different CubeViz chart visualisations from computed quality metadata\footnote{The quality metadata used can be found in \url{https://raw.githubusercontent.com/diachron/quality/master/src/test/resources/cube_qg.trig}}.  While these are generic chart types, we briefly discuss their specific suitability for data quality analysis.
+
+\begin{figure*}[tbph]
+\center
+  \includegraphics[scale=0.3]{images/cube_1.png}
+\caption{Horizontal Bar Chart} 
+  \label{fig:hor_chart}
+\end{figure*}
+
+\begin{figure*}[tbph]
+\center
+\includegraphics[scale=0.3]{images/cube_2.png} 
+\caption{Vertical Bar Chart} 
+\label{fig:ver_chart}
+\end{figure*}
+
+\begin{figure*}[tbph]
+\center
+\includegraphics[scale=0.3]{images/cube_3.png} 
+\caption{Radar Chart} 
+\label{fig:rad_chart}
+\end{figure*}
+
+\begin{figure*}[tbph]
+\center
+\includegraphics[scale=0.3]{images/cube_4.png} 
+\caption{Lines Plot} 
+\label{fig:line_chart}
+\end{figure*}
+
+A \emph{horizontal bar} represents each metric (Figure~\ref{fig:hor_chart}) and shows its value (x-axis) with respect to the dataset (y-axis).
+Here, the different “datasets” analysed are actually successive revisions of one dataset.
+This chart provides a clear view of how the value associated to each one of the measured metrics changes as the dataset evolves.
+The horizontal layout is appropriate when the range of metric values is wide, and the number of different datasets is relatively small.
+
+Similar to the horizontal bars chart, the \emph{vertical bar chart} (Figure~\ref{fig:ver_chart}) allows the user to compare the values computed for each of the metrics (y-axis), with respect to the dataset (x-axis).
+In contrast with its horizontal counterpart, this chart is more appropriate when there are many datasets analysed but the range of metric values is not so wide.
+
+In the \emph{radar chart} (Figure~\ref{fig:rad_chart}), the datasets are represented as slices of a circle and the values corresponding to the metrics are depicted as points and lines of a particular colour.
+This chart provides a clear view of how the values of the metric differ from each other for each particular dataset. 
+Furthermore, it allows one to assess the overall quality of a dataset, by showing whether the values of the metrics are concentrated around sections of the circle regarded as “good” or “bad”.
+
+The lines plot (Figure~\ref{fig:line_chart}), lists the different datasets against the values of the metrics.
+Here, where “different datasets” are actually different revisions in the evolution of one dataset, this plot provides a comparison of the evolution of the quality of the dataset, with respect to each metric.
+The lines emphasise the points where the values of the metrics changed noticeably from one version to the next.
+
 
 \subsubsection{Assessment Tab}
 The Quality Framework Web-UI will also allow users to assess datasets for their quality.

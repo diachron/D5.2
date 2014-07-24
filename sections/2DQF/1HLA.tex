@@ -12,7 +12,7 @@ The purpose of the Quality Framework is to provide an integrated platform that:
 Furthermore, we aim to create an infrastructure and a platform that (i) can be easily extensible by different third parties by creating their custom and more specific pluggable metrics required to assess their particular dataset domain, and (ii) having the the necessary ontology framework to represent the metadata about the quality of the assessed linked datasets.
 
 Currently, there is no uniform infrastructure to address the quality assessment problem, allowing the extension or redefinition of custom-specific metrics such as those required by the DIACHRON use cases.
-Tools such as Trellis~\cite{Gil2002}, WIQA~\cite{Bizer2008:PhDThesis:biblatex} and Sieve~\cite{Mendes2012} implement a number of metrics but lacked flexibility w.r.t.\ the level of automation, and user friendliness~\todo{CL@JD: Is this the right reference, or did you mean \cite{Zaveri2012:LODQ}?}\cite{Zaveri2013}. 
+Tools such as Trellis~\cite{Gil2002}, WIQA~\cite{Bizer2008:PhDThesis:biblatex} and Sieve~\cite{Mendes2012} implement a number of metrics but lacked flexibility w.r.t.\ the level of automation, and user friendliness~\cite{Zaveri2012:LODQ} 
 
 \begin{figure*}[tbph]
 \center
@@ -23,10 +23,10 @@ Tools such as Trellis~\cite{Gil2002}, WIQA~\cite{Bizer2008:PhDThesis:biblatex} a
 
 Figure~\ref{fig:qualityFramework} illustrates the high level architecture of the Quality Framework.
 The two main components are the API layer (cf. Section~\ref{sec:RestAPI}) and the Core framework.
-The core framework is made up of five modules: \emph{Semantic Schema Layer}, \emph{Processing Unit}, \emph{Semantic Annotation Unit}, \emph{Quality Assessment Layer}, and \emph{Visualisation Layer}.
+The core framework is made up of four modules: \emph{Semantic Schema Layer}, \emph{Processing Unit}, \emph{Semantic Annotation Unit}, \emph{Quality Assessment Layer}, and an optional \emph{Visualisation Layer} which we will discuss in Section~\ref{sec:UI}.
 
 \subsubsection{Semantic Schema Layer}
-The Quality Framework is based on semantic technologies and thus has an underlying semantic vocabulary layer which currently is made up of two ontologies: (i) the Dataset Quality Ontology (daQ)\todo{CL@JD: in addition to these URLs, which currently only serve RDF/XML, please also mention the URLs of the TriG source.  BTW I had to create the purl's for dqm and qr today.}\footnote{\url{http://purl.org/eis/vocab/daq}}; and (ii) the Quality Problem Report Ontology (qr)\footnote{\url{http://purl.org/eis/vocab/qr}}. 
+The Quality Framework is based on semantic technologies and thus has an underlying semantic vocabulary layer which currently is made up of two ontologies: (i) the Dataset Quality Ontology (daQ)\todo{CL@JD: in addition to these URLs, which currently only serve RDF/XML, please also mention the URLs of the TriG source.  BTW I had to create the purl's for dqm and qr today. - JD: i did not understand this comment}\footnote{\url{http://purl.org/eis/vocab/daq}}; and (ii) the Quality Problem Report Ontology (qr)\footnote{\url{http://purl.org/eis/vocab/qr}}. 
 The former describes the quality metadata representation whilst the latter describes quality problems found in the dataset itself. 
 The semantic schema layer is meant to be domain independent, where it could be reused in other similar frameworks. 
 The daQ ontology (cf. Section~\ref{sec:DAQ}) is the core vocabulary of this schema layer, and any other ontology part of this layer builds upon it.
@@ -47,7 +47,7 @@ In these two instances there are three problematic triples:
 \begin{description}
 \item [(A) $\langle$ \texttt{ex:JoeDoe a foaf:Researcher} $\rangle$] - The problem in this triple is caused by the usage of an undefined class, in this case \texttt{foaf:Researcher};
 \item [(B) $\langle$ \texttt{ex:JoeDoe rdfs:label "JoeDoe"} $\rangle$] - The literal ("JoeDoe") in the triple causes the malformed capitalisation metric to point out a problem in this triple (as labels should be written in a human-friendly style);
-\item [(C) $\langle$ \texttt{ex:UniBonn rdfs:label "UniBonn"} $\rangle$] – \todo{CL@JD: Is this third example necessary?  It's redundant with the second.}The literal ("UniBonn") in the triple causes the malformed capitalisation metric to point out a problem in this triple.
+\item [(C) $\langle$ \texttt{ex:UniBonn rdfs:label "UniBonn"} $\rangle$] - \todo{CL@JD: Is this third example necessary?  It's redundant with the second. - JD: you're right but i did it just for completeness sake - if it bothers you i'll remove it}The literal ("UniBonn") in the triple causes the malformed capitalisation metric to point out a problem in this triple.
 \end{description}
 Listing~\ref{lst:qualityreport} represent these three problems using the Quality Problem Report ontology.
 \lstinputlisting[caption={An excerpt of a typical dataset},label=lst:dataset_qr, language=N3]{listings/qrtest.trig}
@@ -75,16 +75,16 @@ A finally memory cleanup ensures that no unused objects are using unnecessary co
 \label{sec:qaLayer}
 The Quality Assessment Layer is undeniably the most important layer in this Quality Framework.
 The framework can be extended by any third party providing their own custom specific metric.
-This is already done in the DIACHRON project, where a number of metrics (cf. Section~\ref{sec:DQMetrics}) required to assess the various use cases specified in Deliverable 1.1~\todo{CL: add to bibtex}\cite{diachron-d1.1} are implemented.
+This is already done in the DIACHRON project, where a number of metrics (cf. Section~\ref{sec:DQMetrics}) required to assess the various use cases specified in~\cite{diachron-d5.1} are implemented.
 The Quality Assessment Layer provides two interfaces and an abstract class (cf. Figure~\ref{fig:classDiagram}) which facilitate the quality framework to be a pluggable and extensible platform.
 The interface \texttt{QualityMetric} is the core interface class which describes the metric classes.
 Each metric implementing this interface, must implement the following methods:
 \begin{description}
-\item[compute] assesses the \todo{CL@JD: As this might not be clear to everyone, it wouldn't hurt to explain in one sentence what a quad is.}quad/triple which is passed by the stream processor by the defined metric;
+\item[compute] assesses the quad\footnote{A quad is a triple with an added context value (eg. a named graph URI where the triple is found).}/triple which is passed by the stream processor by the defined metric;
 \item[metricValue] returns the value computed by the quality metric;
-\item[toDAQTriples] returns a list of daQ triples, containing quality metadata about the assessed metric, which \todo{CL@JD: really \emph{will}, or rather \emph{can}?  The QA framework is not itself in charge of storage.}will be stored in the dataset as a new named graph (quality graph);
+\item[toDAQTriples] returns a list of daQ triples, containing quality metadata about the assessed metric, which \todo{CL@JD: really \emph{will}, or rather \emph{can}?  The QA framework is not itself in charge of storage.} will be used to create the quality metadata for the assessed dataset;
 \item[getMetricURI] returns the URI of the Quality Metric from the ontology description (e.g. \url{http://purl.org/eis/vocab/dqm#DereferenceablityMetric});
-\item[getQualityProblems] returns a typed (List$\langle$Resource$\rangle$ or List$\langle$Quad$\rangle$) \todo{CL@JD: I wouldn't speak of ``ProblemList'' as it wrongly suggests that there is a Java class with this name}ProblemList which will be used to create a quality report of the metric;
+\item[getQualityProblems] returns a typed list of either Resources or Quads, which will be used to create a quality report of the metric;
 \end{description}
 
 \begin{figure*}[tbph]
@@ -99,62 +99,14 @@ Therefore, an interface (\texttt{ComplexQualityMetric}) extending \texttt{Qualit
 This interface allow metric developers to perform such processing using the \texttt{\textbf{void} before()} and \texttt{\textbf{void} after()} methods.
 
 In order to facilitate further such development of pluggable metrics, the \texttt{AbstractQualityMetric} class was developed, implementing the \texttt{QualityMetric} interface.
-In this abstract class, the method \texttt{List$\langle$Statement$\rangle$ toDAQTriples()} is implemented, generating daQ \todo{CL@JD: not sure this term will be understood.  Maybe speak of ``quality metadata'' here, and only introduce it (but then with an explanation) below for data cubes.}observation instances (cf. Section~\ref{sec:DAQ}) for the metric being assessed. 
+In this abstract class, the method \texttt{List$\langle$Statement$\rangle$ toDAQTriples()} is implemented, generating quality metadata \todo{CL@JD: not sure this term will be understood.  Maybe speak of ``quality metadata'' here, and only introduce it (but then with an explanation) below for data cubes. - JD: agreed}observation instances (cf. Section~\ref{sec:DAQ}) for the metric being assessed. 
 
 \subsubsection{Semantic Annotation Unit}
-The Semantic Annotation Unit takes the generated triples (from the \texttt{toDAQTriples()} method) in order \todo{CL@JD: again I wouldn't give the impression that we are taking care of storage.  These metadata \emph{can} be stored inside the dataset, but we are not in charge of it.}to create the quality metadata in a dataset.
-The unit provides a number of helper classes that provide inferencing queries on vocabularies that describe metrics (such as DQM) based on the core ontology daQ.
+The Semantic Annotation Unit takes the generated triples (from the \texttt{toDAQTriples()} method) in order \todo{CL@JD: again I wouldn't give the impression that we are taking care of storage.  These metadata \emph{can} be stored inside the dataset, but we are not in charge of it. - JD: better?}to create the quality metadata for an assessed dataset.
+This unit will handle the necessary communications with the datastore to insert the generated quality metadata in the dataset itself.
+The unit provides a number of helper classes that provide inferencing queries on vocabularies that describe metrics (such as DQM) based on the core ontology - Dataset Quality Ontology (daQ).
 Therefore, RDF descriptions of metrics extending the daQ (cf. Section~\ref{sec:extendingDAQ}) ontology is absolutely required.
 These inferencing queries enable the framework to create a complete metadata description (cf. Section~\ref{sec:DAQ}) of an assessed quality metric.
-
-\subsubsection{Visualisation Layer}
-\label{sec:vislayer_hla}
-CubeViz is an extension of the OntoWiki\footnote{\url{http://ontowiki.eu/Welcome}} data wiki for visualising data cubes (observation instances).
-Figures~\ref{fig:hor_chart},~\ref{fig:ver_chart},~\ref{fig:rad_chart}, and~\ref{fig:line_chart} depicts four different CubeViz chart visualisations from computed quality metadata\footnote{The quality metadata used can be found in \url{https://raw.githubusercontent.com/diachron/quality/master/src/test/resources/cube_qg.trig}}.  While these are generic chart types, we briefly discuss their specific suitability for data quality analysis.
-
-\begin{figure*}[tbph]
-\center
-  \includegraphics[scale=0.3]{images/cube_1.png}
-\caption{Horizontal Bar Chart} 
-  \label{fig:hor_chart}
-\end{figure*}
-
-\begin{figure*}[tbph]
-\center
-\includegraphics[scale=0.3]{images/cube_2.png} 
-\caption{Vertical Bar Chart} 
-\label{fig:ver_chart}
-\end{figure*}
-
-\begin{figure*}[tbph]
-\center
-\includegraphics[scale=0.3]{images/cube_3.png} 
-\caption{Radar Chart} 
-\label{fig:rad_chart}
-\end{figure*}
-
-\begin{figure*}[tbph]
-\center
-\includegraphics[scale=0.3]{images/cube_4.png} 
-\caption{Lines Plot} 
-\label{fig:line_chart}
-\end{figure*}
-
-A \emph{horizontal bar} represents each metric (Figure~\ref{fig:hor_chart}) and shows its value (x-axis) with respect to the dataset (y-axis).
-Here, the different “datasets” analysed are actually successive revisions of one dataset.
-This chart provides a clear view of how the value associated to each one of the measured metrics changes as the dataset evolves.
-The horizontal layout is appropriate when the range of metric values is wide, and the number of different datasets is relatively small.
-
-Similar to the horizontal bars chart, the \emph{vertical bar chart} (Figure~\ref{fig:ver_chart}) allows the user to compare the values computed for each of the metrics (y-axis), with respect to the dataset (x-axis).
-In contrast with its horizontal counterpart, this chart is more appropriate when there are many datasets analysed but the range of metric values is not so wide.
-
-In the \emph{radar chart} (Figure~\ref{fig:rad_chart}), the datasets are represented as slices of a circle and the values corresponding to the metrics are depicted as points and lines of a particular colour.
-This chart provides a clear view of how the values of the metric differ from each other for each particular dataset. 
-Furthermore, it allows one to assess the overall quality of a dataset, by showing whether the values of the metrics are concentrated around sections of the circle regarded as “good” or “bad”.
-
-The lines plot (Figure~\ref{fig:line_chart}), lists the different datasets against the values of the metrics.
-Here, where “different datasets” are actually different revisions in the evolution of one dataset, this plot provides a comparison of the evolution of the quality of the dataset, with respect to each metric.
-The lines emphasise the points where the values of the metrics changed noticeably from one version to the next.
 
 % in this section we need to describe the general architecture (stream processor, daq, cache, metrics, plugins etc...) of the quality framework - including how this framework will connect to other modules in diachron
 

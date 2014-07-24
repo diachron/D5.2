@@ -79,8 +79,8 @@ The abstract concepts (and their related properties) are described as follows:
    Since this value is multi-typed (for example one metric might return true/false whilst another might require a floating point number), the value's \texttt{daq:hasValue} range is inherited by the actual metric's attribute defined by the property \texttt{daq:expectedDataType}.
   An observation must have the Dimension Properties (\texttt{qb:DimensionProperty}) \texttt{daq:computedOn} and \texttt{daq:metric}, which defines the assessed resource and the metric the mentioned resource was assessed by respectively.
   A metric might also require additional information (e.g.\ a gold standard dataset to compare with).
-  Therefore, a \todo{CL@JD: to this maybe append ``i.e.\ an instance of a metric class''?}concrete metric representation can also define such properties using subproperties of the \texttt{daq:requires} abstract property.
-  Another important attribute for any observation is the \todo{CL@JD: do you insist on this custom property, or can't we reuse dcterms:date?}\texttt{daq:dateComputed}, where it records the date of the observation's creation.
+  Therefore, a \todo{CL@JD: to this maybe append ``i.e.\ an instance of a metric class''? - JD: agreed}instance of a metric representation can also define such properties using subproperties of the \texttt{daq:requires} abstract property.
+  Another important attribute for any observation is the \todo{CL@JD: do you insist on this custom property, or can't we reuse dcterms:date? - JD: that should be changes, but i'll do it after the deliverable as it will take a lot of effort}\texttt{daq:dateComputed}, where it records the date of the observation's creation.
 \end{description}
 
 \subsubsection{Extending daQ for Custom/Specific Quality Metrics}

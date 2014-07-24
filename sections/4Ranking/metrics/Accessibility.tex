@@ -125,7 +125,6 @@ As shown in algorithm~\ref{alg:lowLatency}, the implementation of this metric co
 \State timeElapsedSinceStart = stopTimer();
 \State totalDelay += timeElapsedSinceStart;
 \EndIf
-\Return{totalDelay / requestsToSend;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -160,7 +159,6 @@ The throughput of the resource is measured by sequentially sending it a fixed nu
 \State timeElapsedSinceStart = stopTimer();
 \State totalDelay += timeElapsedSinceStart;
 \EndIf
-\Return{requestsToSend / totalDelay;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -197,7 +195,6 @@ All the requests whose response times (delays) are to be averaged, are sent simu
 \State sendSynchronousRequestTo(?s);
 \State totalDelaySingleReq = stopTimer();
 \EndIf
-\Return{(totalDelaySimultaneousReqs / numSimultaneousRequests) - totalDelaySingleReq;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -232,7 +229,6 @@ As shown in algorithm \ref{alg:httpsDataAccess}, once the URI of the dataset has
 \If {isDataSetURI(?s) \&\& isHTTPS(?s)} 
 \State httpsConnectionSucceeded = sendTestRequestHTTPS(?s);
 \EndIf
-\Return{httpsConnectionSucceeded;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -247,7 +243,7 @@ In an open data world, such as that of Linked Open Data, it is important to be a
 \paragraph{Machine-readable Indication of a License Metric} ~\\ %metric name
 % background for the metric
 As stated by Hogan et al.~\cite{Hogan2012:LDC}, each dataset should contain a license specifying how the content can be used. Such a license can be machine-readable, if provided by means of any of the several properties defined for that purpose. Having access to the license this way, enables customers to automatically check that the permissions granted upon the data have been specified and hence leverages accessibility to the dataset.
-The dataset is assessed by checking \todo{CL@JD: What is a subject of any such triples is something that's not the whole dataset?  (Well, the algorithm suggests you only check triples where the subject is the dataset.)}if triples contain any of the following predicates:
+The dataset is assessed by checking \todo{CL@JD: What is a subject of any such triples is something that's not the whole dataset?  (Well, the algorithm suggests you only check triples where the subject is the dataset.) - JD: Fixed}if triples (with the subject being the base URI) contain any of the following predicates:
 \begin{itemize}
 \item \url{http://purl.org/dc/terms/license}
 \item \url{http://purl.org/dc/terms/accessRights}
@@ -278,7 +274,6 @@ Algorithm \ref{alg:machineReadLicense} details how the metric is computed. First
 \If {isLicensingProperty(?p) \&\& ?s == dataSetURI} 
 \State hasMachineReadLicense = 1;
 \EndIf ~\\
-\Return{hasMachineReadLicense;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}

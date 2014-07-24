@@ -32,16 +32,13 @@ Implementation details regarding these metric are provided in algorithm~\ref{alg
 \State accumulatedURIsLength += lengthOfURI(?s);
 \State countLocallyDefURIs++;
 \EndIf ~\\
-\Return{accumulatedURIsLength / countLocallyDefURIs;}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 % metric value, range and rating
 The metric will return the average length of all the URIs locally defined in the dataset. The expected range is a real number in the range $[0, +\infty)$. Lower values represent better rankings.
-
 % end-of Short URIs Metric
-
-\todo{CL: Can't we group this differently?  We currently have paragraphs both for dimensions and for metrics.}\paragraph{Understandability Dimension}
+\todo{CL: Can't we group this differently?  We currently have paragraphs both for dimensions and for metrics. - JD: ideally yes}\paragraph{Understandability Dimension}
 Understandability is the quality of information that enables users to comprehend its meaning. 
 It is an ultimate prerequisite for information consumer. 
 The better users understand data, the more effectively they can use it. 
@@ -89,7 +86,6 @@ The algorithm \ref{lst:emptyAnnotationValue} provides detailed description of me
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isAnnotation(?p)} totalAnnotations++; \EndIf
 \If {isEmpty(?o)} emptyAnnotations++ ; \EndIf
-\Return{emptyAnnotations / totalAnnotations}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -119,7 +115,6 @@ A predefined list of annotation properties, described in the previous metric, ar
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isAnnotation(?p)} totalAnnotations++; \EndIf
 \If {containsLeadingORTrailingWhitespace(?o)} whitespaceInAnnotations++ ; \EndIf
-\Return{whitespaceInAnnotations / totalAnnotations}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -154,7 +149,6 @@ The following widely used label properties are considered by the metric:
 \Procedure{compute}{$\langle?s,?p,?o,?g\rangle$}
 \If {isLabel(?p)} totalLabels++; \EndIf
 \If {isBadCapitalised(?o)} badCapitalisedLabels++ ; \EndIf
-\Return{badCapitalisedLabels / totalLabels}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}

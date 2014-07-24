@@ -111,7 +111,7 @@ The metric values vary in the interval $[0, 1]$, where a value of 1 indicates th
 
 \paragraph{Volatility Dimension}~\\ % dimension name 
 %\subparagraph{Background for Volatility Quality Metrics} ~\\ %general background
-In Linked Data evolution appeared almost at each new published version of data. Following the idea of Papavassiliou et al.~\cite{TODS13} curators could define a list of changes that occur frequently and correspond to one or more low-level changes (added or deleted triples). These changes termed as Simple Changes also in the context of DIACHRON and comprise an upper abstract level of changes which is pilot-specific to describe group of changes that appear a special interest for each pilot. The detection of Simple Changes achieved accordingly to the methodology presented in~\cite{TODS13} and followed in change detection service of DIACHRON (cf.\ Deliverable 3.1~\cite{diachron-D3.1}). The following three volatility metrics take into account these assumptions and background information.
+In Linked Data evolution appeared almost at each new published version of data. Following the idea of Papavassiliou et al.~\cite{TODS13} curators could define a list of changes that occur frequently and correspond to one or more low-level changes (added or deleted triples). These changes termed as Simple Changes also in the context of DIACHRON and comprise an upper abstract level of changes which is pilot-specific to describe group of changes that appear a special interest for each pilot. The detection of Simple Changes achieved accordingly to the methodology presented in~\cite{TODS13} and followed in change detection service of DIACHRON (cf.\ Deliverable 3.1~\cite{diachron-d3.1}). The following three volatility metrics take into account these assumptions and background information.
 
 \paragraph{Versions Volatility Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric
@@ -157,6 +157,7 @@ The number of detected simple changes could be varied across different published
 % pseudocode
 The Average Volatility Metric firstly calculates the total number of published versions through a SPARQL query. Afterwards, it calculates the detected Simple Changes per versions pair and aggregate the sum of changes. Finally, it calculates and returns the ratio between aggregated sum and the number of examined pairs.
 
+\todo{CL: fix indentation at the end of the procedure (here and in the following algorithms)}
 % algorithm
 \begin{algorithm}
 \caption{Average Volatility Metric Algorithm}

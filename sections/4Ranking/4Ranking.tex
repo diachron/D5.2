@@ -65,7 +65,7 @@ After the weights have been distributed, the ranking algorithm retrieves all the
 The values of chosen metrics, i.e. the set $X$, are added together and multiplied by the weight $\theta$.
 Similarly, the complement set ($\overline{X}$) are multiplied by the weight $\rho$.
 These two are added together which gives us a value $\tau$ for the dataset (Definition~\ref{def:ranking}).
-This is repeated for all possible datasets and then are ranked accordingly.
+This is repeated for all possible datasets; they are then ranked accordingly.\todo{CL: I simplified the notation by iterating directly over the elements of the set, instead of using a counter.  And I moved the multiplication outside of the sum (distributivity).  Please check.}
 \begin{Def1}
 \label{def:ranking}
 \begin{align*}

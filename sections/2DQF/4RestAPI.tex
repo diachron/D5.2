@@ -6,8 +6,8 @@ The RESTful API design and activity diagrams are explained in Deliverable 6.1~\c
 The only minor change is in the input parameters for the \texttt{\url{/diachron/compute_quality}} API call.
 In Deliverable 6.1 we define the following two parameters:
 \begin{description}
-\item[Dataset -] An instance of a DIACHRON dataset URI;
-\item[QualityReportRequired -] A boolean indicating whether a quality report is required.
+\item[Dataset –] An instance of a DIACHRON dataset URI;
+\item[QualityReportRequired –] A boolean indicating whether a quality report is required.
 \end{description}
 The input parameter we introduce in this Deliverable is \textbf{MetricsConfiguration}.
 This parameter is an object with a list of metrics (cf. Listing~\ref{lst:conf_metric}) in JSON-LD format, identifying the metrics required to be used for the dataset quality assessment.

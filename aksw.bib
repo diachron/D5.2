@@ -6317,13 +6317,22 @@ publisher = {University of New Orleans},
  pages = {69--107},
 }
 
-@unpublished{DebattistaEtAl:daQDataCube2014,
+@inproceedings{DebattistaEtAl:daQDataCube2014,
   author = {Jeremy Debattista and Christoph Lange and S{\"o}ren Auer},
   title = {Representing Dataset Quality Metadata using Multi-Dimensional Views},
   year = {2014},
-  pubstate = {submitted},
   keywords = {conference},
-  pubs = {clange,projects/diachron}
+  pubs = {clange,projects/diachron},
+  crossref = {SEMANTiCS2014},
+}
+
+@proceedings{SEMANTiCS2014,
+  booktitle = {{SEMANTiCS}},
+  year = 2014,
+  editor = {Agata Filipowska and Harald Sack and Jens Lehmann},
+  pubstate = {forthcoming},
+  eventdate = {2014-09-04/2014-09-05},
+  venue = {Leipzig, Germany},
 }
 
 @inproceedings{KolKoz:UnstableMarkup2014,
@@ -6340,6 +6349,7 @@ publisher = {University of New Orleans},
 
 @proceedings{SemPubChallenge2014,
   editor = {Di Iorio, Angelo and Christoph Lange},
+  title = {Semantic Publishing Challenge (Extended Semantic Web Conference, Semantic Web Evaluation Track)},
   booktitle = {Semantic Publishing Challenge (Extended Semantic Web Conference, Semantic Web Evaluation Track)},
   year = 2014,
   url = {http://2014.eswc-conferences.org/program/semwebeval},
@@ -6504,11 +6514,94 @@ language={English}
   year = 2013
 }
 
-@techreport{diachron-D3.1,
+@techreport{diachron-d1.1,
+  author = {Christos Pateritsas and Aggelos Liapis and Amrapali Zaveri and Fran{\c c}ois Bancilhon and Giorgos Flouris and George Papastefanatos and Gunnlaugur Thor Briem and Lo{\"i}c Petit and Mark Williamson and Panagiotis Hasapis and Robert Isele and Simon Jupp and Stratis Viglas and Tony Burdett and Yannis Stavrakas and Vassilis Christophides},
+  title = {Requirements of the {DIACHRON} Use Cases},
+  institution = {DIACHRON: Managing the Evolution and Preservation of the Data Web},
+  type = {Deliverable},
+  number = {D1.1},
+  pubs = {projects/diachron},
+  date = {2013-09-06},
+  year = {2013}
+}
+
+@techreport{diachron-d1.2,
+  author = {Robert Isele and Amrapali Zaveri and Fran{\c c}ois Bancilhon and Gunnlaugur Thor Briem and Lo{\"i}c Petit and Mark Williamson and Simon Jupp and Tony Burdett},
+  title = {{DIACHRON} Dataset Description and Repository},
+  institution = {DIACHRON: Managing the Evolution and Preservation of the Data Web},
+  type = {Deliverable},
+  number = {D1.2},
+  pubs = {projects/diachron},
+  date = {2013-09-30},
+  year = {2013}
+}
+
+@techreport{diachron-d1.3,
+  author = {Christos Pateritsas and James Cheney and Giorgos Flouris and Panagiotis Hasapis and Simon Jupp and Christoph Lange and Marios Meimaris and Giorgos Papastefanatos and Yannis Stavrakas and Gunnlaugur Thor Briem},
+  title = {Design of the {DIACHRON} Platform and Applications},
+  institution = {DIACHRON: Managing the Evolution and Preservation of the Data Web},
+  type = {Deliverable},
+  number = {D1.3},
+  pubs = {projects/diachron,clange},
+  date = {2013-11-29},
+  year = {2013}
+}
+
+@techreport{diachron-d3.1,
   author = {Giorgos Flouris and Yannis Roussakis and Ioannis Chrysakis and Michalis Chortis and Kostas Stefanidis and Christos Pateritsas and Theodora Galani and Natalja Friesen and Christoph Lange},
   title = {{LOD} evolution: change typology, update languages and integrity rules},
-  note = {DIACHRON Deliverable D3.1},
-  year = {2014}
+  institution = {DIACHRON: Managing the Evolution and Preservation of the Data Web},
+  type = {Deliverable},
+  number = {D3.1},
+  pubs = {projects/diachron,clange},
+  month = mar,
+  year = {2014},
+}
+
+@techreport{diachron-d3.2,
+  author = {Giorgos Flouris and Yannis Roussakis and Ioannis Chrysakis and Michalis Chortis and Christos Pateritsas and Natalja Friesen and Christoph Lange},
+  title = {Specification and Implementation of Monitoring, Synchronization and Repairing Services},
+  institution = {DIACHRON: Managing the Evolution and Preservation of the Data Web},
+  type = {Deliverable},
+  number = {D3.2},
+  pubs = {projects/diachron,clange},
+  month = jul,
+  year = {2014},
+  pubstate = {forthcoming},
+}
+
+@techreport{diachron-d5.1,
+  author =       {Amrapali Zaveri and Simon Jupp and Fran{\c c}ois Bancilhon and Loic Petit and Y. Chrysakis and Giorgos Flouris and George Papastefanatos},
+  title =        {{LOD} quality assessment and quality-driven acquisition},
+  institution = {DIACHRON: Managing the Evolution and Preservation of the Data Web},
+  type = {Deliverable},
+  number = {D5.1},
+  date = {2013-11-29},
+  year = {2013},
+  pubs = {projects/diachron},
+}
+
+@techreport{diachron-d5.2,
+  author =       {Jeremy Debattista and Christoph Lange and Natalja Friesen and Santiago Londo{\~n}o and Ioannis Chrysakis and Kostas Stefanidis and Giorgos Flouris},
+  title =        {Software prototype of the crawling, ranking and appraisal services},
+  institution = {DIACHRON: Managing the Evolution and Preservation of the Data Web},
+  type = {Deliverable},
+  number = {D5.2},
+  mon = jul,
+  year = {2014},
+  pubs = {projects/diachron,clange},
+  pubstate = {forthcoming},
+}
+
+@techreport{diachron-d6.1,
+  author =       {Aggelos Liapis and Panagiotis Hasapis and Giannis Roussakis and Marios Meimaris and Christos Pateritsas and Jeremy Debattista},
+  title =        {Development Environment and Detailed Design of the {DIACHRON} Platform},
+  institution = {DIACHRON: Managing the Evolution and Preservation of the Data Web},
+  type = {Deliverable},
+  number = {D6.1},
+  date = {2014-04-30},
+  year = {2014},
+  pubs = {projects/diachron},
 }
 
 @techreport{WSM,
@@ -6516,6 +6609,56 @@ author = {Fishburn, P. C.},
 year = 1967,
 title = {Additive Utilities with Incomplete Product Set: Applications to Priorities and Assignments},
 organization = {{Operations Research Society of America (ORSA), Baltimore, MD, U.S.A.}}
+}
+
+@inproceedings{ALE:SciPubLOD13,
+  author    = {S{\"o}ren Auer and Christoph Lange and Timofey Ermilov},
+  title     = {Towards Facilitating Scientific Publishing and Knowledge Exchange Through Linked Data},
+  pages     = {10--15},
+  crossref = {TPDLworkshops2013},
+  pubs = {clange},
+}
+
+@proceedings{TPDLworkshops2013,
+  editor    = {Lukasz Bolikowski and Vittore Casarosa and Paula Goodale and Nikos Houssos and Paolo Manghi and Jochen Schirrwagen},
+  title     = {Theory and Practice of Digital Libraries -- TPDL 2013 Selected
+               Workshops -- LCPD 2013, SUEDL 2013, DataCur 2013.  Revised Selected Papers},
+  venue = {Valletta, Malta},
+  eventdate = {2013-09-22/2013-09-26},
+  booktitle = {TPDL Workshops},
+  publisher = {Springer},
+  series    = {Communications in Computer and Information Science},
+  volume    = {416},
+  year      = {2014},
+  isbn      = {978-3-319-08424-4},
+  keywords = {conference},
+}
+
+@inproceedings{Lange:SciPubGRYF2014,
+  title = {Machine Support for Interacting with Scientific Publications, Improving Information Retrieval, and Assessing the Quality of Scientific Output},
+  author = {Christoph Lange},
+  booktitle = {4\textsuperscript{th} German-Russian Young Researchers Forum},
+  pubs = {clange},
+  venue = {Saint-Petersburg, Russia},
+  eventdate = {2014-07-06/2014-07-09},
+  year = 2014,
+}
+
+@inproceedings{Gil2002,
+  author    = {Yolanda Gil and
+               Varun Ratnakar},
+  title     = {TRELLIS: An Interactive Tool for Capturing Information Analysis
+               and Decision Making},
+  pages     = {37--42},
+  crossref = {ekaw2002},
+  crossrefCOMMENT = {use external/kwarc.bib to make this work},
+}
+
+@unpublished{Yang2011,
+ author = {Yang Yang and Haiyan Che and Nicholas Gibbins and Wendy Hall and Nigel Shadbolt},
+ title = {Dereferencing Semantic Web URIs: What is 200 OK on the Semantic Web?},
+ url = {https://dl.dropboxusercontent.com/u/4138729/paper/dereference_iswc2011.pdf},
+ urldate = {2014-07-28}
 }
 
 @comment{jabref-entrytype: Poster: req[author;title] opt[note]}

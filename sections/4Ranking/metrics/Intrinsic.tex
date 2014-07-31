@@ -234,7 +234,7 @@ The metric gives a value between $[0,\ldots,1]$, where  the 0 indicates the best
 \paragraph{Obsolete Concepts in Ontology$\star$}~(required for: \textbf{EBI})~\\
 Over time and versions, classes and properties change and old versions get deprecated.
 If an ontology is creating a considerable amount of obsolete concepts between different versions, then this is an indicator that the ontology is going through numerous changes and is potentially in a state of poor quality.
-Typically, in LOD datasets deprecated classes and properties are identified by \texttt{owl:DepricatedClass} and \texttt{owl:DepricatedProperty} respectively.
+Typically, in LOD datasets deprecated classes and properties are identified by \texttt{owl:DeprecatedClass} and \texttt{owl:DeprecatedProperty} respectively.
 The pilot use case requires that this metric assess datasets (which contain an ontology) for the identification of deprecated classes and properties.
 These deprecated concepts should be \texttt{rdfs:subClassOf} by the \texttt{oboInOwl:ObsoleteClass} and \texttt{oboInOwl:ObsoleteProperty}.
 

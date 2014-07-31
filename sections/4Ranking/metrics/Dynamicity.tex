@@ -116,12 +116,12 @@ The comparison of two sequential (or not) versions of datasets could contain a n
 
 % short description
 \begin{mdframed}[style=metricdefinition]
-\emph{Calculates the number of simple changes happened accross two specified versions.}
+\emph{Calculates the number of simple changes between two specified versions.}
 \end{mdframed}
 
 % pseudocode
 The Versions Volatility Metric can be applied to a pair
-of defined versions to count the detected number of Simple Changes. This achieved by querying the corresponding named graph where the the total number of Simple Changes have been stored which are returned as result. 
+of defined versions to count the detected number of Simple Changes. This is achieved by querying the corresponding named graph where the the total number of Simple Changes have been stored which are returned as result. 
 
 % algorithm
 \begin{algorithm}
@@ -150,7 +150,7 @@ The number of detected simple changes could be varied across different published
 \end{mdframed}
 
 % pseudocode
-The Average Volatility Metric firstly calculates the total number of published versions through a SPARQL query. Afterwards, it calculates the detected Simple Changes per versions pair and aggregate the sum of changes. Finally, it calculates and returns the ratio between aggregated sum and the number of examined pairs.
+The Average Volatility Metric firstly calculates the total number of published versions through a SPARQL query. Afterwards, it calculates the detected Simple Changes per versions pair and aggregates the sum of changes. Finally, it calculates and returns the ratio between aggregated sum and the number of examined pairs.
 
 % algorithm
 \begin{algorithm}
@@ -253,7 +253,7 @@ The result is in the range $[0, +\infty]$ and represents an amount of time in se
 % end-of Time Validity Interval Metric
 
 \paragraph{Timeliness Dimension}~\\ % dimension name 
-The degree to which Linked Data is considered to be up-to-date or outdated can heavily depend on the task at hand. Depending on the application, information updated one month ago can be considered highly current (e.g. the list of pet shops in a city) or unacceptably outdated (e.g. a pricing list of foreign currencies). Therefore, in order to align the quality measures related to the age of data with the application of interest, it makes sense to provide currency measures relative to a specific task. The metrics part of this dimension, are based on the concept of timeliness as defined by Gamble et al.: ``Timeliness is a measure of utility, is a comparison of the date the annotation was updated with the consumer's requirement''~\cite{Gamble2011}.
+The degree to which Linked Data is considered to be up-to-date or outdated can heavily depend on the task at hand. Depending on the application, information updated one month ago can be considered highly current (e.g. the list of pet shops in a city) or unacceptably outdated (e.g. a pricing list of foreign currencies). Therefore, in order to align the quality measures related to the age of data with the application of interest, it makes sense to provide currency measures relative to a specific task. The metrics for this dimension, are based on the concept of timeliness as defined by Gamble et al.: ``Timeliness is a measure of utility, is a comparison of the date the annotation was updated with the consumer's requirement''~\cite{Gamble2011}.
 
 \paragraph{Timeliness of the Resource Metric}~(required for: \textbf{GEN}, \textbf{DP}, \textbf{EBI})~\\ %metric name
 % background for the metric

@@ -5,9 +5,9 @@
 In Deliverable 6.1 (Section 6.1.7.3), we described the assessment process in an activity diagram.
 Since we need to cater for datasets modelled on the DIACHRON Data Model (cf. D1.3), the Stream Processor described in Section~\ref{sec:StreamProcessor} requires some adaptation.
 The DIACHRON data model is used as an underlying schema to store and query data from various heterogeneous sources using one standardised representation.
-The schema features a number of key aspects that allow data to be traceable (indicating the provenance), reproducible, and overall enable the DIACHRON services (cf. D1.3).
+The schema features a number of key aspects that enable DIACHRON services, in particularly making data traceable (indicating the provenance) and reproducible (cf. D1.3).
 
-Due to the nature of the heterogenous data that might originate from different models (e.g. triple-based, tuple-based, multidimensional etc.), the DIACHRON model is highly based on reified RDF.
+Due to the heterogenous of data from different models (e.g. triple-based, tuple-based, multidimensional etc.), the DIACHRON model is highly based on reified RDF.
 This enables the description of resources as RDF statements (expanding a triple to a reification quad\footnote{\url{http://www.w3.org/TR/2004/REC-rdf-primer-20040210/#reification}}), recording further information such as provenance, attributes, relations and also changes.
 Therefore, if we take for example the triple\footnote{This example does not follow the DIACHRON data model, but rather to illustrate a simple example of reification}:
 \begin{lstlisting}[language=N3]
@@ -23,17 +23,17 @@ ex:reifiedResource rdf:object "value" .
 
 In Section~\ref{sec:StreamProcessor} we described how the \emph{Stream Processor} sequentially passes quads to the metrics in the \emph{Quality Assessment Layer}.
 Although data based on the DIACHRON data model would be sufficient for the \emph{Stream Processor}, metric assessment will not give the desired results.
-The main problem is that the most metrics would not just require the \emph{object} value, but would also require the \emph{subject} and the \emph{predicate}.
+The main problem is that most metrics would not just require the \emph{object} value, but would also require the \emph{subject} and the \emph{predicate}.
 Therefore, DIACHRON resources have to be de-reified into RDF triple prior to them being passed to the metric.
 
-In order to support the DIACHRON data model, datasets would require preprocessing to de-reify they to a flat RDF structure.
+In order to support the DIACHRON data model, datasets would require preprocessing to de-reify them to a flat RDF structure.
 This can be done in two ways: (1) Constructing a new dataset using SPARQL CONSTRUCT; (2) Parsing a dump of the dataset.
 These are explained further below.
 
 \paragraph{Constructing de-reified RDF triples}~\\
 This is the preferred method of flattening down RDF triples from the DIACHRON data model.
-For this, a SPARQL endpoint is desirable so that we could query the model directly and do not require to load the dataset into memory for the construction of the model.
-Listing~\ref{lst:dereifiedRDF} illustrates the SPARQL query\footnote{Thank you Marios Meimaris (Athena) for providing this query.} used to de-reify a dataset.
+For this, a SPARQL endpoint is desirable so that we could query the model directly and do not require loading the dataset into memory for the construction of the model.
+Listing~\ref{lst:dereifiedRDF} illustrates the SPARQL query used to de-reify a dataset.
 The place holder \texttt{::datasetUri::} will be replaced by the dataset URI provided.
 \begin{lstlisting}[language=sparql,label=lst:dereifiedRDF]
 CONSTRUCT {
@@ -50,7 +50,7 @@ Once the graph is constructed, it is passed to the stream processor which in tur
 
 \paragraph{Parsing a dump of the dataset}~\\
 In the unlikely event that a SPARQL endpoint is not available, a data wrapper is provided with the stream processor module.
-This data wrapper parse the RDF statements and creates triples on the fly, which are then passed to the stream processor to sequentially deliver into the \emph{Quality Assessment Layer}.
+This data wrapper parses the RDF statements and creates triples on the fly, which are then passed to the stream processor to sequentially deliver into the \emph{Quality Assessment Layer}.
 
 %%% Local Variables: 
 %%% mode: latex

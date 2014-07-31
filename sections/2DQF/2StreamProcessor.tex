@@ -10,7 +10,7 @@ The submitted information is passed to the Quality Framework via its API and ini
 The stream processor is then initialised by: (1) creating the necessary objects in memory, and (2) initialising the chosen metrics. 
 In Figure~\ref{fig:closerLook}, ``Metric 1'' is shadowed out – to illustrate that it was not chosen by the user for this particular use case.
 Once the objects are created, the stream processor fetches the dataset and streams quads one by one to all initialised metrics in parallel.
-After all statements are assessed, the semantic annotation unit requests the metric value for each metric and creates (or updates – in case the dataset already has one) the Quality Graph.
+After all statements are assessed, the Semantic Annotation unit requests the metric value for each metric and creates (or updates – in case the dataset already has one) the Quality Graph.
 This named graph represents the quality metadata of a dataset using the representation defined in Section~\ref{sec:DAQ}, and it is stored in the dataset itself.
 Having this metadata, it will allow us to rank and crawl datasets based on different quality attributes.
 
@@ -28,7 +28,7 @@ Having this metadata, it will allow us to rank and crawl datasets based on diffe
 
 \subsubsection{The Initialisation Process – \texttt{setUpProcess()}}
 The \emph{setUpProcess()} method initialises the stream processor.
-Listing~\ref{lst:setUp} is the pseudocode of the the process.
+Algorithm~\ref{lst:setUp} is the pseudocode of the the process.
 The sequential stream processor starts its initialisation by first trying to identify the serialisation used by the available RDF data dump.
 The method \texttt{guessRDFSerialisation} analyses the file serialisation by mapping the file name to one of the RDF serialisations for which Jena has built-in support (e.g. RDF/XML, NTriples, Turtle, NQuads, etc\dots)
 According to the file's serialisation, the process then assigns different types of \texttt{PipedRDFIterator}\footnote{\url{https://jena.apache.org/documentation/javadoc/arq/org/apache/jena/riot/lang/PipedRDFIterator.html}} and either a\texttt{PipedQuadsStream}\footnote{\url{https://jena.apache.org/documentation/javadoc/arq/org/apache/jena/riot/lang/PipedQuadsStream.html}} or \texttt{PipedTriplesStream}\footnote{\url{https://jena.apache.org/documentation/javadoc/arq/org/apache/jena/riot/lang/PipedTriplesStream.html}} 
@@ -66,7 +66,7 @@ The RDFStream \texttt{rdfStream} object starts parsing the RDF dump and producin
 On a different thread, the ``consumer'' – the sequential stream processor – consumes these statements from the \texttt{iterator}, converts them into quads of $\langle s,p,o,c \rangle$, and passes them to all initialised metrics.
 The consumption process is repeated until all statements are exhausted from the \texttt{iterator}.
 The semantic annotation unit is then signalled to start its annotation.
-Listing~\ref{lst:processing} describes this process in pseudocode.
+Algorithm~\ref{lst:processing} describes this process in pseudocode.
 
 \begin{algorithm}
 \caption{Processing Triple/Quad Statements}

@@ -9,7 +9,7 @@ The schema features a number of key aspects that enable DIACHRON services, in pa
 
 Due to the heterogenous of data from different models (e.g. triple-based, tuple-based, multidimensional etc.), the DIACHRON model is highly based on reified RDF.
 This enables the description of resources as RDF statements (expanding a triple to a reification quad\footnote{\url{http://www.w3.org/TR/2004/REC-rdf-primer-20040210/#reification}}), recording further information such as provenance, attributes, relations and also changes.
-Therefore, if we take for example the triple\footnote{This example does not follow the DIACHRON data model, but rather to illustrate a simple example of reification}:
+For example, if consider the triple\footnote{This example does not follow the DIACHRON data model, but rather to illustrate a simple example of reification}:
 \begin{lstlisting}[language=N3]
 ex:resourceSubject ex:property "value" .
 \end{lstlisting}
@@ -26,7 +26,7 @@ Although data based on the DIACHRON data model would be sufficient for the \emph
 The main problem is that most metrics would not just require the \emph{object} value, but would also require the \emph{subject} and the \emph{predicate}.
 Therefore, DIACHRON resources have to be de-reified into RDF triple prior to them being passed to the metric.
 
-In order to support the DIACHRON data model, datasets would require preprocessing to de-reify them to a flat RDF structure.
+In order to support the DIACHRON data model, datasets would require preprocessing to be de-reified to a flat RDF structure.
 This can be done in two ways: (1) Constructing a new dataset using SPARQL CONSTRUCT; (2) Parsing a dump of the dataset.
 These are explained further below.
 
@@ -35,7 +35,7 @@ This is the preferred method of flattening down RDF triples from the DIACHRON da
 For this, a SPARQL endpoint is desirable so that we could query the model directly and do not require loading the dataset into memory for the construction of the model.
 Listing~\ref{lst:dereifiedRDF} illustrates the SPARQL query used to de-reify a dataset.
 The place holder \texttt{::datasetUri::} will be replaced by the dataset URI provided.
-\begin{lstlisting}[language=sparql,label=lst:dereifiedRDF]
+\begin{lstlisting}[language=sparql,,caption="SPARQL Query to de-refy the DIACHRON data model into flat RDF",label=lst:dereifiedRDF]
 CONSTRUCT {
 	?s ?p ?o
 }

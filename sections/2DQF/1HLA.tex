@@ -7,11 +7,11 @@ The purpose of the Quality Framework is to provide an integrated platform that:
 \begin{enumerate}
 \item assesses Linked Open Data (via RDF Dumps or SPARQL endpoints) in a scalable manner;
 \item provides queryable quality metadata on the assessed datasets;
-\item provides visualisations on the quality 
+\item provides visualisations on the quality metadata.
 \end{enumerate}
 Furthermore, we aim to create an infrastructure and a platform that (i) can be easily extensible by different third parties by creating their custom and more specific pluggable metrics required to assess their particular dataset domain, and (ii) having the the necessary ontology framework to represent the metadata about the quality of the assessed linked datasets.
 
-Currently, there is no uniform infrastructure to address the quality assessment problem, allowing the extension or redefinition of custom-specific metrics such as those required by the DIACHRON use cases.
+Currently, there is no uniform infrastructure to assess quality of a linked dataset, allowing the extension or redefinition of custom-specific metrics such as those required by the DIACHRON use cases.
 Tools such as Trellis~\cite{Gil2002}, WIQA~\cite{Bizer2008:PhDThesis:biblatex} and Sieve~\cite{Mendes2012} implement a number of metrics but lacks flexibility w.r.t.\ the level of automation, and user friendliness~\cite{Zaveri2012:LODQ} 
 
 \begin{figure*}[tbph]
@@ -22,11 +22,10 @@ Tools such as Trellis~\cite{Gil2002}, WIQA~\cite{Bizer2008:PhDThesis:biblatex} a
 \end{figure*}
 
 Figure~\ref{fig:qualityFramework} illustrates the high level architecture of the Quality Framework.
-The two main components are the API layer (cf. Section~\ref{sec:RestAPI}) and the Core framework.
-The core framework is made up of four modules: \emph{Semantic Schema Layer}, \emph{Processing Unit}, \emph{Semantic Annotation Unit}, \emph{Quality Assessment Layer}, and an optional \emph{Visualisation Layer} which we will discuss in Section~\ref{sec:UI}.
+The core assessment framework is made up of four modules: \emph{Semantic Schema Layer}, \emph{Processing Unit}, \emph{Semantic Annotation Unit}, \emph{Quality Assessment Layer}, and an optional \emph{Visualisation Layer} which we will discuss in Section~\ref{sec:UI}.
 
 \subsubsection{Semantic Schema Layer}
-The Quality Framework is based on semantic technologies and thus has an underlying semantic vocabulary layer which currently is made up of two ontologies: (i) the Dataset Quality Ontology (daQ)\todo{CL@JD: in addition to these URLs, which currently only serve RDF/XML, please also mention the URLs of the TriG source.  BTW I had to create the purl's for dqm and qr today. - JD: i did not understand this comment}\footnote{\url{http://purl.org/eis/vocab/daq}}; and (ii) the Quality Problem Report Ontology (qr)\footnote{\url{http://purl.org/eis/vocab/qr}}. 
+The Quality Framework is based on semantic technologies and thus has an underlying semantic vocabulary layer which currently consists of two ontologies: (i) the Dataset Quality Ontology (daQ)\todo{CL@JD: in addition to these URLs, which currently only serve RDF/XML, please also mention the URLs of the TriG source.  BTW I had to create the purl's for dqm and qr today. - JD: i did not understand this comment}\footnote{\url{http://purl.org/eis/vocab/daq}}; and (ii) the Quality Problem Report Ontology (qr)\footnote{\url{http://purl.org/eis/vocab/qr}}. 
 The former describes the quality metadata representation whilst the latter describes quality problems found in the dataset itself. 
 The semantic schema layer is meant to be domain independent, where it could be reused in other similar frameworks. 
 The daQ ontology (cf. Section~\ref{sec:DAQ}) is the core vocabulary of this schema layer, and any other ontology part of this layer builds upon it.
@@ -37,11 +36,11 @@ Such vocabularies are straightforward to integrate into the Quality Framework, s
 The Quality Problem Report Ontology (qr) is made up of two classes a \texttt{qr:QualityReport} and \texttt{qr:QualityProblem}. 
 The former represents a report on the problems detected during the assessment of quality on a dataset, whilst the latter represents the individual quality problems making up that report. 
 Four properties are also defined in the ontology. 
-The \texttt{qr:computedOn} represents the dataset URI on quality assessment has been made. 
+The \texttt{qr:computedOn} represents the dataset URI on which quality assessment has been made. 
 This property is attached to a \texttt{qr:QualityReport}. \texttt{qr:hasProblem} links a \texttt{qr:QualityProblem} to a \texttt{qr:QualityReport}. 
 The mentioned property identifies problem instances in a report. 
 Each \texttt{qr:QualityProblem} \texttt{isDescribedBy} an instance of a \texttt{daq:Metric}\footnote{refer to Section~\ref{sec:DAQ}}. 
-The property \texttt{qr:problematicThing} represent the actual problematic instance from the dataset. This could be a list of resources (\texttt{rdf:Seq}) or a list of reified statements.
+The property \texttt{qr:problematicThing} represents the actual problematic instance from the dataset. This could be a list of resources (\texttt{rdf:Seq}) or a list of reified statements.
 Listing~\ref{lst:dataset_qr} represents an excerpt from a typical dataset showing the instance of \texttt{ex:JoeDoe} who is a \texttt{foaf:Researcher} working for \texttt{ex:UniBonn}.
 In these two instances there are three problematic triples:
 \begin{description}
@@ -51,7 +50,7 @@ In these two instances there are three problematic triples:
 \end{description}
 Listing~\ref{lst:qualityreport} represent these three problems using the Quality Problem Report ontology.
 \lstinputlisting[caption={An excerpt of a typical dataset},label=lst:dataset_qr, language=N3]{listings/qrtest.trig}
-\lstinputlisting[caption={An corresponding Quality Report for Listing~\ref{lst:dataset_qr}},label=lst:qualityreport, language=N3]{listings/qualityreport.trig}
+\lstinputlisting[caption={A corresponding Quality Report for Listing~\ref{lst:dataset_qr}},label=lst:qualityreport, language=N3]{listings/qualityreport.trig}
 
 \subsubsection{Processing Unit}
 \label{sec:processingUnit}
@@ -73,7 +72,7 @@ A final memory cleanup ensures that no unused objects are using unnecessary comp
 
 \subsubsection{Quality Assessment Layer}
 \label{sec:qaLayer}
-The Quality Assessment Layer is undeniably the most important layer in this Quality Framework.
+The Quality Assessment Layer is undeniably the most important layer of the Quality Framework.
 The framework can be extended by any third party providing their own custom specific metric.
 This is already done in the DIACHRON project, where a number of metrics (cf. Section~\ref{sec:DQMetrics}) required to assess the various use cases specified in~\cite{diachron-d5.1} are implemented.
 The Quality Assessment Layer provides two interfaces and an abstract class (cf. Figure~\ref{fig:classDiagram}) which facilitate the quality framework to be a pluggable and extensible platform.
@@ -103,7 +102,7 @@ In this abstract class, the method \texttt{List$\langle$Statement$\rangle$ toDAQ
 Having this generic implementation of the method would ensure that the quality metadata is described correctly with respect to its definition in the Dataset Quality Ontology.
 
 \subsubsection{Semantic Annotation Unit}
-The Semantic Annotation Unit takes the generated triples (from the \texttt{toDAQTriples()} method) in order \todo{CL@JD: again I wouldn't give the impression that we are taking care of storage.  These metadata \emph{can} be stored inside the dataset, but we are not in charge of it. - JD: better?}to create the quality metadata for an assessed dataset.
+The Semantic Annotation Unit takes the triples generated by the \texttt{toDAQTriples()} method in order \todo{CL@JD: again I wouldn't give the impression that we are taking care of storage.  These metadata \emph{can} be stored inside the dataset, but we are not in charge of it. - JD: better?}to create the quality metadata for an assessed dataset.
 This unit will handle the necessary communications with the datastore to insert the generated quality metadata in the dataset itself.
 The unit provides a number of helper classes that provide inferencing queries on vocabularies that describe metrics (in the case of DIACHRON, the DQM vocabulary) based on the core ontology - Dataset Quality Ontology (daQ).
 Therefore, RDF descriptions of metrics extending the daQ (cf. Section~\ref{sec:extendingDAQ}) ontology are absolutely required.

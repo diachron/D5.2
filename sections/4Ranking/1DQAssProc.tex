@@ -35,7 +35,7 @@ This is the preferred method of flattening down RDF triples from the DIACHRON da
 For this, a SPARQL endpoint is desirable so that we could query the model directly and do not require loading the dataset into memory for the construction of the model.
 Listing~\ref{lst:dereifiedRDF} illustrates the SPARQL query used to de-reify a dataset.
 The place holder \texttt{::datasetUri::} will be replaced by the dataset URI provided.
-\begin{lstlisting}[language=sparql,,caption="SPARQL Query to de-refy the DIACHRON data model into flat RDF",label=lst:dereifiedRDF]
+\begin{lstlisting}[language=sparql,caption="SPARQL Query to de-reify the DIACHRON data model into flat RDF",label=lst:dereifiedRDF]
 CONSTRUCT {
 	?s ?p ?o
 }

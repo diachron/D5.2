@@ -5,14 +5,14 @@
 
 The purpose of the Quality Framework is to provide an integrated platform that: 
 \begin{enumerate}
-\item assesses RDF datasets and triple stores in a scalable manner;
+\item assesses Linked Open Data (via RDF Dumps or SPARQL endpoints) in a scalable manner;
 \item provides queryable quality metadata on the assessed datasets;
 \item provides visualisations on the quality 
 \end{enumerate}
 Furthermore, we aim to create an infrastructure and a platform that (i) can be easily extensible by different third parties by creating their custom and more specific pluggable metrics required to assess their particular dataset domain, and (ii) having the the necessary ontology framework to represent the metadata about the quality of the assessed linked datasets.
 
 Currently, there is no uniform infrastructure to address the quality assessment problem, allowing the extension or redefinition of custom-specific metrics such as those required by the DIACHRON use cases.
-Tools such as Trellis~\cite{Gil2002}, WIQA~\cite{Bizer2008:PhDThesis:biblatex} and Sieve~\cite{Mendes2012} implement a number of metrics but lacked flexibility w.r.t.\ the level of automation, and user friendliness~\cite{Zaveri2012:LODQ} 
+Tools such as Trellis~\cite{Gil2002}, WIQA~\cite{Bizer2008:PhDThesis:biblatex} and Sieve~\cite{Mendes2012} implement a number of metrics but lacks flexibility w.r.t.\ the level of automation, and user friendliness~\cite{Zaveri2012:LODQ} 
 
 \begin{figure*}[tbph]
 \center
@@ -32,10 +32,10 @@ The semantic schema layer is meant to be domain independent, where it could be r
 The daQ ontology (cf. Section~\ref{sec:DAQ}) is the core vocabulary of this schema layer, and any other ontology part of this layer builds upon it.
 
 The daQ ontology is a comprehensive generic vocabulary framework, based on three abstract concepts (Category, Dimension and Metric). 
-Any newly implemented specific metric should have its representation in RDF, extending the daQ ontology. In DIACHRON, all metrics are defined in the Diachron Quality Metric vocabulary (dqm)\footnote{\url{http://purl.org/eis/vocab/dqm}}. 
+Any newly implemented specific metric should have its representation in RDF, extending the daQ ontology. In DIACHRON, all metrics are defined in the Diachron Quality Metric vocabulary (DQM)\footnote{\url{http://purl.org/eis/vocab/dqm}}. 
 Such vocabularies are straightforward to integrate into the Quality Framework, since they adopt and extend the generic daQ vocabulary (by inheriting classes and properties) as the way quality metadata is represented (cf. Section~\ref{sec:extendingDAQ}).
 The Quality Problem Report Ontology (qr) is made up of two classes a \texttt{qr:QualityReport} and \texttt{qr:QualityProblem}. 
-The former represents a report on the problems detected during the assessment of quality on a dataset, whilst the latter represents a quality problem detected during the assessment of quality metrics on triples. 
+The former represents a report on the problems detected during the assessment of quality on a dataset, whilst the latter represents the individual quality problems making up that report. 
 Four properties are also defined in the ontology. 
 The \texttt{qr:computedOn} represents the dataset URI on quality assessment has been made. 
 This property is attached to a \texttt{qr:QualityReport}. \texttt{qr:hasProblem} links a \texttt{qr:QualityProblem} to a \texttt{qr:QualityReport}. 
@@ -57,7 +57,7 @@ Listing~\ref{lst:qualityreport} represent these three problems using the Quality
 \label{sec:processingUnit}
 The Processing Unit is an integral part of the Quality Framework.
 In this framework, we provide two main scalable processing units: a sequential stream processor (cf. Section~\ref{sec:StreamProcessor}) and a SPARQL processor\footnote{The SPARQL processor is still being investigated and will not be ready by the deliverable deadline.}.
-The former streams triples from RDF date dumps one by one in a sequential fashion.
+The former streams triples from RDF data dumps one by one in a sequential fashion.
 The latter allows the framework to assess quality on data that is available only in SPARQL endpoints. 
 This unit is one of the two extensible modules (the other being Quality Assessment Layer) in the Quality Framework.
 For DIACHRON, the plan is to extend the sequential stream processor, enabling the de-reification of RDF statements into RDF triples.
@@ -68,7 +68,7 @@ Listing~\ref{lst:conf_metric} shows an example of a typical metric configuration
 Each data processor in the Quality Framework has a defined 3-stage procedure (Listing~\ref{lst:int_ioprocessor}): (i) processor initialisation; (ii) processing; and (iii) memory clean up.
 In the first process (processor initialisation), the processor create the necessary objects in memory to process data and load the required metrics that are instructed in the configuration file.
 Once the initialisation is ready, the processing is done by passing the streamed triples into the metrics.
-A finally memory cleanup ensures that no unused objects are using unnecessary computational resources.
+A final memory cleanup ensures that no unused objects are using unnecessary computational resources.
 \lstinputlisting[caption={IO Processor Interface},label=lst:int_ioprocessor, language=Java]{listings/ioprocessor.java} 
 
 \subsubsection{Quality Assessment Layer}
@@ -96,16 +96,17 @@ Each metric implementing this interface, must implement the following methods:
 
 Furthermore, computing a metric might require some pre-processing or post-processing.
 Therefore, an interface (\texttt{ComplexQualityMetric}) extending \texttt{QualityMetric} was developed.
-This interface allow metric developers to perform such processing using the \texttt{\textbf{void} before()} and \texttt{\textbf{void} after()} methods.
+This interface allow metric developers to perform such processing using the \texttt{\textbf{void} before(Object ... args)} and \texttt{\textbf{void} after(Object ... args)} methods.
 
 In order to facilitate further such development of pluggable metrics, the \texttt{AbstractQualityMetric} class was developed, implementing the \texttt{QualityMetric} interface.
-In this abstract class, the method \texttt{List$\langle$Statement$\rangle$ toDAQTriples()} is implemented, generating quality metadata \todo{CL@JD: not sure this term will be understood.  Maybe speak of ``quality metadata'' here, and only introduce it (but then with an explanation) below for data cubes. - JD: agreed}observation instances (cf. Section~\ref{sec:DAQ}) for the metric being assessed. 
+In this abstract class, the method \texttt{List$\langle$Statement$\rangle$ toDAQTriples()} is implemented, generating quality metadata \todo{CL@JD: not sure this term will be understood.  Maybe speak of ``quality metadata'' here, and only introduce it (but then with an explanation) below for data cubes. - JD: agreed}observation instances (cf. Section~\ref{sec:DAQ}) for the metric being assessed.
+Having this generic implementation of the method would ensure that the quality metadata is described correctly with respect to its definition in the Dataset Quality Ontology.
 
 \subsubsection{Semantic Annotation Unit}
 The Semantic Annotation Unit takes the generated triples (from the \texttt{toDAQTriples()} method) in order \todo{CL@JD: again I wouldn't give the impression that we are taking care of storage.  These metadata \emph{can} be stored inside the dataset, but we are not in charge of it. - JD: better?}to create the quality metadata for an assessed dataset.
 This unit will handle the necessary communications with the datastore to insert the generated quality metadata in the dataset itself.
-The unit provides a number of helper classes that provide inferencing queries on vocabularies that describe metrics (such as DQM) based on the core ontology - Dataset Quality Ontology (daQ).
-Therefore, RDF descriptions of metrics extending the daQ (cf. Section~\ref{sec:extendingDAQ}) ontology is absolutely required.
+The unit provides a number of helper classes that provide inferencing queries on vocabularies that describe metrics (in the case of DIACHRON, the DQM vocabulary) based on the core ontology - Dataset Quality Ontology (daQ).
+Therefore, RDF descriptions of metrics extending the daQ (cf. Section~\ref{sec:extendingDAQ}) ontology are absolutely required.
 These inferencing queries enable the framework to create a complete metadata description (cf. Section~\ref{sec:DAQ}) of an assessed quality metric.
 
 % in this section we need to describe the general architecture (stream processor, daq, cache, metrics, plugins etc...) of the quality framework - including how this framework will connect to other modules in diachron
